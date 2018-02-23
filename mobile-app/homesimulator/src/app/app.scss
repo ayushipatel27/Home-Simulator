@@ -1,0 +1,82 @@
+// http://ionicframework.com/docs/theming/
+
+
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.
+
+.home {
+    background: color($colors, primary);
+    color: color($colors, light);
+    margin-top: 20px;
+}
+.settings {
+    background: color($colors, primary);
+    color: color($colors, light);
+    margin-top: 20px;
+}
+.about {
+    background: color($colors, primary);
+    color: color($colors, light);
+    margin-top: 20px;
+}
+.home-header {
+    text-align: center;
+}
+
+.toolbar-title {
+    text-align: center;
+}
+
+.tabs-md .tab-button-icon {
+    color: #ccc;
+}
+
+.temp {
+    font-size: 90px;
+    text-align: center;
+    font-weight: normal;
+}
+
+.location, .icon, .desc {
+    text-align: center;
+
+}
+
+.icon img{
+    width: 100px;
+}
+
+.location {
+    font-size: 40px;
+}
+
+.page-header {
+    text-align: center;
+}
+.smallimg {
+    max-height: 30px;
+    max-width: 30px;
+    display: inline-block;
+}
+ion-card-header {
+    white-space: nowrap;
+}
+ion-row {
+    height: 50%;
+}
+ion-col {
+    width: 50%;
+    outline: 2px dashed white;
+    text-align: center;
+}
