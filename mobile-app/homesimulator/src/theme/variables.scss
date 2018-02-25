@@ -36,6 +36,7 @@ $app-direction: ltr;
 $colors: (
   primary:    #d5d5d5, 
   secondary:  #6D7993, // #66b9b powder blue
+  powder:     #66b9bf, // #66b9b powder blue
   danger:     #f53d3d,
   light:      #f4f4f4,
   dark:       #222
@@ -51,6 +52,7 @@ $tabs-md-tab-text-color: color($colors, light);
 
 $list-md-background-color: color($colors, secondary);
 $list-md-text-color: color($colors, light);
+$card-md-title-font-size: 100px;
 
 $card-md-header-color: color($colors, light);
 
