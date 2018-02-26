@@ -8,6 +8,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
  * Ionic pages and navigation.
  */
 
+
 @IonicPage()
 @Component({
   selector: 'page-rooms',
@@ -15,8 +16,20 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class RoomsPage {
 
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
+
+  rooms = [
+    {'name': 'kitchen', 'id': 1},
+    {'name': 'living room', 'id': 2},
+    {'name': 'kitchen', 'id': 3},
+    {'name': 'masterbedroom', 'id': 4},
+    {'name': 'masterbathroom', 'id': 5},
+    {'name': 'guestroom1', 'id': 6},
+    {'name': 'guestroom2', 'id': 7},
+    {'name': 'guestbathroom', 'id': 8}
+  ];
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad RoomsPage');

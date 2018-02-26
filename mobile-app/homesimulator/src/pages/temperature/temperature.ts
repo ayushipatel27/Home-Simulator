@@ -15,13 +15,16 @@ export class TemperaturePage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad TemperaturePage');
 
-    var slider = (<HTMLInputElement>document.getElementById("myRange"));
-    var output = (<HTMLInputElement>document.getElementById("output"));
+    //var slider = (<HTMLInputElement>document.getElementById("myRange"));
+    var slider = (document.getElementById("myslider") as HTMLInputElement);
+    
+    //var output = (<HTMLInputElement>document.getElementById("output") as HTMLInputElement);
+    var output = (document.getElementById("output"));
     output.innerHTML = slider.value; // Display the default slider value
 
   // Update the current slider value (each time you drag the slider handle)
     slider.oninput = function() {
-    output.innerHTML = this.value;
+    output.innerHTML = (this as HTMLInputElement).value;
     }
     
   }

@@ -17,7 +17,7 @@ page-temperature {
     opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: opacity .2s;
-    margin-top: 10%;
+    margin-top: 6%;
 }
 
 /* Mouse-over effects */
@@ -71,4 +71,8 @@ page-temperature {
 ion-card-header {
     text-align: center;
     font-size: 100px;
+}
+
+#degrees {
+    content: "\2109";
 }

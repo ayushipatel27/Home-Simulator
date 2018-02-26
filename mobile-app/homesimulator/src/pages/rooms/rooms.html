@@ -11,30 +11,9 @@
 
   <ion-card class="rooms-card">
     <ion-list class="rooms-list">
-      <ion-item class="room-item" (click)="navigateToModule()">
-        Kitchen
-      </ion-item>
-      <ion-item class="room-item">
-        Living Room
-      </ion-item>
-      <ion-item class="room-item">
-        Master Bedroom
-      </ion-item>
-      <ion-item class="room-item">
-        Master Bathroom
-      </ion-item>
-      <ion-item class="room-item">
-        Guest Bedroom 1
-      </ion-item>
-      <ion-item class="room-item">
-        Guest Bedroom 2
-      </ion-item>
-      <ion-item class="room-item">
-        Guest Bathroom
-      </ion-item>
-      <ion-item class="room-item">
-        Garage
-      </ion-item>
+      <ion-item *ngFor="let room of rooms" class="room-item" (click)="navigateToModule()">
+        {{room.name}}
+      </ion-item> 
     </ion-list>
   </ion-card>
 
