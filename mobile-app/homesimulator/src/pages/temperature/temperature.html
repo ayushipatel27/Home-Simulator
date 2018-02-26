@@ -10,16 +10,21 @@
 <ion-content class="background" padding>
 
 
-    <ion-card class="temperature-card">
-      <ion-card-header text-wrap><h1 id="temp-title">Current Temperature</h1></ion-card-header>
-      <h1 id="output">50 <span id="degrees"></span></h1>
-      <div class="slidecontainer">
-        <input type="range" min="1" max="100" value="50" class="slider" id="myslider">
+  <ion-card class="temperature-card">
+    <ion-item-divider class="header-divider" color="light">Temperature</ion-item-divider>
+    <ion-card-header text-wrap>
+      <h1 id="temp-title">Current Temperature</h1>
+    </ion-card-header>
+    <h1 id="output">50
+      <span id="degrees"></span>
+    </h1>
+    <div class="slidecontainer">
+      <input type="range" min="1" max="100" value="50" class="slider" id="myslider">
     </div>
-    </ion-card>
+  </ion-card>
 
-    <ion-card class="slider-stats">
-      
-    </ion-card>
+  <ion-card class="slider-stats">
+
+  </ion-card>
 
 </ion-content>

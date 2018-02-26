@@ -11,9 +11,13 @@
 
   <ion-card class="rooms-card">
     <ion-list class="rooms-list">
-      <ion-item text-wrap *ngFor="let item of inprogress" class="room-item" (click)="navigateToModule()">
-        Sensor: {{item.sensorname}} Appliance: {{item.appliancename}} Power Useage: {{item.poweruseage || item.wateruseage }} Power Rate: {{item.powerrate || item.waterrate}}
-      </ion-item> 
+      <ion-item-group>
+        <ion-item-divider class="header-divider" color="light">In Progress</ion-item-divider>
+        <ion-item text-wrap *ngFor="let item of inprogress" class="room-item" (click)="navigateToModule()">
+          Sensor: {{item.sensorname}} Appliance: {{item.appliancename}} Power Useage: {{item.poweruseage || item.wateruseage }} Power
+          Rate: {{item.powerrate || item.waterrate}}
+        </ion-item>
+      </ion-item-group>
     </ion-list>
   </ion-card>
 
