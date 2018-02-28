@@ -13,7 +13,7 @@
     <ion-list class="rooms-list">
       <ion-item-group>
         <ion-item-divider class="header-divider" color="light">Rooms</ion-item-divider>
-        <ion-item *ngFor="let room of rooms" class="room-item" (click)="navigateToModule()">
+        <ion-item *ngFor="let room of rooms" class="room-item" (click)="navigateToRoomPage(room)">
           {{room.name}}
         </ion-item>
       </ion-item-group>

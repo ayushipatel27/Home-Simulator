@@ -9,24 +9,23 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class TemperaturePage {
 
+  temperature = 50;
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad TemperaturePage');
 
-    //var slider = (<HTMLInputElement>document.getElementById("myRange"));
-    var slider = (document.getElementById("myslider") as HTMLInputElement);
+    //var slider = (document.getElementById("myslider") as HTMLInputElement);
     
-    //var output = (<HTMLInputElement>document.getElementById("output") as HTMLInputElement);
-    var output = (document.getElementById("output"));
-    output.innerHTML = slider.value; // Display the default slider value
+    //var output = (document.getElementById("output"));
+    //output.innerHTML = slider.value; // Display the default slider value
 
-  // Update the current slider value (each time you drag the slider handle)
-    slider.oninput = function() {
-    output.innerHTML = (this as HTMLInputElement).value;
+    //slider.oninput = function() {
+    //output.innerHTML = (this as HTMLInputElement).value;
+
     }
     
   }
 
-}

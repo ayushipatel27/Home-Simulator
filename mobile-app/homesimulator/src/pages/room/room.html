@@ -1,0 +1,24 @@
+<ion-header>
+
+    <ion-navbar>
+      <ion-title>Room</ion-title>
+    </ion-navbar>
+  
+  </ion-header>
+  
+  
+  <ion-content class="background" padding>
+  
+    <ion-card class="rooms-card">
+      <ion-list class="rooms-list">
+        <ion-item-group>
+            <ion-item-divider class="header-divider" color="light">{{name}} Appliances</ion-item-divider>
+          <ion-item text-wrap *ngFor="let appliance of appliances" class="room-item" (click)="navigateToApplianceDetailsPage(appliance)">
+            <ion-label>Sensor: {{appliance.sensorname}} Appliance: {{appliance.appliancename}}</ion-label>
+          </ion-item>
+        </ion-item-group>
+      </ion-list>
+    </ion-card>
+  
+  </ion-content>
+  

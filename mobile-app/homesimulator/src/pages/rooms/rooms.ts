@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { RoomPage } from '../room/room';
+
 
 /**
  * Generated class for the RoomsPage page.
@@ -35,9 +37,10 @@ export class RoomsPage {
     console.log('ionViewDidLoad RoomsPage');
   }
 
-  navigateToModule() {
-    console.log('Navigating to module page.');
-    //this.navCtrl.push('RoomsPage');
+  navigateToRoomPage(room) {
+    console.log(room);
+    console.log('Navigating to room details page.');
+    this.navCtrl.push('RoomPage', {'room': room});
     }
 
 }

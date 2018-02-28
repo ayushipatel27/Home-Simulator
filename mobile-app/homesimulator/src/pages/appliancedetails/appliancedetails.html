@@ -1,0 +1,30 @@
+<!--
+  Generated template for the AppliancedetailsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{name}} Details</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="background" padding>
+
+  <ion-card class="detailscard">
+    <ion-item-divider class="header-divider" color="light">{{name}} Details</ion-item-divider>
+
+    <div class=text-container text-center>
+      <ion-label>On/Off Switch</ion-label>
+      <ion-toggle text-center id="onoffswitch" [(ngModel)]="onoffswitch"></ion-toggle>
+      <p *ngIf="onoffswitch">The {{name}} is on</p>
+    </div>
+
+  </ion-card>
+
+
+</ion-content>

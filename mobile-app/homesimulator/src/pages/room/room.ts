@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { ApplianceDetailsPage } from '../appliancedetails/appliancedetails';
-
 
 /**
- * Generated class for the AppliancesPage page.
+ * Generated class for the RoomPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -12,19 +10,11 @@ import { ApplianceDetailsPage } from '../appliancedetails/appliancedetails';
 
 @IonicPage()
 @Component({
-  selector: 'page-appliances',
-  templateUrl: 'appliances.html',
+  selector: 'page-room',
+  templateUrl: 'room.html',
 })
-export class AppliancesPage {
+export class RoomPage {
 
-
-  page = 1;
-  perPage = 0;
-  totalData = 0;
-  totalPage = 0;
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
 
   appliances = [
     {'sensorname': 'kitchenlightsensor', 'sensorid': 1, 'applianceid': 1, 'appliancename': 'kitchenlight1', 'poweruseage': 20, 'powerrate': 1.40},
@@ -40,11 +30,23 @@ export class AppliancesPage {
     {'sensorname': 'guestbathroomlightsensor', 'sensorid': 8, 'applianceid': 23, 'appliancename': 'guestbathroomlight', 'poweruseage': 12, 'powerrate': 1.14},
     {'sensorname': 'guestbathroomwatersensor', 'sensorid': 9, 'applianceid': 26, 'appliancename': 'guestbathroomfaucet', 'wateruseage': 3.0, 'waterrate': 1.95},
   ];
+  id: number;
+  room;
+  name: string;
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AppliancesPage');
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+    console.log(this.navParams);
+    this.room = this.navParams.get('room');
+    this.id = this.room.id;
+    console.log(this.id);
+    this.name = this.room.name;
+    console.log(this.name);
   }
 
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad RoomPage');
+  }
   navigateToApplianceDetailsPage(appliance) {
     console.log(appliance);
     console.log('Navigating to appliance details page.');

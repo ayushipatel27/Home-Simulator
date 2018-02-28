@@ -13,7 +13,7 @@
     <ion-list class="rooms-list">
       <ion-item-group>
           <ion-item-divider class="header-divider" color="light">Appliances</ion-item-divider>
-        <ion-item text-wrap *ngFor="let appliance of appliances" class="room-item" (click)="navigateToModule()">
+        <ion-item text-wrap *ngFor="let appliance of appliances" class="room-item" (click)="navigateToApplianceDetailsPage(appliance)">
           <ion-label>Sensor: {{appliance.sensorname}} Appliance: {{appliance.appliancename}}</ion-label>
         </ion-item>
       </ion-item-group>
