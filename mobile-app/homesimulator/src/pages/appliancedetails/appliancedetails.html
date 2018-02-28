@@ -21,7 +21,8 @@
     <div class=text-container text-center>
       <ion-label>On/Off Switch</ion-label>
       <ion-toggle text-center id="onoffswitch" [(ngModel)]="onoffswitch"></ion-toggle>
-      <p *ngIf="onoffswitch">The {{name}} is on</p>
+      <!--<p *ngIf="onoffswitch" class="powerstatus" style="color: white">The {{name}} is on</p> -->
+      <p *ngIf="onoffswitch" class="powerstatus">The {{name}} is on</p>
     </div>
 
   </ion-card>

@@ -41,7 +41,6 @@ export class ApplianceDetailsPage {
     console.log('ionViewDidLoad AppliancedetailsPage');
     console.log(this.name);
     console.log(this.id);
-    //this.id = this.result.applianceid;
   }
 
 }

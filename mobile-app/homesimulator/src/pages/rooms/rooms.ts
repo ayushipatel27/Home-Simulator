@@ -23,7 +23,7 @@ export class RoomsPage {
   }
 
   rooms = [
-    {'name': 'kitchen', 'id': 1},
+    {'name': 'garage', 'id': 1},
     {'name': 'living room', 'id': 2},
     {'name': 'kitchen', 'id': 3},
     {'name': 'masterbedroom', 'id': 4},
