@@ -139,6 +139,7 @@ CREATE TABLE Appliances
  SensorID    INT NOT NULL ,
  PowerUsage  INT NOT NULL ,
  PowerRate   MONEY NOT NULL ,
+ ApplianceName VARCHAR(50) NOT NULL ,
 
  CONSTRAINT PK_Appliances PRIMARY KEY (ApplianceId),
  CONSTRAINT FK_38 FOREIGN KEY (SensorID)
