@@ -1,43 +1,3 @@
-import random
-
-class Usage(object):
-    def __init__(self, appliance, startTime, endTime):
-        self.appliance = Appliance
-        self.startTime = startTime
-        self.endTime = endTime
-
-    def getStartTime(self):
-        return self.startTime
-
-    def getEndTime(self):
-        return self.endTime
-
-    def setStartTime(self, startTime):
-        self.startTime = startTime
-
-    def setEndTime(self, endTime):
-        self.endTime = endTime
-
-class PowerUsage(Usage):
-    def __init__(self, cost, appliance, startTime, endTime):
-        self.cost = cost
-        Usage.__init__(self, appliance, startTime, endTime)
-
-class HVACUsage(Usage):
-    def __init__(self, internalTemp, externalTemp, desiredTemp, appliance, startTime, endTime):
-        self.internalTemp = internalTemp
-        self.externalTemp = externalTemp
-        self.desiredTemp = desiredTemp
-        Usage.__init__(self, appliance, startTime, endTime)
-
-
-class WaterUsage(Usage):
-    def __init__(self, gallons, hotWater, coldWater, appliance, startTime, endTime):
-        self.gallons = gallons
-        self.hotWater = hotWater
-        self.coldWater = coldWater
-        Usage.__init__(self, appliance, startTime, endTime)
-
 class Sensor(object):
     def __init__(self, sensorName, sensorState):
         self.sensorName = sensorName
@@ -48,9 +8,6 @@ class Sensor(object):
 
     def getSensorState(self):
         return self.sensorState
-
-    def setSensorName(self, sensorName):
-        self.sensorName = sensorName
 
     def setSensorState(self, sensorState):
         self.sensorState = sensorState
@@ -70,14 +27,6 @@ class Appliance(object):
     def getWatts(self):
         return self.watts
 
-    def setApplianceName(self, applianceName):
-        self.applianceName = applianceName
-
-    def setSensor(self, sensor):
-        self.sensor = sensor
-
-    def setWatts(self, watts):
-        self.watts = watts
 
 class Room(object):
     def __init__(self, roomName, numOfRooms, appliances):
@@ -88,23 +37,15 @@ class Room(object):
     def getRoomName(self):
         return self.roomName
 
-    def setRoomname(self, roomName):
-        self.roomName = roomName
-
     def getNumOfRooms(self):
         return self.numOfRooms
-
-    def setNumOfRooms(self, numOfRooms):
-        self.numOfRooms = numOfRooms
 
     def getAppliances(self):
         appliances = ""
         for appliance in self.appliances:
-            appliances = appliances + "\nAppliance: " + appliance.applianceName + "\t Quantity: " + str(self.appliances[appliance])
+            appliances = appliances + "\n\tAppliance: " + appliance.applianceName + "\t Quantity: " + str(self.appliances[appliance])
         return appliances
 
-    def setAppliances(self, appliances):
-        self.appliances = appliances
 
 class Home(object):
     def __init__(self, rooms, numOfAdults, numOfKids):
@@ -120,15 +61,6 @@ class Home(object):
 
     def getNumOfKids(self):
         return self.numOfKids
-
-    def setRooms(self, rooms):
-        self.rooms = rooms
-
-    def setNumOfAdults(self, numOfAdults):
-        self.numOfAdults = numOfAdults
-
-    def setNumOfKids(self, numOfKids):
-        self.numOfKids = numOfKids
 
 
 class Simulation(object):
