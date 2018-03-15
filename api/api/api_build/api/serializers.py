@@ -14,6 +14,7 @@ class AppliancesSerializer(serializers.ModelSerializer):
 		    'powerusage',
 		    'powerrate',
 		]
+		read_only_fields = ['applianceid', 'sensorid']
 
 class DailyusageSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -27,6 +28,7 @@ class DailyusageSerializer(serializers.ModelSerializer):
 			'totalhvacusage',
 			'totalhvaccost',
 		]
+		read_only_fields = ['applianceid', 'sensorid']
 
 class EnergyusageSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -38,6 +40,7 @@ class EnergyusageSerializer(serializers.ModelSerializer):
 			'usage',
 			'cost',
 		]
+		read_only_fields = ['timestamp']
 
 class HvacusageSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -50,6 +53,7 @@ class HvacusageSerializer(serializers.ModelSerializer):
 			'cost',
 			'temperature',
 		]
+		read_only_fields = ['timestamp']
 
 class RoomsSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -58,6 +62,7 @@ class RoomsSerializer(serializers.ModelSerializer):
 			'roomid',
 			'roomname',
 		]
+		read_only_fields = ['roomid']
 
 class SensorsSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -68,6 +73,7 @@ class SensorsSerializer(serializers.ModelSerializer):
 			'sensorstate',
 			'roomid',
 		]
+		read_only_fields = ['sensorid', 'roomid']
 
 class WaterusageSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -79,6 +85,7 @@ class WaterusageSerializer(serializers.ModelSerializer):
 			'usage',
 			'cost',
 		]
+		read_only_fields = ['timestamp']
 
 class WeatherSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -90,5 +97,6 @@ class WeatherSerializer(serializers.ModelSerializer):
 			'chanceofprecipitation',
 			'state',
 		]
+		read_only_fields = ['timestamp']
 
 

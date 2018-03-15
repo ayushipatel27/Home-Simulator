@@ -2,28 +2,44 @@
 
 from django.urls import path, re_path
 
-from .views import AppliancesRudView, DailyusageRudView, EnergyusageRudView, HvacusageRudView, RoomsRudView, SensorsRudView, WaterusageRudView, WeatherRudView
+from .views import AppliancesAPIView, DailyusageAPIView, EnergyusageAPIView, HvacusageAPIView, RoomsAPIView, SensorsAPIView, WaterusageAPIView, WeatherAPIView, AppliancesRudView, DailyusageRudView, EnergyusageRudView, HvacusageRudView, RoomsRudView, SensorsRudView, WaterusageRudView, WeatherRudView
 
 urlpatterns = [
 
-	#re_path(r'^(?P<applianceid>\d+)/$', AppliancesRudView.as_view(), name='appliances-rud')
+	# List Create Views:
 
-    path('appliances/', AppliancesRudView.as_view(), name='appliances-rud'),
+    path('appliances/', AppliancesAPIView.as_view(), name='appliances-listcreate'),
 
-    path('appliances', AppliancesRudView.as_view(), name='appliances-rud'),
+    path('dailyusage/', DailyusageAPIView.as_view(), name='dailyusage-create'),
 
-    path('dailyusage', DailyusageRudView.as_view(), name='dailyusage-rud'),
+    path('energyusage/', EnergyusageAPIView.as_view(), name='energyusage-listcreate'),
 
-    path('energyusage', EnergyusageRudView.as_view(), name='energyusage-rud'),
+    path('hvacusage/', HvacusageAPIView.as_view(), name='hvacusage-listcreate'),
 
-    path('hvacusage', HvacusageRudView.as_view(), name='hvacusage-rud'),
+    path('rooms/', RoomsAPIView.as_view(), name='rooms-listcreate'),
 
-    path('rooms', RoomsRudView.as_view(), name='rooms-rud'),
+    path('sensors/', SensorsAPIView.as_view(), name='sensors-listcreate'),
 
-    path('sensors', SensorsRudView.as_view(), name='sensors-rud'),
+    path('waterusage/', WaterusageAPIView.as_view(), name='waterusage-listcreate'),
 
-    path('waterusage', WaterusageRudView.as_view(), name='waterusage-rud'),
+    path('weather/', WeatherAPIView.as_view(), name='weather-listcreate'),
 
-    path('weather', WeatherRudView.as_view(), name='weather-rud'),
+    # Rud Views:
+
+    path('appliances/<int:applianceid>/', AppliancesRudView.as_view(), name='appliances-rud'),
+
+    path('dailyusage/<int:dailyusageid>/', DailyusageRudView.as_view(), name='dailyusage-rud'),
+
+    path('energyusage/<int:energyusageid>/', EnergyusageRudView.as_view(), name='energyusage-rud'),
+
+    path('hvacusage/<int:hvacusageid>/', HvacusageRudView.as_view(), name='hvacusage-rud'),
+
+    path('rooms/<int:roomid>/', RoomsRudView.as_view(), name='rooms-rud'),
+
+    path('sensors/<int:sensorid>/', SensorsRudView.as_view(), name='sensors-rud'),
+
+    path('waterusage/<int:waterusageid>/', WaterusageRudView.as_view(), name='waterusage-rud'),
+
+    path('weather/<int:weatherid>/', WeatherRudView.as_view(), name='weather-rud'),
 
 ]

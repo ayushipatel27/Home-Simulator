@@ -213,3 +213,5 @@ class Weather(models.Model):
     class Meta:
         managed = False
         db_table = 'weather'
+
+        
