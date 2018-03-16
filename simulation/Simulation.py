@@ -481,20 +481,26 @@ class Simulation(object):
                 while wakeTime <= currentTime <= sleepTime:
                     if totalTimeOn < desiredTimeOn:
                         timeOn = random.randint(1, desiredTimeOn)
-                        timeOff = random.randint(1, desiredTimeOn)
                         randomTime = self.generateRandomTime(currentTime, wakeTime, sleepTime)
 
-                        if currentTime + randomTime + timeOn + timeOff < sleepTime:
-                            currentTime += randomTime + timeOn
-                            totalTimeOn += timeOn
+                        if currentTime + randomTime + timeOn  < sleepTime:
+                            if currentTime + timeOn > leaveTime:
+                                timeOn = leaveTime - currentTime
+                            else:
+                                break
+
+                            currentTime += randomTime
 
                             appliance.getSensor().setSensorState(1)
+                            print(appliance.getSensor().getSensorState())
                             startTime = self.convertSecondsToTime(currentTime)
                             print("Turning on sensor at " + startTime)
 
-                            currentTime += timeOff
+                            currentTime += timeOn
+                            totalTimeOn += timeOn
 
                             appliance.getSensor().setSensorState(0)
+                            print(appliance.getSensor().getSensorState())
                             endTime = self.convertSecondsToTime(currentTime)
                             print("Turning off sensor at " + endTime)
 
@@ -522,12 +528,14 @@ class Simulation(object):
                             totalTimeOn += timeOn
 
                             appliance.getSensor().setSensorState(1)
+                            print(appliance.getSensor().getSensorState())
                             startTime = self.convertSecondsToTime(currentTime)
                             print("Turning on sensor at " + startTime)
 
                             currentTime += timeOff
 
                             appliance.getSensor().setSensorState(0)
+                            print(appliance.getSensor().getSensorState())
                             endTime = self.convertSecondsToTime(currentTime)
                             print("Turning off sensor at " + endTime)
 
@@ -590,7 +598,6 @@ def simulate():
                 s.simulateUsage(appliance, day)
             if appliance.getApplianceName() == "Bath":
                 s.simulateUsage(appliance, day)
-
 
 
 simulate()
