@@ -1,5 +1,5 @@
-import simpy, random
-from datetime import timedelta, time
+import random
+from datetime import timedelta, time, date
 
 class PowerUsage(object):
     def __init__(self, sensor, startTime, endTime, usage, cost):
@@ -141,9 +141,12 @@ class Home(object):
 class Simulation(object):
     def __init__(self):
         self.home = Home
+        self.rooms = []
+        self.appliances = []
+        self.sensors = []
         self.powerUsages = []
         self.waterUsages = []
-        self.HvacUsages = []
+        self.hvacUsages = []
         self.dailyUsages = []
 
     def createHome(self):
@@ -195,19 +198,6 @@ class Simulation(object):
 
         return self.home
 
-    def updatePowerUsage(self, sensor, startTime, endTime, usage, cost):
-        self.powerUsages.append(PowerUsage(sensor, startTime, endTime, usage, cost))
-
-    def updateWaterUsage(self, sensor, startTime, endTime, usage, cost):
-        self.powerUsages.append(WaterUsage(sensor, startTime, endTime, usage, cost))
-
-    def updateHvacUsage(self, sensor, startTime, endTime, temperature, usage, cost):
-        self.powerUsages.append(HvacUsage(sensor, startTime, endTime, usage, cost))
-
-    def updateDailyUsage(self,  date, totalWaterUsage, totalPowerUsage, totalHvacUsage, totalPowerCost, totalWaterCost, totalHvacCost):
-        self.dailyUsages.append(DailyUsage( date, totalWaterUsage, totalPowerUsage, totalHvacUsage, totalPowerCost, totalWaterCost, totalHvacCost))
-
-
     def printHouseDetail(self):
         print("Home Detail: \n")
 
@@ -218,19 +208,37 @@ class Simulation(object):
                 print(appliance.toString())
             print()
 
+    def addRooms(self):
+        for room in self.home.getRooms():
+            self.rooms.append(room)
 
-    def calculatePowerCost(self, watts, time):
-        return ((watts * (time/3600))/1000) * .12         # returns $ for kilowatts per hour
+    def addAppliances(self):
+        for room in self.home.getRooms():
+            for appliance in room.getAppliances():
+                self.appliances.append(appliance)
 
-    def calculatePowerUsage(self, watts, time):
-        return (watts * (time/3600))/1000                 #returns kilowatts per hour
+    def addSensors(self):
+        for room in self.home.getRooms():
+            for appliance in room.getAppliances():
+                self.sensors.append(appliance.getSensor())
 
-    def calculateWaterCost(self, appliance):
-        timeHotWaterUsed = self.getGallons(appliance) * self.getHotWaterPercentage(appliance) * 240
-        return self.calculatePowerCost(4500, timeHotWaterUsed)
+    def addPowerUsage(self, sensor, startTime, endTime, usage, cost):
+        self.powerUsages.append(PowerUsage(sensor, startTime, endTime, usage, cost))
 
-    def calculateWaterUsage(self, appliance):
-        return self.getGallons(appliance)
+    def addWaterUsage(self, sensor, startTime, endTime, usage, cost):
+        self.powerUsages.append(WaterUsage(sensor, startTime, endTime, usage, cost))
+
+    def addHvacUsage(self, sensor, startTime, endTime, temperature, usage, cost):
+        self.powerUsages.append(HvacUsage(sensor, startTime, endTime, usage, cost))
+
+    def addDailyUsage(self,  date, waterUsage, powerUsage, totalHvacUsage, powerCost, waterCost, totalHvacCost):
+        self.dailyUsages.append(DailyUsage( date, waterUsage, powerUsage, totalHvacUsage, powerCost, waterCost, totalHvacCost))
+
+    def dateRange(self, startDate, endDate):
+        for n in range(int((endDate - startDate).days)):
+            yield startDate + timedelta(n)
+
+
 
     def convertSecondsToTime(self, seconds):
         m, s = divmod(seconds, 60)
@@ -243,12 +251,10 @@ class Simulation(object):
         return t.strftime("%I:%M:%S %p")
 
     def isWeekday(self, day):
-        days = ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"]
-        if day in days[0:5]:
+        if day < 5:
             return True
-        elif day in days[5:7]:
+        else:
             return False
-
 
     def generateRandomTime(self, currentTime, startTime, endTime):
         randomTime = 0
@@ -258,7 +264,7 @@ class Simulation(object):
                 break
         return randomTime - currentTime
 
-    def getTimeOn(self, appliance, day):
+    def getDurationOn(self, appliance, day):
         if appliance.getApplianceName() == "Overhead Light":
             if self.isWeekday(day):
                 return random.randint(10800, 25200)
@@ -311,6 +317,10 @@ class Simulation(object):
             return random.randint(900, 1800)
         if appliance.getApplianceName() == "Bath":
             return random.randint(1800, 2700)
+        if "Door" in appliance.getApplianceName():
+            return 30
+        else:
+            return  0
 
     def getGallons(self, appliance):
         if appliance.getApplianceName() == "Bath":
@@ -321,6 +331,8 @@ class Simulation(object):
             return 6
         if appliance.getApplianceName() == "Clothes Washer":
             return 20
+        else:
+            return 0
 
     def getHotWaterPercentage(self, appliance):
         if appliance.getApplianceName() == "Bath":
@@ -331,138 +343,100 @@ class Simulation(object):
             return 1.00
         if appliance.getApplianceName() == "Clothes Washer":
             return 0.85
+        else:
+            return 0
 
+    def calculatePowerCost(self, watts, time):
+        return ((watts * (time/3600))/1000) * .12         # returns $ for kilowatts per hour
 
-    def simulateUsage(self, appliance, day):
-        print("\n" + "Toggling sensors for appliance " + appliance.getApplianceName())
+    def calculatePowerUsage(self, watts, time):
+        return (watts * (time/3600))/1000                 #returns kilowatts per hour
+
+    def calculateWaterCost(self, appliance):
+        timeHotWaterUsed = self.getGallons(appliance) * self.getHotWaterPercentage(appliance) * 240
+        return self.calculatePowerCost(4500, timeHotWaterUsed)
+
+    def calculateWaterUsage(self, appliance):
+        return self.getGallons(appliance)
+
+    def startRoutineUsage(self, timeOfDay, desiredTimeOn, appliance):
+        sensor = appliance.getSensor()
+
+        startTime = self.convertSecondsToTime(timeOfDay)
+        sensor.setSensorState(1)
+        print("Turning on sensor at " + startTime)
+
+        endTime = self.convertSecondsToTime(timeOfDay + desiredTimeOn)
+        sensor.setSensorState(0)
+        print("Turning off sensor at " + endTime)
+
+        powerUsage = self.calculatePowerCost(appliance.getWatts(), desiredTimeOn)
+        powerCost = self.calculatePowerUsage(appliance.getWatts(), desiredTimeOn)
+        waterUsage = self.calculateWaterUsage(appliance)
+        waterCost = self.calculateWaterCost(appliance)
+
+        if powerUsage != 0:
+            self.addPowerUsage(sensor.getId(), startTime, endTime, powerUsage, powerCost)
+
+        if waterUsage != 0:
+            self.addWaterUsage(sensor.getId(), startTime, endTime, waterUsage, waterCost)
+
+        return {'powerUsage' : powerUsage, 'powerCost': powerCost, 'waterUsage': waterUsage, 'waterCost': waterCost}
+
+    def startRandomUsage(self, day, desiredTimeOn, appliance):
+        sensor = appliance.getSensor()
 
         wakeTime = 18000            #5:00 AM
         leaveTime = 27000           #7:30 AM
         comeHomeTime = 57600        #4:00 PM
         sleepTime = 73800           #10:30 PM
         currentTime = wakeTime
-        desiredTimeOn = self.getTimeOn(appliance, day)
+
         totalTimeOn = 0
-        totalPowerUsage = 0
-        totalPowerCost = 0
-        totalWaterUsage = 0
-        totalWaterCost = 0
+        powerUsage = 0
+        powerCost = 0
 
-        cleaningDays = ["Sat", "Sun", "Tues", "Thurs"]
+        if self.isWeekday(day):
+            while wakeTime <= currentTime <= sleepTime:
+                if totalTimeOn < desiredTimeOn:
+                    timeOn = random.randint(1, desiredTimeOn)
+                    randomTime = self.generateRandomTime(currentTime, wakeTime, sleepTime)
 
-        # Todo: Extras: Make cooking appliances run in the PM instead? Make others 1/2 probability to run in AM/PM
-        # Todo: Update all usages and sensor states to their lists
-        # Todo: calculate Daily Usage at the end of day
-        # Todo: Clean this method up if need be. Good job \_o_/
+                    if (currentTime + timeOn) > leaveTime and currentTime < leaveTime:
+                        timeOn = leaveTime - currentTime
 
-        if appliance.getApplianceName() == "Refrigerator":
-            startTime = self.convertSecondsToTime(0)
-            appliance.getSensor().setSensorState(1)
-            print("Turning on sensor at " + startTime)
-            endTime = self.convertSecondsToTime(86400)
-            print("Turning off sensor at " + endTime)
-            appliance.getSensor().setSensorState(0)
-            totalPowerUsage = self.calculatePowerCost(appliance.getWatts(), desiredTimeOn)
-            totalPowerCost = self.calculatePowerUsage(appliance.getWatts(), desiredTimeOn)
-            totalTimeOn += desiredTimeOn
+                    currentTime += randomTime
 
-            print("\nTotal time on should be " + str(desiredTimeOn) + " but is " + str(totalTimeOn))
-            print("Total Power Usage: %.2f kWh" % (totalPowerUsage))
-            print("Total Power Cost: $%.2f" % (totalPowerCost))
+                    appliance.getSensor().setSensorState(1)
+                    startTime = self.convertSecondsToTime(currentTime)
+                    print("Turning on sensor at " + startTime)
 
+                    currentTime += timeOn
+                    totalTimeOn += timeOn
 
-        elif appliance.getApplianceName() == "Clothes Dryer":
-            if day in cleaningDays:
-                randomTime = random.randint(63000, 72000)
-                startTime = self.convertSecondsToTime(randomTime)
-                appliance.getSensor().setSensorState(1)
-                print("Turning on sensor at " + startTime)
-                endTime = self.convertSecondsToTime(randomTime + desiredTimeOn)
-                appliance.getSensor().setSensorState(0)
-                print("Turning off sensor at " + endTime)
-                totalTimeOn += desiredTimeOn
+                    appliance.getSensor().setSensorState(0)
+                    endTime = self.convertSecondsToTime(currentTime)
+                    print("Turning off sensor at " + endTime)
 
-                totalPowerUsage = self.calculatePowerCost(appliance.getWatts(), desiredTimeOn)
-                totalPowerCost = self.calculatePowerUsage(appliance.getWatts(), desiredTimeOn)
+                    if leaveTime <= currentTime <= comeHomeTime:
+                        currentTime += (comeHomeTime - leaveTime)
 
-                print("\nTotal time on should be " + str(desiredTimeOn) + " but is " + str(totalTimeOn))
-                print("Total Power Usage: %.2f kWh" % (totalPowerUsage))
-                print("Total Power Cost: $%.2f" % (totalPowerCost))
+                    usage = self.calculatePowerUsage(appliance.getWatts(), totalTimeOn)
+                    powerUsage += usage
+                    cost = self.calculatePowerCost(appliance.getWatts(), totalTimeOn)
+                    powerCost += cost
 
+                    self.addPowerUsage(sensor.getId(), startTime, endTime, usage, cost)
 
-        elif appliance.getApplianceName() == "Clothes Washer":
-            if day in cleaningDays:
-                randomTime = random.randint(63000, 72000)
-                startTime = self.convertSecondsToTime(randomTime)
-                print("Turning on sensor at " + startTime)
-                appliance.getSensor().setSensorState(1)
-                endTime = self.convertSecondsToTime(randomTime + desiredTimeOn)
-                appliance.getSensor().setSensorState(0)
-                print("Turning off sensor at " + endTime)
-                totalTimeOn += desiredTimeOn
-
-                totalPowerUsage += self.calculatePowerCost(appliance.getWatts(), desiredTimeOn)
-                totalPowerCost += self.calculatePowerUsage(appliance.getWatts(), desiredTimeOn)
-                totalWaterUsage += self.calculateWaterUsage(appliance)
-                totalWaterCost += self.calculateWaterCost(appliance)
-
-            print("\nTotal time on should be " + str(desiredTimeOn) + " but is " + str(totalTimeOn))
-            print("Total Power Usage: %.2f kWh" % (totalPowerUsage))
-            print("Total Power Cost: $%.2f" % (totalPowerCost))
-            print("Total Water Usage: %.2f kWh" % (totalWaterUsage))
-            print("Total Water Cost: $%.2f" % (totalWaterCost))
-
-
-        elif appliance.getApplianceName() == "Dishwasher":
-            if day in cleaningDays:
-                randomTime = random.randint(63000, 72000)
-                startTime = self.convertSecondsToTime(randomTime)
-                print("Turning on sensor at " + startTime)
-                appliance.getSensor().setSensorState(1)
-                endTime = self.convertSecondsToTime(randomTime + desiredTimeOn)
-                appliance.getSensor().setSensorState(0)
-                print("Turning off sensor at " + endTime)
-                totalTimeOn += desiredTimeOn
-
-                totalPowerUsage = self.calculatePowerCost(appliance.getWatts(), desiredTimeOn)
-                totalPowerCost = self.calculatePowerUsage(appliance.getWatts(), desiredTimeOn)
-                totalWaterUsage += self.calculateWaterUsage(appliance)
-                totalWaterCost += self.calculateWaterCost(appliance)
-
-            print("\nTotal time on should be " + str(desiredTimeOn) + " but is " + str(totalTimeOn))
-            print("Total Power Usage: %.2f kWh" % (totalPowerUsage))
-            print("Total Power Cost: $%.2f" % (totalPowerCost))
-            print("Total Water Usage: %.2f kWh" % (totalWaterUsage))
-            print("Total Water Cost: $%.2f" % (totalWaterCost))
-
-        elif appliance.getApplianceName() == "Bath" or appliance.getApplianceName() == "Shower":
-            timeOn = desiredTimeOn
-            randomTime = random.randint(18000, 21600)
-            startTime = self.convertSecondsToTime(randomTime)
-            print("Turning on sensor at " + startTime)
-            appliance.getSensor().setSensorState(1)
-            endTime = self.convertSecondsToTime(randomTime + timeOn)
-            appliance.getSensor().setSensorState(0)
-            print("Turning off sensor at " + endTime)
-            totalTimeOn += timeOn
-
-            totalWaterUsage += self.calculateWaterUsage(appliance)
-            totalWaterCost += self.calculateWaterCost(appliance)
-
-
-            print("\nTotal time on should be " + str(desiredTimeOn) + " but is " + str(totalTimeOn))
-            print("Total Water Usage: %.2f kWh" % (totalWaterUsage))
-            print("Total Water Cost: $%.2f" % (totalWaterCost))
+                else:
+                    break
 
         else:
-            if self.isWeekday(day):
-                while wakeTime <= currentTime <= sleepTime:
-                    if totalTimeOn < desiredTimeOn:
-                        timeOn = random.randint(1, desiredTimeOn)
-                        randomTime = self.generateRandomTime(currentTime, wakeTime, sleepTime)
-
-                        if (currentTime + timeOn) > leaveTime and currentTime < leaveTime:
-                            timeOn = leaveTime - currentTime
+            while wakeTime <= currentTime <= sleepTime:
+                if totalTimeOn < desiredTimeOn:
+                    timeOn = random.randint(1, desiredTimeOn)
+                    randomTime = self.generateRandomTime(currentTime, wakeTime, sleepTime)
+                    if currentTime + randomTime + timeOn < sleepTime:
 
                         currentTime += randomTime
 
@@ -477,52 +451,81 @@ class Simulation(object):
                         endTime = self.convertSecondsToTime(currentTime)
                         print("Turning off sensor at " + endTime)
 
-                        if leaveTime <= currentTime <= comeHomeTime:
-                            currentTime += (comeHomeTime - leaveTime)
-
                         usage = self.calculatePowerUsage(appliance.getWatts(), totalTimeOn)
-                        totalPowerUsage += usage
+                        powerUsage += usage
                         cost = self.calculatePowerCost(appliance.getWatts(), totalTimeOn)
-                        totalPowerCost += cost
+                        powerCost += cost
+
+                        self.addPowerUsage(sensor.getId(), startTime, endTime, usage, cost)
+
                     else:
                         break
+                else:
+                    break
 
-            else:
-                while wakeTime <= currentTime <= sleepTime:
-                    if totalTimeOn < desiredTimeOn:
-                        timeOn = random.randint(1, desiredTimeOn)
-                        randomTime = self.generateRandomTime(currentTime, wakeTime, sleepTime)
-                        if currentTime + randomTime + timeOn < sleepTime:
-
-                            currentTime += randomTime
+        return {'powerUsage': powerUsage, 'powerCost': powerCost}
 
 
-                            appliance.getSensor().setSensorState(1)
-                            startTime = self.convertSecondsToTime(currentTime)
-                            print("Turning on sensor at " + startTime)
+    def simulateUsage(self, appliance, day, date):
+        totalPowerUsage = 0
+        totalWaterUsage = 0
+        totalHvacUsage = 0
+        totalPowerCost = 0
+        totalWaterCost = 0
+        totalHvacCost = 0
 
-                            currentTime += timeOn
-                            totalTimeOn += timeOn
+        desiredTimeOn = self.getDurationOn(appliance, day)
 
-                            appliance.getSensor().setSensorState(0)
-                            endTime = self.convertSecondsToTime(currentTime)
-                            print("Turning off sensor at " + endTime)
+        cleaningDays = ["5", "6", "1", "3"]
 
-                            usage = self.calculatePowerUsage(appliance.getWatts(), totalTimeOn)
-                            totalPowerUsage += usage
-                            cost = self.calculatePowerCost(appliance.getWatts(), totalTimeOn)
-                            totalPowerCost += cost
-                        else:
-                            break
-                    else:
-                        break
+        if appliance.getApplianceName() == "Refrigerator":
+            usages = self.startRoutineUsage(0, desiredTimeOn, appliance)
+            totalPowerUsage += usages['powerUsage']
+            totalPowerCost += usages['powerCost']
 
-            print("\nTotal time on should be " + str(desiredTimeOn) + " but is " + str(totalTimeOn))
-            print("Total Power Usage: %.2f kWh" % (totalPowerUsage))
-            print("Total Power Cost: $%.2f" % (totalPowerCost))
+        elif appliance.getApplianceName() == "Clothes Dryer":
+            if str(day) in cleaningDays:
+                randomTime = random.randint(63000, 72000)
+                usages = self.startRoutineUsage(randomTime, desiredTimeOn, appliance)
+                totalPowerUsage += usages['powerUsage']
+                totalPowerCost += usages['powerCost']
 
+        elif appliance.getApplianceName() == "Clothes Washer":
+            if str(day) in cleaningDays:
+                randomTime = random.randint(63000, 72000)
+                usages = self.startRoutineUsage(randomTime, desiredTimeOn, appliance)
+                totalWaterUsage += usages['waterUsage']
+                totalWaterCost += usages['waterCost']
+                totalPowerUsage += usages['powerUsage']
+                totalPowerCost += usages['powerCost']
 
+        elif appliance.getApplianceName() == "Dishwasher":
+            if str(day) in cleaningDays:
+                randomTime = random.randint(63000, 72000)
+                usages = self.startRoutineUsage(randomTime, desiredTimeOn, appliance)
+                totalWaterUsage += usages['waterUsage']
+                totalWaterCost += usages['waterCost']
+                totalPowerUsage += usages['powerUsage']
+                totalPowerCost += usages['powerCost']
 
+        elif appliance.getApplianceName() == "Bath":
+            randomTime = random.randint(64800, 72000)
+            usages = self.startRoutineUsage(randomTime, desiredTimeOn, appliance)
+            totalWaterUsage += usages['waterUsage']
+            totalWaterCost += usages['waterCost']
+
+        elif appliance.getApplianceName() == "Shower":
+            randomTime = random.randint(18000, 21600)
+            usages = self.startRoutineUsage(randomTime, desiredTimeOn, appliance)
+            totalWaterUsage += usages['waterUsage']
+            totalWaterCost += usages['waterCost']
+
+        else:
+            usages = self.startRandomUsage(day, desiredTimeOn, appliance)
+            totalPowerUsage += usages['powerUsage']
+            totalPowerCost += usages['powerCost']
+
+        self.addDailyUsage(date, totalWaterUsage, totalPowerUsage, totalHvacUsage, totalPowerCost, totalWaterCost, totalHvacCost)
 
 def simulate():
     s = Simulation()
@@ -531,52 +534,37 @@ def simulate():
 
     s.printHouseDetail()
 
-    day = "Sun"
-
     print("\nSimulating power usage for appliances in rooms.\n")
 
-
-    for room in home.getRooms():
-        print("\n\n\nRoom: " + room.getRoomName())
-        for appliance in room.getAppliances():
-            if appliance.getApplianceName() == "Overhead Light":
-                s.simulateUsage(appliance, day)
-            if "Lamp" in appliance.getApplianceName():
-                s.simulateUsage(appliance, day)
-            if appliance.getApplianceName() == "Living Room TV":
-                s.simulateUsage(appliance, day)
-            if appliance.getApplianceName() == "Bedroom TV":
-                s.simulateUsage(appliance, day)
-            if appliance.getApplianceName() == "Bath Exhaust Fan":
-                s.simulateUsage(appliance, day)
-            if appliance.getApplianceName() == "Stove":
-                s.simulateUsage(appliance, day)
-            if appliance.getApplianceName() == "Oven":
-                s.simulateUsage(appliance, day)
-            if appliance.getApplianceName() == "Microwave":
-                s.simulateUsage(appliance, day)
-            if appliance.getApplianceName() == "Refrigerator":
-                s.simulateUsage(appliance, day)
-            if appliance.getApplianceName() == "Clothes Dryer":
-                s.simulateUsage(appliance, day)
-            if appliance.getApplianceName() == "Clothes Washer":
-                s.simulateUsage(appliance, day)
-            if appliance.getApplianceName() == "Dishwasher":
-                s.simulateUsage(appliance, day)
-            if appliance.getApplianceName() == "Shower":
-                if s.isWeekday(day):
-                    for i in range(2):
-                        s.simulateUsage(appliance, day)
+    startDate = date(2018, 2, 1)
+    endDate = date(2018, 3, 1)
+    for singleDate in s.dateRange(startDate, endDate):
+        day = singleDate.weekday()
+        for room in home.getRooms():
+            print("\n\n\nRoom: " + room.getRoomName())
+            for appliance in room.getAppliances():
+                if "Door" in appliance.getApplianceName():
+                    print("Have not simulated Doors and Windows.")
+                if "Window" in appliance.getApplianceName():
+                    print("Have not simulated Doors and Windows.")
+                if "Lamp" in appliance.getApplianceName():
+                    s.simulateUsage(appliance, day, singleDate)
+                if appliance.getApplianceName() == "Shower":
+                    if s.isWeekday(day):
+                        for i in range(2):
+                            s.simulateUsage(appliance, day, singleDate)
+                    else:
+                        for i in range(3):
+                            s.simulateUsage(appliance, day, singleDate)
+                if appliance.getApplianceName() == "Bath":
+                    if s.isWeekday(day):
+                        for i in range(2):
+                            s.simulateUsage(appliance, day, singleDate)
+                    else:
+                        for i in range(3):
+                            s.simulateUsage(appliance, day, singleDate)
                 else:
-                    for i in range(3):
-                        s.simulateUsage(appliance, day)
-            if appliance.getApplianceName() == "Bath":
-                if s.isWeekday(day):
-                    for i in range(2):
-                        s.simulateUsage(appliance, day)
-                else:
-                    for i in range(3):
-                        s.simulateUsage(appliance, day)
+                    s.simulateUsage(appliance, day, singleDate)
 
 
 simulate()
