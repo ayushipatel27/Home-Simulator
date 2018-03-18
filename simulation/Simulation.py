@@ -502,7 +502,7 @@ class Simulation(object):
 
         desiredTimeOn = self.getDurationOn(appliance, day)
 
-        cleaningDays = random.choice(["0", "1", "2", "3", "4", "5", "6"])
+        cleaningDays = random.sample(["1", "2", "3", "4", "5", "6"], 4)             # may need to change
 
         if "Door" in appliance.getApplianceName():
             return {'powerUsage' : 0, 'powerCost': 0, 'waterUsage': 0, 'waterCost': 0}
