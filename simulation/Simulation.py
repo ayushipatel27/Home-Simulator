@@ -379,23 +379,33 @@ class Simulation(object):
     def startRoutineUsage(self, timeOfDay, desiredTimeOn, appliance):
         sensor = appliance.getSensor()
 
+        totalTimeOn = 0
+
         startTime = self.convertSecondsToTime(timeOfDay)
         sensor.setSensorState(1)
+        print("Turning on sensor at " + startTime)
 
         endTime = self.convertSecondsToTime(timeOfDay + desiredTimeOn)
         sensor.setSensorState(0)
-
+        print("Turning off sensor at " + endTime)
 
         powerUsage = self.calculatePowerCost(appliance.getWatts(), desiredTimeOn)
         powerCost = self.calculatePowerUsage(appliance.getWatts(), desiredTimeOn)
         waterUsage = self.calculateWaterUsage(appliance)
         waterCost = self.calculateWaterCost(appliance)
 
+        totalTimeOn += desiredTimeOn
+        print("\nTotal time on should be " + str(desiredTimeOn) + " but is " + str(totalTimeOn))
+
         if powerUsage != 0:
             self.addPowerUsage(sensor.getId(), startTime, endTime, powerUsage, powerCost)
+            print("Power Usage: %.2f kWh" % (powerUsage))
+            print("Power Cost: $%.2f" % (powerCost))
 
         if waterUsage != 0:
             self.addWaterUsage(sensor.getId(), startTime, endTime, waterUsage, waterCost)
+            print("Water Usage: %.2f kWh" % (waterUsage))
+            print("Water Cost: $%.2f" % (waterCost))
 
         return {'powerUsage' : powerUsage, 'powerCost': powerCost, 'waterUsage': waterUsage, 'waterCost': waterCost}
 
@@ -426,14 +436,16 @@ class Simulation(object):
 
                     currentTime += randomTime
 
-                    appliance.getSensor().setSensorState(1)
                     startTime = self.convertSecondsToTime(currentTime)
+                    appliance.getSensor().setSensorState(1)
+                    print("Turning on sensor at " + startTime)
 
                     currentTime += timeOn
                     totalTimeOn += timeOn
 
-                    appliance.getSensor().setSensorState(0)
                     endTime = self.convertSecondsToTime(currentTime)
+                    appliance.getSensor().setSensorState(0)
+                    print("Turning off sensor at " + endTime)
 
                     if leaveTime <= currentTime <= comeHomeTime:
                         currentTime += (comeHomeTime - leaveTime)
@@ -457,14 +469,16 @@ class Simulation(object):
 
                         currentTime += randomTime
 
-                        appliance.getSensor().setSensorState(1)
                         startTime = self.convertSecondsToTime(currentTime)
+                        appliance.getSensor().setSensorState(1)
+                        print("Turning on sensor at " + startTime)
 
                         currentTime += timeOn
                         totalTimeOn += timeOn
 
-                        appliance.getSensor().setSensorState(0)
                         endTime = self.convertSecondsToTime(currentTime)
+                        appliance.getSensor().setSensorState(0)
+                        print("Turning off sensor at " + endTime)
 
                         usage = self.calculatePowerUsage(appliance.getWatts(), totalTimeOn)
                         powerUsage += usage
@@ -477,13 +491,19 @@ class Simulation(object):
                         break
                 else:
                     break
+
+        print("\nTotal time on should be " + str(desiredTimeOn) + " but is " + str(totalTimeOn))
+        print("Power Usage: %.2f kWh" % (powerUsage))
+        print("Power Cost: $%.2f" % (powerCost))
+
         return {'powerUsage' : powerUsage, 'powerCost': powerCost, 'waterUsage': waterUsage, 'waterCost': waterCost}
 
     def simulateUsage(self, appliance, day):
 
         desiredTimeOn = self.getDurationOn(appliance, day)
 
-        cleaningDays = ["5", "6", "1", "3"]
+        cleaningDays = random.choice(["0", "1", "2", "3", "4", "5", "6"])
+
         if "Door" in appliance.getApplianceName():
             return {'powerUsage' : 0, 'powerCost': 0, 'waterUsage': 0, 'waterCost': 0}
 
@@ -533,17 +553,23 @@ class Simulation(object):
         startDate = date(2018, 2, 1)
         endDate = date(2018, 3, 1)
 
-        totalPowerUsage = 0
-        totalPowerCost = 0
-        totalWaterUsage = 0
-        totalWaterCost = 0
-        totalHvacUsage = 0
-        totalHvacCost = 0
-
         for singleDate in self.dateRange(startDate, endDate):
             day = singleDate.weekday()
+
+            totalPowerUsage = 0
+            totalPowerCost = 0
+            totalWaterUsage = 0
+            totalWaterCost = 0
+            totalHvacUsage = 0
+            totalHvacCost = 0
+
             for room in home.getRooms():
+                print("Room: " + room.getRoomName() + "\n")
+
                 for appliance in room.getAppliances():
+
+                    print("Toggling sensor states for appliance " + appliance.getApplianceName() + ": \n")
+
                     if "Door" in appliance.getApplianceName():
                         usages = self.simulateUsage(appliance, day)
                     if "Window" in appliance.getApplianceName():
@@ -578,19 +604,12 @@ class Simulation(object):
 
             self.addDailyUsage(singleDate, totalWaterUsage, totalPowerUsage, totalHvacUsage, totalPowerCost, totalWaterCost, totalHvacCost)
 
-            totalPowerUsage = 0
-            totalPowerCost = 0
-            totalWaterUsage = 0
-            totalWaterCost = 0
-            totalHvacUsage = 0
-            totalHvacCost = 0
-
 
         self.generateJson()
 
         print(self.monthlyReport())
-        # Power cost: ~230, Water Cost: always 72 -_- (somethings wrong deep down in the code)
 
+# calling simulation to simulate usage.
 s = Simulation()
 s.simulate()
 
