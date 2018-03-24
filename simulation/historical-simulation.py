@@ -105,7 +105,7 @@ class Home(object):
 
 class Simulation(object):
     def __init__(self):
-        self.home = Home
+        self.home = Home()
         self.rooms = []
         self.appliances = []
         self.sensors = []
@@ -246,12 +246,12 @@ class Simulation(object):
         water_usages_json = json.dumps(self.waterUsages, indent=4, sort_keys=True)
         daily_usages_json = json.dumps(self.dailyUsages, indent=4, sort_keys=True)
 
-        print(rooms_json)
-        print(appliances_json)
-        print(sensors_json)
-        print(power_usages_json)
-        print(water_usages_json)
-        print(daily_usages_json)
+        print("Rooms: " + rooms_json)
+        print("Appliances: " + appliances_json)
+        print("Sensors: " + sensors_json)
+        print("Power Usages: " + power_usages_json)
+        print("Water Usages: " + water_usages_json)
+        print("Daily Usages: " + daily_usages_json)
 
     def dateRange(self, startDate, endDate):
         for n in range(int((endDate - startDate).days)):
