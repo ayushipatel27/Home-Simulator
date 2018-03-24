@@ -142,7 +142,7 @@ class Simulation(object):
              Appliance(25, "Shower", 0)})
 
         self.home.getRoom("Garage").addAppliances(
-            {Appliance(26, "Garage Door 1", 0), Appliance(27, "Garage Door 2", 0), Appliance(28, "Window", 0)})
+            {Appliance(26, "Garage Door 1", 0), Appliance(27, "Garage Door 2", 0), Appliance(28, "Window 1", 0)})
 
         self.home.getRoom("Living Room").addAppliances(
             {Appliance(29, "Overhead Light", 60), Appliance(30, "Lamp",  60), Appliance(31, "Living Room TV", 636),
@@ -335,7 +335,15 @@ class Simulation(object):
         if appliance.getApplianceName() == "Bath":
             return random.randint(1800, 2700)
         if "Door" in appliance.getApplianceName():
-            return 30
+            if self.isWeekday(day):
+                return 480
+            else:
+                return 960
+        if "Window" in appliance.getApplianceName():
+            if self.isWeekday(day):
+                return random.randint(7200, 10800)
+            else:
+                return random.randint(14400, 18000)
         else:
             return  0
 
@@ -428,7 +436,10 @@ class Simulation(object):
         if self.isWeekday(day):
             while wakeTime <= currentTime <= sleepTime:
                 if totalTimeOn < desiredTimeOn:
-                    timeOn = random.randint(1, desiredTimeOn)
+                    if "Door" in appliance.getApplianceName():
+                        timeOn = 30
+                    else:
+                        timeOn = random.randint(1, desiredTimeOn)
                     randomTime = self.generateRandomTime(currentTime, wakeTime, sleepTime)
 
                     if (currentTime + timeOn) > leaveTime and currentTime < leaveTime:
@@ -437,14 +448,14 @@ class Simulation(object):
                     currentTime += randomTime
 
                     startTime = self.convertSecondsToTime(currentTime)
-                    appliance.getSensor().setSensorState(1)
+                    sensor.setSensorState(1)
                     print("Turning on sensor at " + startTime)
 
                     currentTime += timeOn
                     totalTimeOn += timeOn
 
                     endTime = self.convertSecondsToTime(currentTime)
-                    appliance.getSensor().setSensorState(0)
+                    sensor.setSensorState(0)
                     print("Turning off sensor at " + endTime)
 
                     if leaveTime <= currentTime <= comeHomeTime:
@@ -463,21 +474,24 @@ class Simulation(object):
         else:
             while wakeTime <= currentTime <= sleepTime:
                 if totalTimeOn < desiredTimeOn:
-                    timeOn = random.randint(1, desiredTimeOn)
+                    if "Door" in appliance.getApplianceName():
+                        timeOn = 30
+                    else:
+                        timeOn = random.randint(1, desiredTimeOn)
                     randomTime = self.generateRandomTime(currentTime, wakeTime, sleepTime)
                     if currentTime + randomTime + timeOn < sleepTime:
 
                         currentTime += randomTime
 
                         startTime = self.convertSecondsToTime(currentTime)
-                        appliance.getSensor().setSensorState(1)
+                        sensor.setSensorState(1)
                         print("Turning on sensor at " + startTime)
 
                         currentTime += timeOn
                         totalTimeOn += timeOn
 
                         endTime = self.convertSecondsToTime(currentTime)
-                        appliance.getSensor().setSensorState(0)
+                        sensor.setSensorState(0)
                         print("Turning off sensor at " + endTime)
 
                         usage = self.calculatePowerUsage(appliance.getWatts(), totalTimeOn)
@@ -505,9 +519,11 @@ class Simulation(object):
         cleaningDays = random.choice(["0", "1", "2", "3", "4", "5", "6"])
 
         if "Door" in appliance.getApplianceName():
+            self.startRandomUsage(day, desiredTimeOn, appliance)
             return {'powerUsage' : 0, 'powerCost': 0, 'waterUsage': 0, 'waterCost': 0}
 
         if "Window" in appliance.getApplianceName():
+            self.startRandomUsage(day, desiredTimeOn, appliance)
             return {'powerUsage' : 0, 'powerCost': 0, 'waterUsage': 0, 'waterCost': 0}
 
         elif appliance.getApplianceName() == "Refrigerator":
