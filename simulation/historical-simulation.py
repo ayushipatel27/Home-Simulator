@@ -1,4 +1,4 @@
-import random, json
+import random, json, requests
 from datetime import timedelta, time, date
 
 class Sensor(object):
@@ -224,29 +224,29 @@ class Simulation(object):
                                      'roomId': room.getId()})
 
     def addPowerUsage(self, sensorId, startTime, endTime, usage, cost):
-        self.powerUsages.append({'powerUsage' : {'timeStamp': startTime,
+        self.powerUsages.append({'timeStamp': startTime,
                                  'sensorId': sensorId,
                                  'endTimeStamp': endTime,
                                  'usage': usage,
-                                 'cost': cost}})
+                                 'cost': cost})
 
 
     def addWaterUsage(self, sensorId, startTime, endTime, usage, cost):
-        self.waterUsages.append({'waterUsage': {'timeStamp': startTime,
+        self.waterUsages.append({'timeStamp': startTime,
                                  'sensorId': sensorId,
                                  'endTimeStamp': endTime,
                                  'usage': usage,
-                                 'cost': cost}})
+                                 'cost': cost})
 
     def addHvacUsage(self, sensorId, startTime, endTime, temperature, usage, cost):
-        self.hvacUsages.append({'hvacUsage' : {'timeStamp': startTime,
+        self.hvacUsages.append({'timeStamp': startTime,
                                  'sensorId': sensorId,
                                  'endTimeStamp': endTime,
                                  'usage': usage,
-                                 'cost': cost}})
+                                 'cost': cost})
 
     def addDailyUsage(self,  date, totalWaterUsage, totalPowerUsage, totalHvacUsage, totalPowerCost, totalWaterCost, totalHvacCost):
-        self.dailyUsages.append({'dailyUsage': {'date': date.strftime("%A, %B  %d, %Y"),
+        self.dailyUsages.append({'date': date.strftime("%A, %B  %d, %Y"),
                                  'totalWaterUsage': int(totalWaterUsage),
                                  'totalPowerUsage': int(totalPowerUsage),
                                  'totalPowerCost': int(totalPowerCost),
@@ -265,9 +265,27 @@ class Simulation(object):
         return {'totalPowerCost' : totalPowerCost, 'totalWaterCost': totalWaterCost}
 
     def generateJson(self):
-        state = self.updateState()
-        data = json.dumps(state, indent=4, sort_keys=True)
-        print(data)
+        self.addRooms()
+        self.addAppliances()
+        self.addSensors()
+
+        rooms_json = json.dumps(self.rooms, indent=4, sort_keys=True)
+        appliances_json = json.dumps(self.appliances, indent=4, sort_keys=True)
+        sensors_json = json.dumps(self.sensors,indent=4, sort_keys=True)
+        power_usages_json = json.dumps(self.powerUsages, indent=4, sort_keys=True)
+        water_usages_json = json.dumps(self.waterUsages, indent=4, sort_keys=True)
+        daily_usages_json = json.dumps(self.dailyUsages, indent=4, sort_keys=True)
+
+        print("Rooms: " + rooms_json)
+        print("Appliances: " + appliances_json)
+        print("Sensors: " + sensors_json)
+        print("Power Usages: " + power_usages_json)
+        print("Water Usages: " + water_usages_json)
+        print("Daily Usages: " + daily_usages_json)
+
+        a = requests.post('http://127.0.0.1:8000/api/insert/sensors/', data=sensors_json)
+        b = requests.post('http://127.0.0.1:8000/api/insert/appliances/', data=appliances_json)
+        c = requests.post('http://127.0.0.1:8000/api/insert/rooms/', data=rooms_json)
 
     def dateRange(self, startDate, endDate):
         for n in range(int((endDate - startDate).days)):
@@ -452,10 +470,7 @@ class Simulation(object):
         if self.isWeekday(day):
             while wakeTime <= currentTime <= sleepTime:
                 if totalTimeOn < desiredTimeOn:
-                    if "Door" in appliance.getApplianceName():
-                        timeOn = 30
-                    else:
-                        timeOn = random.randint(1, desiredTimeOn)
+                    timeOn = random.randint(1, desiredTimeOn)
                     randomTime = self.generateRandomTime(currentTime, wakeTime, sleepTime)
 
                     if (currentTime + timeOn) > leaveTime and currentTime < leaveTime:
@@ -490,10 +505,7 @@ class Simulation(object):
         else:
             while wakeTime <= currentTime <= sleepTime:
                 if totalTimeOn < desiredTimeOn:
-                    if "Door" in appliance.getApplianceName():
-                        timeOn = 30
-                    else:
-                        timeOn = random.randint(1, desiredTimeOn)
+                    timeOn = random.randint(1, desiredTimeOn)
                     randomTime = self.generateRandomTime(currentTime, wakeTime, sleepTime)
                     if currentTime + randomTime + timeOn < sleepTime:
 
@@ -535,11 +547,9 @@ class Simulation(object):
         cleaningDays = random.choice(["0", "1", "2", "3", "4", "5", "6"])
 
         if "Door" in appliance.getApplianceName():
-            self.startRandomUsage(day, desiredTimeOn, appliance)
             return {'powerUsage' : 0, 'powerCost': 0, 'waterUsage': 0, 'waterCost': 0}
 
         if "Window" in appliance.getApplianceName():
-            self.startRandomUsage(day, desiredTimeOn, appliance)
             return {'powerUsage' : 0, 'powerCost': 0, 'waterUsage': 0, 'waterCost': 0}
 
         elif appliance.getApplianceName() == "Refrigerator":
