@@ -75,27 +75,27 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'shs',
-        'USER': 'shs_user',
-        'PASSWORD': 's3cure',
-        'HOST': '',
-        'PORT': '',
-    }
-}
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'mchlpitt',
-#         'USER': 'mchlpittweb',
+#         'NAME': 'shs',
+#         'USER': 'shs_user',
 #         'PASSWORD': 's3cure',
-#         'HOST': '127.0.0.1',
-#         'PORT': '10000',
+#         'HOST': '',
+#         'PORT': '',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'mchlpitt',
+        'USER': 'mchlpittweb',
+        'PASSWORD': 's3cure',
+        'HOST': '127.0.0.1',
+        'PORT': '10000',
+    }
+}
 
 # socket: ip-port
 

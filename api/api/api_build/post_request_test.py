@@ -20,7 +20,7 @@ import json
 
 url1 = 'http://127.0.0.1:8000/api/insert/appliances/'
 
-appliances = [{"applianceid":4, "sensorid":1, "powerusage":12, "powerrate":0.15}, {"applianceid":5, "sensorid":2, "powerusage":25, "powerrate":0.15}] #, "appliancename":"Washer"}
+appliances = [{"sensorid":1, "powerusage":12, "powerrate":0.15}, {"sensorid":2, "powerusage":25, "powerrate":0.15}] #, "appliancename":"Washer"}
 
 headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
@@ -29,7 +29,7 @@ req = requests.post(url1, data=json.dumps(appliances), headers=headers)
 
 url2 = 'http://127.0.0.1:8000/api/insert/rooms/'
 
-rooms = [{"roomid":21, "roomname":"GARAGE"}, {"roomid":22, "roomname":"GARAGE"}]
+rooms = [{"roomname":"GARAGE"}]
 
 headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
@@ -38,7 +38,7 @@ req = requests.post(url2, data=json.dumps(rooms), headers=headers)
 
 url3 = 'http://127.0.0.1:8000/api/insert/sensors/'
 
-sensors = [{"sensorid":31, "sensorname":"Light", "sensorstate":0, "roomid":1}, {"sensorid":32, "sensorname":"Light", "sensorstate":1, "roomid":2}]
+sensors = [{"sensorname":"Light", "sensorstate":0, "roomid":1}, {"sensorname":"Light", "sensorstate":1, "roomid":2}]
 
 headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 

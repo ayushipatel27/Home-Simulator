@@ -1,6 +1,6 @@
 from rest_framework import serializers 
 
-from api_build.models import Appliances, Dailyusage, Energyusage, Hvacusage, Rooms, Sensors, Waterusage, Weather
+from api_build.models import Appliances, Dailyusage, Powerusage, Hvacusage, Rooms, Sensors, Waterusage, Weather
 
 # Converts to JSON
 # Validates for data passed
@@ -30,18 +30,6 @@ class DailyusageSerializer(serializers.ModelSerializer):
 		]
 		read_only_fields = ['applianceid', 'sensorid']
 
-class EnergyusageSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Energyusage
-		fields = [
-			'timestamp',
-			'sensorid',
-			'endtimestamp',
-			'usage',
-			'cost',
-		]
-		read_only_fields = ['timestamp']
-
 class HvacusageSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Hvacusage
@@ -54,6 +42,19 @@ class HvacusageSerializer(serializers.ModelSerializer):
 			'temperature',
 		]
 		read_only_fields = ['timestamp']
+
+class PowerusageSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Powerusage
+		fields = [
+		    'energyusageid',
+			'timestamp',
+			'sensorid',
+			'endtimestamp',
+			'usage',
+			'cost',
+		]
+		read_only_fields = ['energyusageid']
 
 class RoomsSerializer(serializers.ModelSerializer):
 	class Meta:

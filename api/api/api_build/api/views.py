@@ -11,8 +11,8 @@ import json
 
 from rest_framework.generics import UpdateAPIView
 
-from api_build.models import Appliances, Dailyusage, Energyusage, Hvacusage, Rooms, Sensors, Waterusage, Weather
-from .serializers import AppliancesSerializer, DailyusageSerializer, EnergyusageSerializer, HvacusageSerializer, RoomsSerializer, SensorsSerializer, WaterusageSerializer, WeatherSerializer
+from api_build.models import Appliances, Dailyusage, Powerusage, Hvacusage, Rooms, Sensors, Waterusage, Weather
+from .serializers import AppliancesSerializer, DailyusageSerializer, PowerusageSerializer, HvacusageSerializer, RoomsSerializer, SensorsSerializer, WaterusageSerializer, WeatherSerializer
 
 
 
@@ -50,18 +50,18 @@ class DailyusageRudView(generics.RetrieveUpdateDestroyAPIView):
 
 
 
-class EnergyusageRudView(generics.RetrieveUpdateDestroyAPIView):
-	lookup_field     = 'energyusageid'
-	serializer_class = EnergyusageSerializer
+# class EnergyusageRudView(generics.RetrieveUpdateDestroyAPIView):
+# 	lookup_field     = 'energyusageid'
+# 	serializer_class = EnergyusageSerializer
 
-	def get_queryset(self):
-		return Energyusage.objects.all()
+# 	def get_queryset(self):
+# 		return Energyusage.objects.all()
 
-	def put(self, request, *args, **kwargs):
-		return self.update(request, *args, **kwargs)
+# 	def put(self, request, *args, **kwargs):
+# 		return self.update(request, *args, **kwargs)
 
-	def patch(self, request, *args, **kwargs):
-		return self.update(request, *args, **kwargs)
+# 	def patch(self, request, *args, **kwargs):
+# 		return self.update(request, *args, **kwargs)
 
 
 
@@ -78,7 +78,18 @@ class HvacusageRudView(generics.RetrieveUpdateDestroyAPIView):
 	def patch(self, request, *args, **kwargs):
 		return self.update(request, *args, **kwargs)
 
+class PowerusageRudView(generics.RetrieveUpdateDestroyAPIView):
+	lookup_field     = 'Powerusageid'
+	serializer_class = PowerusageSerializer
 
+	def get_queryset(self):
+		return Powerusage.objects.all()
+
+	def put(self, request, *args, **kwargs):
+		return self.update(request, *args, **kwargs)
+
+	def patch(self, request, *args, **kwargs):
+		return self.update(request, *args, **kwargs)
 
 class RoomsRudView(generics.RetrieveUpdateDestroyAPIView):
 	lookup_field     = 'roomid'
@@ -201,14 +212,15 @@ class DailyusageAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 
 
 
-class EnergyusageAPIView(mixins.CreateModelMixin, generics.ListAPIView):
-	serializer_class = EnergyusageSerializer
+class PowerusageAPIView(mixins.CreateModelMixin, generics.ListAPIView):
+	serializer_class = PowerusageSerializer
 
 	def get_queryset(self):
-		qs = Energyusage.objects.all()
+		qs = Powerusage.objects.all()
 		query = self.request.GET.get("q")
 		if query is not None:
-			qs = qs.filter(Q(timestamp__icontains=query)|
+			qs = qs.filter(Q(energyusageid__icontains=query)|
+			               Q(timestamp__icontains=query)|
 						   Q(sensorid__icontains=query)|
 						   Q(endtimestamp__icontains=query)|
 						   Q(usage__icontains=query)|
@@ -429,7 +441,7 @@ def InsertAppliances(request):
 
         for i in data:
             sensor = Sensors.objects.get(sensorid=i['sensorid'])
-            appliance = Appliances.objects.create(applianceid=i['applianceid'], sensorid=sensor, powerusage=i['powerusage'], powerrate=i['powerrate'])
+            appliance = Appliances.objects.create(sensorid=sensor, powerusage=i['powerusage'], powerrate=i['powerrate'])
             appliance.save()
 
     return HttpResponse('')
@@ -478,7 +490,7 @@ def InsertRooms(request):
         data = json.loads(request.body)
 
         for i in data:
-            room = Rooms.objects.create(roomid=i['roomid'], roomname=i['roomname'])
+            room = Rooms.objects.create(roomname=i['roomname'])
             room.save()
 
     return HttpResponse('')
@@ -491,7 +503,7 @@ def InsertSensors(request):
 
         for i in data:
             room = Rooms.objects.get(roomid=i['roomid'])
-            sensor = Sensors.objects.create(sensorid=i['sensorid'], sensorname=i['sensorname'], sensorstate=i['sensorstate'], roomid=room)
+            sensor = Sensors.objects.create(sensorname=i['sensorname'], sensorstate=i['sensorstate'], roomid=room)
             sensor.save()
 
     return HttpResponse('')
