@@ -2,7 +2,9 @@
 
 from django.urls import path, re_path
 
-from .views import AppliancesAPIView, DailyusageAPIView, EnergyusageAPIView, HvacusageAPIView, RoomsAPIView, SensorsAPIView, WaterusageAPIView, WeatherAPIView, AppliancesRudView, DailyusageRudView, EnergyusageRudView, HvacusageRudView, RoomsRudView, SensorsRudView, WaterusageRudView, WeatherRudView
+from rest_framework.generics import UpdateAPIView
+
+from .views import AppliancesAPIView, DailyusageAPIView, EnergyusageAPIView, HvacusageAPIView, RoomsAPIView, SensorsAPIView, WaterusageAPIView, WeatherAPIView, AppliancesRudView, DailyusageRudView, EnergyusageRudView, HvacusageRudView, RoomsRudView, SensorsRudView, WaterusageRudView, WeatherRudView, AppliancesViewSet, api_update, UpdateRoom, UpdateRoomNew, UpdateHouseState, InsertSensors, InsertAppliances, InsertRooms
 
 urlpatterns = [
 
@@ -42,4 +44,25 @@ urlpatterns = [
 
     path('weather/<int:weatherid>/', WeatherRudView.as_view(), name='weather-rud'),
 
+    # ViewSets:
+
+    path('appliances/viewsets/', AppliancesViewSet.as_view({'get': 'list'}), name='appliances-viewset'),
+
+    # Updates
+
+    path('rooms/aa/', api_update),
+
+    path('updateroom/', UpdateRoom),
+
+    path('updateroomnew/', UpdateRoomNew, name='update-room'),
+
+    path('update/', UpdateHouseState, name='update'),
+
+    # Inserts
+
+    path('insert/appliances/', InsertAppliances, name='insert-appliances'),
+
+    path('insert/rooms/', InsertRooms, name='insert-rooms'),
+
+    path('insert/sensors/', InsertSensors, name='insert-sensers'),
 ]

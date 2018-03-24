@@ -1,4 +1,3 @@
-# This is an auto-generated Django model module.
 # You'll have to do the following manually to clean this up:
 #   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
@@ -12,7 +11,8 @@ class Appliances(models.Model):
     applianceid = models.IntegerField(primary_key=True)
     sensorid = models.ForeignKey('Sensors', models.DO_NOTHING, db_column='sensorid')
     powerusage = models.IntegerField()
-    powerrate = models.TextField()  # This field type is a guess.
+    powerrate = models.FloatField()  # This field type is a guess.
+    #appliancename = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -89,10 +89,10 @@ class Dailyusage(models.Model):
     date = models.DateField(primary_key=True)
     totalwaterusage = models.FloatField()
     totalpowerusage = models.IntegerField()
-    totalpowercost = models.TextField()  # This field type is a guess.
-    totalwatercost = models.TextField()  # This field type is a guess.
+    totalpowercost = models.FloatField()  # This field type is a guess.
+    totalwatercost = models.FloatField()  # This field type is a guess.
     totalhvacusage = models.FloatField()
-    totalhvaccost = models.TextField()  # This field type is a guess.
+    totalhvaccost = models.FloatField()  # This field type is a guess.
 
     class Meta:
         managed = False
@@ -148,7 +148,7 @@ class Energyusage(models.Model):
     sensorid = models.IntegerField()
     endtimestamp = models.DateTimeField(blank=True, null=True)
     usage = models.IntegerField()
-    cost = models.TextField()  # This field type is a guess.
+    cost = models.FloatField()  # This field type is a guess.
 
     class Meta:
         managed = False
@@ -161,7 +161,7 @@ class Hvacusage(models.Model):
     sensorid = models.IntegerField()
     endtimestamp = models.DateTimeField(blank=True, null=True)
     usage = models.FloatField()
-    cost = models.TextField()  # This field type is a guess.
+    cost = models.FloatField()  # This field type is a guess.
     temperature = models.FloatField()
 
     class Meta:
@@ -173,6 +173,7 @@ class Hvacusage(models.Model):
 class Rooms(models.Model):
     roomid = models.IntegerField(primary_key=True)
     roomname = models.CharField(max_length=50)
+    #applianceid = models.ForeignKey(Appliances, models.DO_NOTHING, db_column='applianceid', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -195,7 +196,7 @@ class Waterusage(models.Model):
     sensorid = models.IntegerField()
     endtimestamp = models.DateTimeField(blank=True, null=True)
     usage = models.FloatField()
-    cost = models.TextField() # This field type is a guess.
+    cost = models.FloatField() # This field type is a guess.
 
     class Meta:
         managed = False
@@ -213,5 +214,3 @@ class Weather(models.Model):
     class Meta:
         managed = False
         db_table = 'weather'
-
-        
