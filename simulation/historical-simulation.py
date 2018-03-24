@@ -113,6 +113,7 @@ class Simulation(object):
         self.waterUsages = []
         self.hvacUsages = []
         self.dailyUsages = []
+        self.states = []
 
     def createHome(self):
         self.home = Home()
@@ -173,6 +174,34 @@ class Simulation(object):
                 print(appliance.toString())
             print()
 
+    def updateState(self):
+        return {
+            'home':
+                {
+                    {
+                        'sensors':
+                            {item['sensorId']: item for item in self.sensors}
+                    },
+                    {
+                        'appliances':
+                             {item['applianceId']: item for item in self.appliances}
+
+                    },
+                    {
+                        'rooms':
+                            {item['roomId']: item for item in self.rooms}
+                    },
+                    {
+                        'powerUsages':  {item['powerUsage']:item for item in self.powerUsages}
+                    },
+                    {
+                        'waterUsages': {item['waterUsage']: item for item in self.waterUsages}
+                    },
+                    {
+                        'dailyUsages': {item['dailyUsage']: item for item in self.dailyUsages}
+                    }
+                }
+        }
     def addRooms(self):
         for room in self.home.getRooms():
             self.rooms.append({'roomId': room.getId(), 'roomName': room.getRoomName()})
@@ -195,28 +224,29 @@ class Simulation(object):
                                      'roomId': room.getId()})
 
     def addPowerUsage(self, sensorId, startTime, endTime, usage, cost):
-        self.powerUsages.append({'timeStamp': startTime,
+        self.powerUsages.append({'powerUsage' : {'timeStamp': startTime,
                                  'sensorId': sensorId,
                                  'endTimeStamp': endTime,
                                  'usage': usage,
-                                 'cost': cost})
+                                 'cost': cost}})
+
 
     def addWaterUsage(self, sensorId, startTime, endTime, usage, cost):
-        self.waterUsages.append({'timeStamp': startTime,
+        self.waterUsages.append({'waterUsage': {'timeStamp': startTime,
                                  'sensorId': sensorId,
                                  'endTimeStamp': endTime,
                                  'usage': usage,
-                                 'cost': cost})
+                                 'cost': cost}})
 
     def addHvacUsage(self, sensorId, startTime, endTime, temperature, usage, cost):
-        self.hvacUsages.append({'timeStamp': startTime,
+        self.hvacUsages.append({'hvacUsage' : {'timeStamp': startTime,
                                  'sensorId': sensorId,
                                  'endTimeStamp': endTime,
                                  'usage': usage,
-                                 'cost': cost})
+                                 'cost': cost}})
 
     def addDailyUsage(self,  date, totalWaterUsage, totalPowerUsage, totalHvacUsage, totalPowerCost, totalWaterCost, totalHvacCost):
-        self.dailyUsages.append({'date': date.strftime("%A, %B  %d, %Y"),
+        self.dailyUsages.append({'dailyUsage': {'date': date.strftime("%A, %B  %d, %Y"),
                                  'totalWaterUsage': int(totalWaterUsage),
                                  'totalPowerUsage': int(totalPowerUsage),
                                  'totalPowerCost': int(totalPowerCost),
@@ -235,23 +265,9 @@ class Simulation(object):
         return {'totalPowerCost' : totalPowerCost, 'totalWaterCost': totalWaterCost}
 
     def generateJson(self):
-        self.addRooms()
-        self.addAppliances()
-        self.addSensors()
-
-        rooms_json = json.dumps(self.rooms, indent=4, sort_keys=True)
-        appliances_json = json.dumps(self.appliances, indent=4, sort_keys=True)
-        sensors_json = json.dumps(self.sensors,indent=4, sort_keys=True)
-        power_usages_json = json.dumps(self.powerUsages, indent=4, sort_keys=True)
-        water_usages_json = json.dumps(self.waterUsages, indent=4, sort_keys=True)
-        daily_usages_json = json.dumps(self.dailyUsages, indent=4, sort_keys=True)
-
-        print("Rooms: " + rooms_json)
-        print("Appliances: " + appliances_json)
-        print("Sensors: " + sensors_json)
-        print("Power Usages: " + power_usages_json)
-        print("Water Usages: " + water_usages_json)
-        print("Daily Usages: " + daily_usages_json)
+        state = self.updateState()
+        data = json.dumps(state, indent=4, sort_keys=True)
+        print(data)
 
     def dateRange(self, startDate, endDate):
         for n in range(int((endDate - startDate).days)):

@@ -312,7 +312,7 @@ class Simulation(object):
         sensor.setSensorState(1)
         print("Turning sensor " + sensor.getSensorName() + " in room " + room.getRoomName() + " on at " + startTime)
 
-        # time.sleep(desiredTimeOn)
+        time.sleep(desiredTimeOn)
 
         endTime = self.convertSecondsToTime(timeOfDay + desiredTimeOn)
         sensor.setSensorState(0)
@@ -345,14 +345,14 @@ class Simulation(object):
                     if (currentTime + timeOn) > leaveTime and currentTime < leaveTime:
                         timeOn = leaveTime - currentTime
 
-                    # time.sleep(randomTime)
+                    time.sleep(randomTime)
                     currentTime += randomTime
 
                     startTime = self.convertSecondsToTime(currentTime)
                     sensor.setSensorState(1)
                     print("Turning sensor " + sensor.getSensorName() + " in room " + room.getRoomName() +  " on at " + startTime)
 
-                    # time.sleep(timeOn)
+                    time.sleep(timeOn)
                     currentTime += timeOn
                     totalTimeOn += timeOn
 
@@ -376,14 +376,14 @@ class Simulation(object):
                     randomTime = self.generateRandomTime(currentTime, wakeTime, sleepTime)
                     if currentTime + randomTime + timeOn < sleepTime:
 
-                        # time.sleep(randomTime)
+                        time.sleep(randomTime)
                         currentTime += randomTime
 
                         startTime = self.convertSecondsToTime(currentTime)
                         sensor.setSensorState(1)
                         print("Turning sensor " + sensor.getSensorName() + " in room " + room.getRoomName() + " on at " + startTime)
 
-                        # time.sleep(timeOn)
+                        time.sleep(timeOn)
                         currentTime += timeOn
                         totalTimeOn += timeOn
 
