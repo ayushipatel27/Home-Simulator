@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': 'shs',
         'USER': 'shs_user',
         'PASSWORD': 's3cure',
-        'HOST': '',
+        'HOST': '/tmp/',
         'PORT': '',
     }
 }
