@@ -12,7 +12,7 @@ class Appliances(models.Model):
     sensorid = models.ForeignKey('Sensors', models.DO_NOTHING, db_column='sensorid')
     powerusage = models.IntegerField()
     powerrate = models.FloatField()  # This field type is a guess.
-    #appliancename = models.CharField(max_length=50, blank=True, null=True)
+    appliancename = models.CharField(max_length=50)
 
     class Meta:
         managed = False
