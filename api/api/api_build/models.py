@@ -12,7 +12,8 @@ class Appliances(models.Model):
     sensorid = models.ForeignKey('Sensors', models.DO_NOTHING, db_column='sensorid')
     powerusage = models.IntegerField()
     powerrate = models.TextField()
-
+    appliancename = models.TextField()
+    
     class Meta:
         managed = False
         db_table = 'appliances'
