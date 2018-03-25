@@ -174,34 +174,6 @@ class Simulation(object):
                 print(appliance.toString())
             print()
 
-    # def updateState(self):
-    #     return {
-    #         'home':
-    #             {
-    #                 {
-    #                     'sensors':
-    #                         {item['sensorId']: item for item in self.sensors}
-    #                 },
-    #                 {
-    #                     'appliances':
-    #                          {item['applianceId']: item for item in self.appliances}
-    #
-    #                 },
-    #                 {
-    #                     'rooms':
-    #                         {item['roomId']: item for item in self.rooms}
-    #                 },
-    #                 {
-    #                     'powerUsages':  {k:v for k,v in (x.split(':') for x in self.powerUsages)}
-    #                 },
-    #                 {
-    #                     'waterUsages': {k:v for k,v in (x.split(':') for x in self.powerUsages)}
-    #                 },
-    #                 {
-    #                     'dailyUsages': {item['dailyUsage']: item for item in self.dailyUsages}
-    #                 }
-    #             }
-    #     }
 
     def addRooms(self):
         for room in self.home.getRooms():
@@ -256,31 +228,10 @@ class Simulation(object):
                                  'totalWaterCost':  int(totalWaterCost),
                                  'totalHvacUsage': int(totalHvacUsage),
                                  'totalHvacCost': int(totalHvacCost)}})
-    def monthlyReport(self):
-        totalPowerCost = 0
-        totalWaterCost = 0
-        for i in self.dailyUsages:
-            for j in i:
-                if j == 'totalPowerCost':
-                    totalPowerCost += i['totalPowerCost']
-                if j == 'totalWaterCost':
-                    totalWaterCost += i['totalWaterCost']
-        return {'totalPowerCost' : totalPowerCost, 'totalWaterCost': totalWaterCost}
+
 
     def generateJson(self):
-
-        rooms_json = json.dumps(self.rooms, indent=4, sort_keys=True)
-        appliances_json = json.dumps(self.appliances, indent=4, sort_keys=True)
-        sensors_json = json.dumps(self.sensors,indent=4, sort_keys=True)
-        power_usages_json = json.dumps(self.powerUsages, indent=4, sort_keys=True)
-        water_usages_json = json.dumps(self.waterUsages, indent=4, sort_keys=True)
-        daily_usages_json = json.dumps(self.dailyUsages, indent=4, sort_keys=True)
-
-        print(appliances_json)
-        # c = requests.post('http://127.0.0.1:8000/api/insert/rooms/', data=rooms_json)
-        # a = requests.post('http://127.0.0.1:8000/api/insert/sensors/', data=sensors_json)
-        b = requests.post('http://127.0.0.1:8000/api/insert/appliances/', data=appliances_json)
-        print(b.text)
+        print()
 
     def dateRange(self, startDate, endDate):
         for n in range(int((endDate - startDate).days)):
