@@ -1,6 +1,6 @@
 import random
 import time
-import threading
+import multiprocessing
 import datetime
 
 class Sensor(object):
@@ -398,77 +398,65 @@ class Simulation(object):
 
         print("\nTotal time on should be " + str(desiredTimeOn) + " but is " + str(totalTimeOn) + "\n")
 
-    def simulateUsage(self, home, day):
-        threads = []
+    def simulateUsage(self, appliance, room, day):
         cleaningDays = random.choice(["0", "1", "2", "3", "4", "5", "6"])
-        for room in home.getRooms():
-            for appliance in room.getAppliances():
+        desiredTimeOn = self.getDurationOn(appliance, day)
 
-                desiredTimeOn = self.getDurationOn(appliance, day)
+        if "Door" in appliance.getApplianceName():
+            multiprocessing.Process(
+                    name='Door', target=self.startRandomUsage(day, desiredTimeOn, appliance, room)).start()
 
-                if "Door" in appliance.getApplianceName():
-                    threads.append(
-                        threading.Thread(
-                            name='Door', target=self.startRandomUsage(day, desiredTimeOn, appliance, room)))
+        elif "Window" in appliance.getApplianceName():
+            multiprocessing.Process(
+                    name= 'Window', target=self.startRandomUsage(day, desiredTimeOn, appliance, room)).start()
 
-                elif "Window" in appliance.getApplianceName():
-                    threads.append(
-                        threading.Thread(
-                            name= 'Window', target=self.startRandomUsage(day, desiredTimeOn, appliance, room)))
+        elif appliance.getApplianceName() == "Refrigerator":
+            multiprocessing.Process(
+                    name='Refrigerator', target=self.startRoutineUsage(0, desiredTimeOn, appliance, room)).start()
 
-                elif appliance.getApplianceName() == "Refrigerator":
-                    threads.append(
-                        threading.Thread(
-                            name='Refrigerator', target=self.startRoutineUsage(0, desiredTimeOn, appliance, room)))
-
-                elif appliance.getApplianceName() == "Clothes Dryer":
-                    if str(day) in cleaningDays:
-                        randomTime = random.randint(63000, 72000)
-                        threads.append(
-                            threading.Thread(
-                                name='Clothes Dryer', target=self.startRoutineUsage(randomTime, desiredTimeOn, appliance, room)))
+        elif appliance.getApplianceName() == "Clothes Dryer":
+            if str(day) in cleaningDays:
+                randomTime = random.randint(63000, 72000)
+                multiprocessing.Process(
+                        name='Clothes Dryer', target=self.startRoutineUsage(randomTime, desiredTimeOn, appliance, room)).start()
 
 
-                elif appliance.getApplianceName() == "Clothes Washer":
-                    if str(day) in cleaningDays:
-                        randomTime = random.randint(63000, 72000)
-                        threads.append(
-                            threading.Thread(
-                                name='Clothes Washer', target=self.startRoutineUsage(randomTime, desiredTimeOn, appliance, room)))
+        elif appliance.getApplianceName() == "Clothes Washer":
+            if str(day) in cleaningDays:
+                randomTime = random.randint(63000, 72000)
+                multiprocessing.Process(
+                        name='Clothes Washer', target=self.startRoutineUsage(randomTime, desiredTimeOn, appliance, room)).start()
 
 
-                elif appliance.getApplianceName() == "Dishwasher":
-                    if str(day) in cleaningDays:
-                        randomTime = random.randint(63000, 72000)
-                        threads.append(
-                            threading.Thread(
-                                name='Dishwasher', target=self.startRoutineUsage(randomTime, desiredTimeOn, appliance, room)))
+        elif appliance.getApplianceName() == "Dishwasher":
+            if str(day) in cleaningDays:
+                randomTime = random.randint(63000, 72000)
+                multiprocessing.Process(
+                        name='Dishwasher', target=self.startRoutineUsage(randomTime, desiredTimeOn, appliance, room)).start()
 
-                elif appliance.getApplianceName() == "Bath":
-                    randomTime = random.randint(64800, 72000)
-                    threads.append(
-                        threading.Thread(
-                            name='Bath', target=self.startRoutineUsage(randomTime, desiredTimeOn, appliance, room)))
+        elif appliance.getApplianceName() == "Bath":
+            randomTime = random.randint(64800, 72000)
+            multiprocessing.Process(
+                    name='Bath', target=self.startRoutineUsage(randomTime, desiredTimeOn, appliance, room)).start()
 
-                elif appliance.getApplianceName() == "Shower":
-                    randomTime = random.randint(18000, 21600)
-                    threads.append(
-                        threading.Thread(
-                            name='Shower', target=self.startRoutineUsage(randomTime, desiredTimeOn, appliance, room)))
+        elif appliance.getApplianceName() == "Shower":
+            randomTime = random.randint(18000, 21600)
+            multiprocessing.Process(
+                    name='Shower', target=self.startRoutineUsage(randomTime, desiredTimeOn, appliance, room)).start()
 
-                else:
-                    threads.append(
-                        threading.Thread(
-                            name=appliance.getApplianceName(), target=self.startRandomUsage(day, desiredTimeOn, appliance, room)))
+        else:
+            multiprocessing.Process(
+                    name=appliance.getApplianceName(), target=self.startRandomUsage(day, desiredTimeOn, appliance, room)).start()
 
-        return threads
+        multiprocessing.Pool()
 
     def simulate(self):
         home = self.createHome()
-        day = 0
-        threads = self.simulateUsage(home, day)
-        for thread in threads:
-            thread.start()
+        day = 6
+        for room in home.getRooms():
+            for appliance in room.getAppliances():
+                self.simulateUsage(appliance,room, day)
+
 
 
 # calling simulation to simulate usage.
