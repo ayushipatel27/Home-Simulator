@@ -3,18 +3,30 @@
 from django.db.models import Q
 from rest_framework import generics, mixins, viewsets
 from django.shortcuts import get_list_or_404, get_object_or_404
-#from .models import Post
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect, HttpResponse
-
 import json
-
 from rest_framework.generics import UpdateAPIView
 
-from api_build.models import Appliances, Dailyusage, Powerusage, Hvacusage, Rooms, Sensors, Waterusage, Weather
-from .serializers import AppliancesSerializer, DailyusageSerializer, PowerusageSerializer, HvacusageSerializer, RoomsSerializer, SensorsSerializer, WaterusageSerializer, WeatherSerializer
+from api_build.models import ( Appliances, 
+							   Dailyusage, 
+							   Powerusage, 
+							   Hvacusage, 
+							   Rooms, 
+							   Sensors, 
+							   Waterusage, 
+							   Weather
+							 )
 
-
+from .serializers import ( AppliancesSerializer, 
+						   DailyusageSerializer, 
+						   PowerusageSerializer, 
+						   HvacusageSerializer, 
+						   RoomsSerializer, 
+						   SensorsSerializer, 
+						   WaterusageSerializer, 
+						   WeatherSerializer
+						 )
 
 #######################################################################
 #                            RUD VIEWS                                #
@@ -34,7 +46,6 @@ class AppliancesRudView(generics.RetrieveUpdateDestroyAPIView):
 		return self.update(request, *args, **kwargs)
 
 
-
 class DailyusageRudView(generics.RetrieveUpdateDestroyAPIView):
 	lookup_field     = 'dailyusageid'
 	serializer_class = DailyusageSerializer
@@ -47,22 +58,6 @@ class DailyusageRudView(generics.RetrieveUpdateDestroyAPIView):
 
 	def patch(self, request, *args, **kwargs):
 		return self.update(request, *args, **kwargs)
-
-
-
-# class EnergyusageRudView(generics.RetrieveUpdateDestroyAPIView):
-# 	lookup_field     = 'energyusageid'
-# 	serializer_class = EnergyusageSerializer
-
-# 	def get_queryset(self):
-# 		return Energyusage.objects.all()
-
-# 	def put(self, request, *args, **kwargs):
-# 		return self.update(request, *args, **kwargs)
-
-# 	def patch(self, request, *args, **kwargs):
-# 		return self.update(request, *args, **kwargs)
-
 
 
 class HvacusageRudView(generics.RetrieveUpdateDestroyAPIView):
@@ -78,6 +73,7 @@ class HvacusageRudView(generics.RetrieveUpdateDestroyAPIView):
 	def patch(self, request, *args, **kwargs):
 		return self.update(request, *args, **kwargs)
 
+
 class PowerusageRudView(generics.RetrieveUpdateDestroyAPIView):
 	lookup_field     = 'Powerusageid'
 	serializer_class = PowerusageSerializer
@@ -90,6 +86,7 @@ class PowerusageRudView(generics.RetrieveUpdateDestroyAPIView):
 
 	def patch(self, request, *args, **kwargs):
 		return self.update(request, *args, **kwargs)
+
 
 class RoomsRudView(generics.RetrieveUpdateDestroyAPIView):
 	lookup_field     = 'roomid'
@@ -114,7 +111,6 @@ class RoomsRudView(generics.RetrieveUpdateDestroyAPIView):
 		return self.partial_update(request, *args, **kwargs)
 
 
-
 class SensorsRudView(generics.RetrieveUpdateDestroyAPIView):
 	lookup_field     = 'sensorid'
 	serializer_class = SensorsSerializer
@@ -129,7 +125,6 @@ class SensorsRudView(generics.RetrieveUpdateDestroyAPIView):
 		return self.update(request, *args, **kwargs)
 
 
-
 class WaterusageRudView(generics.RetrieveUpdateDestroyAPIView):
 	lookup_field     = 'waterusageid'
 	serializer_class = WaterusageSerializer
@@ -142,7 +137,6 @@ class WaterusageRudView(generics.RetrieveUpdateDestroyAPIView):
 
 	def patch(self, request, *args, **kwargs):
 		return self.update(request, *args, **kwargs)
-
 
 
 class WeatherRudView(generics.RetrieveUpdateDestroyAPIView):
@@ -177,7 +171,8 @@ class AppliancesAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 			qs = qs.filter(Q(applianceid__icontains=query)|
 						   Q(sensorid__sensorid__icontains=query)|
 						   Q(powerusage__icontains=query)|
-						   Q(powerrate__icontains=query)).distinct()
+						   Q(powerrate__icontains=query)|
+						   Q(appliancename__icontains=query)).distinct()
 		return qs
 
 	def post(self, request, *args, **kwargs):
@@ -185,7 +180,6 @@ class AppliancesAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 
 	def perform_create(self, serializer):
 		serializer.save(applianceid=self.request.applianceid, sensorid=self.request.sensorid)
-
 
 
 class DailyusageAPIView(mixins.CreateModelMixin, generics.ListAPIView):
@@ -211,7 +205,6 @@ class DailyusageAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 		serializer.save(date=self.request.date)
 
 
-
 class PowerusageAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 	serializer_class = PowerusageSerializer
 
@@ -232,7 +225,6 @@ class PowerusageAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 
 	def perform_create(self, serializer):
 		serializer.save(timestamp=self.request.timestamp)
-
 
 
 class HvacusageAPIView(mixins.CreateModelMixin, generics.ListAPIView):
@@ -257,7 +249,6 @@ class HvacusageAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 		serializer.save(timestamp=self.request.timestamp)
 
 
-
 class RoomsAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 	serializer_class = RoomsSerializer
 
@@ -274,7 +265,6 @@ class RoomsAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 
 	def perform_create(self, serializer):
 		serializer.save(roomid=self.request.roomid)
-
 
 
 class SensorsAPIView(mixins.CreateModelMixin, generics.ListAPIView):
@@ -295,7 +285,6 @@ class SensorsAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 
 	def perform_create(self, serializer):
 		serializer.save(sensorid=self.request.sensorid, roomid=self.request.roomid)
-
 
 
 class WaterusageAPIView(mixins.CreateModelMixin, generics.ListAPIView):
@@ -319,7 +308,6 @@ class WaterusageAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 		serializer.save(timestamp=self.request.timestamp)
 
 
-
 class WeatherAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 	serializer_class = WeatherSerializer
 
@@ -341,65 +329,6 @@ class WeatherAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 		serializer.save(timestamp=self.request.timestamp)
 
 
-
-#######################################################################
-#                       LIST CREATE VIEWS                             #
-#######################################################################
-
-class AppliancesViewSet(viewsets.ModelViewSet):
-	serializer_class = AppliancesSerializer
-
-	def get_queryset(self):
-		qs = Appliances.objects.all()
-		query = self.request.GET.get("q")
-		if query is not None:
-			qs = qs.filter(Q(applianceid__icontains=query)|
-						   Q(sensorid__sensorid__icontains=query)|
-						   Q(powerusage__icontains=query)|
-						   Q(powerrate__icontains=query)).distinct()
-		return qs
-
-
-def api_update(request):
-	instance = get_object_or_404(Rooms)
-	form = PostForm(request.POST or None, request.FILES or None, instance=instance)
-	if form.is_valid():
-		instance = form.save(commit=False)
-		instance.save()
-		return HttpRequestRedirect("http://127.0.0.1:8000/api/rooms/1/")
-
-		context = {
-			"roomid":1,
-			"roomname":"Parent Bedroom"
-		}
-
-
-class UpdateRoom(generics.UpdateAPIView):
-    serializer_class = RoomsSerializer
-
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.roomname = request.data.get("roomname")
-        instance.save()
-
-        serializer = self.get_serializer(instance)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        return Response(serializer.data)
-
-@csrf_exempt
-def UpdateRoomNew(request):
-    if request.method=='POST':
-        data = json.loads(request.body)
-
-        #data2 = json.dumps(data)
-
-        print("\n" + data["roomid"] + "\n")
-
-    return HttpResponseRedirect("/")
-
-
 #######################################################################
 #                       UPDATE STATES                                 #
 #######################################################################
@@ -407,7 +336,7 @@ def UpdateRoomNew(request):
 @csrf_exempt
 def UpdateHouseState(request):
     if request.method=='POST':
-        data = json.loads(request.body)
+        #data = json.loads(request.body)
 
         GetCurrentHouseState()
 
@@ -418,16 +347,20 @@ def UpdateHouseState(request):
         #     tmp.roomname = i['roomname']
         #     tmp.save()
 
-    return HttpResponseRedirect("http://127.0.0.1:8000/api/rooms/")
+    return HttpResponse('')
 
 
-def GetCurrentHouseState():
+def GetCurrentHouseState(request):
 
     room = Rooms.objects.latest('roomid')
 
-    print("\n" + str(obj.roomname) + "\n")
+    sensor = Sensors.objects.latest('sensorid')
 
-    return HttpResponseRedirect("http://127.0.0.1:8000/api/rooms/")
+    appliance = Appliances.objects.latest('applianceid')
+
+    print("\n Room: " + str(room.roomname) + "\n Sensor: " + str(sensor.sensorname) + "\n Appliance: " + str(appliance.appliancename) + "\n")
+
+    return HttpResponse('')
 
 
 #######################################################################
@@ -441,47 +374,68 @@ def InsertAppliances(request):
 
         for i in data:
             sensor = Sensors.objects.get(sensorid=i['sensorid'])
-            appliance = Appliances.objects.create(sensorid=sensor, powerusage=i['powerusage'], powerrate=i['powerrate'], appliancename=i['applianceName'])
+
+            appliance = Appliances.objects.create(sensorid       = sensor, 
+            									  powerusage     = i['powerusage'], 
+            									  powerrate      = i['powerrate'], 
+            									  appliancename  = i['appliancename'])
             appliance.save()
 
     return HttpResponse('')
 
-# @csrf_exempt
-# def InsertDailyusage(request):
-#     if request.method=='POST':
-#         data = json.loads(request.body)
 
-#         for i in data:
-#             room = Rooms.objects.get(roomid=i['roomid'])
-#             tmp = Sensors.objects.create(sensorid=i['sensorid'], sensorname=i['sensorname'], sensorstate=i['sensorstate'], roomid=room)
-#             tmp.save()
+@csrf_exempt
+def InsertDailyusage(request):
+    if request.method=='POST':
+        data = json.loads(request.body)
 
-#     return HttpResponse('')
+        for i in data:
+            dailyusage = Dailyusage.objects.create(date            = i['date'],
+											       totalwaterusage = i['totalwaterusage'],
+											       totalpowerusage = i['totalpowerusage'],
+											       totalpowercost  = i['totalpowercost'],
+											       totalwatercost  = i['totalwatercost'],
+											       totalhvacusage  = i['totalhvacusage'],
+											       totalhvaccost   = i['totalhvaccost'])
+            dailyusage.save()
 
-# @csrf_exempt
-# def InsertEnergyusage(request):
-#     if request.method=='POST':
-#         data = json.loads(request.body)
-
-#         for i in data:
-#             room = Rooms.objects.get(roomid=i['roomid'])
-#             tmp = Sensors.objects.create(sensorid=i['sensorid'], sensorname=i['sensorname'], sensorstate=i['sensorstate'], roomid=room)
-#             tmp.save()
-
-#     return HttpResponse('')
+    return HttpResponse('')
 
 
-# @csrf_exempt
-# def InsertHvacusage(request):
-#     if request.method=='POST':
-#         data = json.loads(request.body)
+@csrf_exempt
+def InsertPowerusage(request):
+    if request.method=='POST':
+        data = json.loads(request.body)
 
-#         for i in data:
-#             room = Rooms.objects.get(roomid=i['roomid'])
-#             tmp = Sensors.objects.create(sensorid=i['sensorid'], sensorname=i['sensorname'], sensorstate=i['sensorstate'], roomid=room)
-#             tmp.save()
+        for i in data:
+            #sensor = Sensors.objects.get(sensorid=i['sensorid'])
+            #print("\n" + str(sensor) + "\n")
+            powerusage = Powerusage.objects.create(timestamp    = i['timestamp'],
+											       sensorid     = i['sensorid'],
+											       endtimestamp = i['endtimestamp'],
+											       usage        = i['usage'],
+											       cost         = i['cost'])
+            powerusage.save()
 
-#     return HttpResponse('')
+    return HttpResponse('')
+
+
+@csrf_exempt
+def InsertHvacusage(request):
+    if request.method=='POST':
+        data = json.loads(request.body)
+
+        for i in data:
+            #sensor = Sensors.objects.get(sensorid=i['sensorid'])
+            hvacusage = Hvacusage.objects.create(timestamp      = i['timestamp'],
+											     sensorid       = i['sensorid'],
+											     endtimestamp   = i['endtimestamp'],
+											     usage          = i['usage'],
+											     cost           = i['cost'],
+											     temperature    = i['temperature'])
+            hvacusage.save()
+
+    return HttpResponse('')
 
 
 @csrf_exempt
@@ -503,41 +457,45 @@ def InsertSensors(request):
 
         for i in data:
             room = Rooms.objects.get(roomid=i['roomid'])
-            sensor = Sensors.objects.create(sensorname=i['sensorname'], sensorstate=i['sensorstate'], roomid=room)
+            sensor = Sensors.objects.create(sensorname  = i['sensorname'], 
+            								sensorstate = i['sensorstate'], 
+            								roomid      = room)
             sensor.save()
 
     return HttpResponse('')
 
 
-# @csrf_exempt
-# def InsertWaterusage(request):
-#     if request.method=='POST':
-#         data = json.loads(request.body)
+@csrf_exempt
+def InsertWaterusage(request):
+    if request.method=='POST':
+        data = json.loads(request.body)
 
-#         for i in data:
-#             room = Rooms.objects.get(roomid=i['roomid'])
-#             tmp = Sensors.objects.create(sensorid=i['sensorid'], sensorname=i['sensorname'], sensorstate=i['sensorstate'], roomid=room)
-#             tmp.save()
+        for i in data:
+            #sensor = Sensors.objects.get(sensorid=i['sensorid'])
+            waterusage = Waterusage.objects.create(timestamp    = i['timestamp'],
+											       sensorid     = i['sensorid'],
+											       endtimestamp = i['endtimestamp'],
+											       usage        = i['usage'],
+											       cost         = i['cost'])
+            waterusage.save()
 
-#     return HttpResponse('')
-
-
-
-# @csrf_exempt
-# def InsertWeather(request):
-#     if request.method=='POST':
-#         data = json.loads(request.body)
-
-#         for i in data:
-#             room = Rooms.objects.get(roomid=i['roomid'])
-#             tmp = Sensors.objects.create(sensorid=i['sensorid'], sensorname=i['sensorname'], sensorstate=i['sensorstate'], roomid=room)
-#             tmp.save()
-
-#     return HttpResponse('')
+    return HttpResponse('')
 
 
+@csrf_exempt
+def InsertWeather(request):
+    if request.method=='POST':
+        data = json.loads(request.body)
 
-#, appliancename=i['appliancename']
+        for i in data:
+            weather = Weather.objects.create(timestamp             = i['timestamp'],
+											 temperature           = i['temperature'],
+											 precipitation         = i['precipitation'],
+											 chanceofprecipitation = i['chanceofprecipitation'],
+											 state                 = i['state'])
+            weather.save()
+
+    return HttpResponse('')
 
 
 

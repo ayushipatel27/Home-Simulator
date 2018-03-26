@@ -4,11 +4,42 @@ from django.urls import path, re_path
 
 from rest_framework.generics import UpdateAPIView
 
-from .views import AppliancesAPIView, DailyusageAPIView, PowerusageAPIView, HvacusageAPIView, RoomsAPIView, SensorsAPIView, WaterusageAPIView, WeatherAPIView, AppliancesRudView, DailyusageRudView, PowerusageRudView, HvacusageRudView, RoomsRudView, SensorsRudView, WaterusageRudView, WeatherRudView, AppliancesViewSet, api_update, UpdateRoom, UpdateRoomNew, UpdateHouseState, InsertSensors, InsertAppliances, InsertRooms
+from .views import ( 
+                     AppliancesAPIView, 
+                     DailyusageAPIView, 
+                     PowerusageAPIView, 
+                     HvacusageAPIView, 
+                     RoomsAPIView, 
+                     SensorsAPIView, 
+                     WaterusageAPIView, 
+                     WeatherAPIView, 
+
+                     AppliancesRudView, 
+                     DailyusageRudView, 
+                     PowerusageRudView, 
+                     HvacusageRudView, 
+                     RoomsRudView, 
+                     SensorsRudView, 
+                     WaterusageRudView, 
+                     WeatherRudView,
+
+                     InsertSensors, 
+                     InsertAppliances, 
+                     InsertRooms, 
+                     InsertDailyusage, 
+                     InsertPowerusage, 
+                     InsertHvacusage, 
+                     InsertWaterusage, 
+                     InsertWeather,
+
+                     UpdateHouseState,
+
+                     GetCurrentHouseState, 
+                    )
 
 urlpatterns = [
 
-	# List Create Views:
+	# List Views:
 
     path('appliances/', AppliancesAPIView.as_view(), name='appliances-listcreate'),
 
@@ -26,7 +57,9 @@ urlpatterns = [
 
     path('weather/', WeatherAPIView.as_view(), name='weather-listcreate'),
 
-    # Rud Views:
+    path('chs/', GetCurrentHouseState, name='list-chs'),
+
+    # Individual Views:
 
     path('appliances/<int:applianceid>/', AppliancesRudView.as_view(), name='appliances-rud'),
 
@@ -44,25 +77,25 @@ urlpatterns = [
 
     path('weather/<int:weatherid>/', WeatherRudView.as_view(), name='weather-rud'),
 
-    # ViewSets:
-
-    path('appliances/viewsets/', AppliancesViewSet.as_view({'get': 'list'}), name='appliances-viewset'),
-
-    # Updates
-
-    path('rooms/aa/', api_update),
-
-    path('updateroom/', UpdateRoom),
-
-    path('updateroomnew/', UpdateRoomNew, name='update-room'),
-
-    path('update/', UpdateHouseState, name='update'),
-
     # Inserts
 
     path('insert/appliances/', InsertAppliances, name='insert-appliances'),
 
     path('insert/rooms/', InsertRooms, name='insert-rooms'),
 
-    path('insert/sensors/', InsertSensors, name='insert-sensers'),
+    path('insert/sensors/', InsertSensors, name='insert-sensors'),
+
+    path('insert/dailyusage/', InsertDailyusage, name='insert-dailyusage'),
+
+    path('insert/powerusage/', InsertPowerusage, name='insert-powerusage'),
+
+    path('insert/hvacusage/', InsertHvacusage, name='insert-hvacusage'),
+
+    path('insert/waterusage/', InsertWaterusage, name='insert-waterusage'),
+
+    path('insert/weather/', InsertWeather, name='insert-weather'),
+
+    # Updates
+
+    path('update/housestate/', UpdateHouseState, name='update-housestate'),
 ]

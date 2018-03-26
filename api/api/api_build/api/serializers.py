@@ -13,6 +13,7 @@ class AppliancesSerializer(serializers.ModelSerializer):
 			'sensorid',
 		    'powerusage',
 		    'powerrate',
+		    'appliancename',
 		]
 		read_only_fields = ['applianceid', 'sensorid']
 
