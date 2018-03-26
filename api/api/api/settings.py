@@ -80,9 +80,7 @@ WSGI_APPLICATION = 'api.wsgi.application'
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 #         'NAME': 'shs',
 #         'USER': 'shs_user',
-#         'PASSWORD': 's3cure',
-#         'HOST': '/tmp/',
-#         'PORT': '',
+# #         'PASSWORD': 's3cure',
 #     }
 # }
 
@@ -96,6 +94,7 @@ DATABASES = {
         'PORT': '10000',
     }
 }
+
 
 # socket: ip-port
 #

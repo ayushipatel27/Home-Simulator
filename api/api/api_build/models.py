@@ -8,7 +8,7 @@ from django.db import models
 
 
 class Appliances(models.Model):
-    applianceid = models.IntegerField(primary_key=True)
+    applianceid = models.AutoField(primary_key=True)
     sensorid = models.ForeignKey('Sensors', models.DO_NOTHING, db_column='sensorid')
     powerusage = models.IntegerField()
     powerrate = models.FloatField()  # This field type is a guess.
@@ -89,10 +89,10 @@ class Dailyusage(models.Model):
     date = models.DateField(primary_key=True)
     totalwaterusage = models.FloatField()
     totalpowerusage = models.IntegerField()
-    totalpowercost = models.FloatField()  # This field type is a guess.
-    totalwatercost = models.FloatField()  # This field type is a guess.
+    totalpowercost = models.TextField()  # This field type is a guess.
+    totalwatercost = models.TextField()  # This field type is a guess.
     totalhvacusage = models.FloatField()
-    totalhvaccost = models.FloatField()  # This field type is a guess.
+    totalhvaccost = models.TextField()  # This field type is a guess.
 
     class Meta:
         managed = False
@@ -143,25 +143,12 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
-class Energyusage(models.Model):
-    timestamp = models.DateTimeField(primary_key=True)
-    sensorid = models.IntegerField()
-    endtimestamp = models.DateTimeField(blank=True, null=True)
-    usage = models.IntegerField()
-    cost = models.FloatField()  # This field type is a guess.
-
-    class Meta:
-        managed = False
-        db_table = 'energyusage'
-        unique_together = (('timestamp', 'sensorid'),)
-
-
 class Hvacusage(models.Model):
     timestamp = models.DateTimeField(primary_key=True)
     sensorid = models.IntegerField()
     endtimestamp = models.DateTimeField(blank=True, null=True)
     usage = models.FloatField()
-    cost = models.FloatField()  # This field type is a guess.
+    cost = models.TextField()  # This field type is a guess.
     temperature = models.FloatField()
 
     class Meta:
@@ -170,10 +157,23 @@ class Hvacusage(models.Model):
         unique_together = (('timestamp', 'sensorid'),)
 
 
+class Powerusage(models.Model):
+    energyusageid = models.AutoField(primary_key=True)
+    timestamp = models.DateTimeField()
+    sensorid = models.IntegerField()
+    endtimestamp = models.DateTimeField(blank=True, null=True)
+    usage = models.IntegerField()
+    cost = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        managed = False
+        db_table = 'powerusage'
+        unique_together = (('timestamp', 'sensorid'),)
+
+
 class Rooms(models.Model):
-    roomid = models.IntegerField(primary_key=True)
+    roomid = models.AutoField(primary_key=True)
     roomname = models.CharField(max_length=50)
-    #applianceid = models.ForeignKey(Appliances, models.DO_NOTHING, db_column='applianceid', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -181,7 +181,7 @@ class Rooms(models.Model):
 
 
 class Sensors(models.Model):
-    sensorid = models.IntegerField(primary_key=True)
+    sensorid = models.AutoField(primary_key=True)
     sensorname = models.CharField(max_length=50)
     sensorstate = models.IntegerField()
     roomid = models.ForeignKey(Rooms, models.DO_NOTHING, db_column='roomid')
@@ -196,7 +196,7 @@ class Waterusage(models.Model):
     sensorid = models.IntegerField()
     endtimestamp = models.DateTimeField(blank=True, null=True)
     usage = models.FloatField()
-    cost = models.FloatField() # This field type is a guess.
+    cost = models.TextField()  # This field type is a guess.
 
     class Meta:
         managed = False

@@ -4,7 +4,7 @@ from django.urls import path, re_path
 
 from rest_framework.generics import UpdateAPIView
 
-from .views import AppliancesAPIView, DailyusageAPIView, EnergyusageAPIView, HvacusageAPIView, RoomsAPIView, SensorsAPIView, WaterusageAPIView, WeatherAPIView, AppliancesRudView, DailyusageRudView, EnergyusageRudView, HvacusageRudView, RoomsRudView, SensorsRudView, WaterusageRudView, WeatherRudView, AppliancesViewSet, api_update, UpdateRoom, UpdateRoomNew, UpdateHouseState, InsertSensors, InsertAppliances, InsertRooms
+from .views import AppliancesAPIView, DailyusageAPIView, PowerusageAPIView, HvacusageAPIView, RoomsAPIView, SensorsAPIView, WaterusageAPIView, WeatherAPIView, AppliancesRudView, DailyusageRudView, PowerusageRudView, HvacusageRudView, RoomsRudView, SensorsRudView, WaterusageRudView, WeatherRudView, AppliancesViewSet, api_update, UpdateRoom, UpdateRoomNew, UpdateHouseState, InsertSensors, InsertAppliances, InsertRooms
 
 urlpatterns = [
 
@@ -14,7 +14,7 @@ urlpatterns = [
 
     path('dailyusage/', DailyusageAPIView.as_view(), name='dailyusage-create'),
 
-    path('energyusage/', EnergyusageAPIView.as_view(), name='energyusage-listcreate'),
+    path('powerusage/', PowerusageAPIView.as_view(), name='powerusage-listcreate'),
 
     path('hvacusage/', HvacusageAPIView.as_view(), name='hvacusage-listcreate'),
 
@@ -32,7 +32,7 @@ urlpatterns = [
 
     path('dailyusage/<int:dailyusageid>/', DailyusageRudView.as_view(), name='dailyusage-rud'),
 
-    path('energyusage/<int:energyusageid>/', EnergyusageRudView.as_view(), name='energyusage-rud'),
+    path('powerusage/<int:energyusageid>/', PowerusageRudView.as_view(), name='powerusage-rud'),
 
     path('hvacusage/<int:hvacusageid>/', HvacusageRudView.as_view(), name='hvacusage-rud'),
 
