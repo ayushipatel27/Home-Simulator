@@ -374,7 +374,6 @@ def InsertAppliances(request):
 
         for i in data:
             sensor = Sensors.objects.get(sensorid=i['sensorid'])
-
             appliance = Appliances.objects.create(sensorid       = sensor, 
             									  powerusage     = i['powerusage'], 
             									  powerrate      = i['powerrate'], 
@@ -408,8 +407,6 @@ def InsertPowerusage(request):
         data = json.loads(request.body)
 
         for i in data:
-            #sensor = Sensors.objects.get(sensorid=i['sensorid'])
-            #print("\n" + str(sensor) + "\n")
             powerusage = Powerusage.objects.create(timestamp    = i['timestamp'],
 											       sensorid     = i['sensorid'],
 											       endtimestamp = i['endtimestamp'],
@@ -426,9 +423,7 @@ def InsertHvacusage(request):
         data = json.loads(request.body)
 
         for i in data:
-            #sensor = Sensors.objects.get(sensorid=i['sensorid'])
             hvacusage = Hvacusage.objects.create(timestamp      = i['timestamp'],
-											     sensorid       = i['sensorid'],
 											     endtimestamp   = i['endtimestamp'],
 											     usage          = i['usage'],
 											     cost           = i['cost'],

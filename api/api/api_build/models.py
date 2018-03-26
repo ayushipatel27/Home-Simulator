@@ -12,8 +12,9 @@ class Appliances(models.Model):
     applianceid = models.AutoField(primary_key=True)
     sensorid = models.ForeignKey('Sensors', models.DO_NOTHING, db_column='sensorid')
     powerusage = models.IntegerField()
-    powerrate = models.TextField()
-    appliancename = models.TextField()
+    powerrate = models.FloatField()
+    appliancename = models.CharField(max_length=50)
+
     class Meta:
         managed = False
         db_table = 'appliances'
@@ -86,13 +87,14 @@ class AuthUserUserPermissions(models.Model):
 
 
 class Dailyusage(models.Model):
-    date = models.DateField(primary_key=True)
+    dailyusageid = models.AutoField(primary_key=True)
+    date = models.DateField()
     totalwaterusage = models.FloatField()
     totalpowerusage = models.IntegerField()
-    totalpowercost = models.FloatField()  # This field type is a guess.
-    totalwatercost = models.FloatField()  # This field type is a guess.
+    totalpowercost = models.FloatField()
+    totalwatercost = models.FloatField()
     totalhvacusage = models.FloatField()
-    totalhvaccost = models.FloatField()  # This field type is a guess.
+    totalhvaccost = models.FloatField()
 
     class Meta:
         managed = False
@@ -144,17 +146,16 @@ class DjangoSession(models.Model):
 
 
 class Hvacusage(models.Model):
-    timestamp = models.DateTimeField(primary_key=True)
-    sensorid = models.IntegerField()
+    hvacusageid = models.AutoField(primary_key=True)
+    timestamp = models.DateTimeField()
     endtimestamp = models.DateTimeField(blank=True, null=True)
     usage = models.FloatField()
-    cost = models.FloatField()  # This field type is a guess.
+    cost = models.FloatField()
     temperature = models.FloatField()
 
     class Meta:
         managed = False
         db_table = 'hvacusage'
-        unique_together = (('timestamp', 'sensorid'),)
 
 
 class Powerusage(models.Model):
@@ -192,20 +193,21 @@ class Sensors(models.Model):
 
 
 class Waterusage(models.Model):
-    timestamp = models.DateTimeField(primary_key=True)
+    waterusageid = models.AutoField(primary_key=True)
+    timestamp = models.DateTimeField()
     sensorid = models.IntegerField()
     endtimestamp = models.DateTimeField(blank=True, null=True)
     usage = models.FloatField()
-    cost = models.FloatField()  # This field type is a guess.
+    cost = models.FloatField()
 
     class Meta:
         managed = False
         db_table = 'waterusage'
-        unique_together = (('timestamp', 'sensorid'),)
 
 
 class Weather(models.Model):
-    timestamp = models.DateTimeField(primary_key=True)
+    weatherid = models.AutoField(primary_key=True)
+    timestamp = models.DateTimeField()
     temperature = models.FloatField()
     precipitation = models.FloatField()
     chanceofprecipitation = models.FloatField()
