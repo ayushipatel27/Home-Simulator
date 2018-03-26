@@ -374,6 +374,7 @@ def InsertAppliances(request):
 
         for i in data:
             sensor = Sensors.objects.get(sensorid=i['sensorid'])
+
             appliance = Appliances.objects.create(sensorid       = sensor, 
             									  powerusage     = i['powerusage'], 
             									  powerrate      = i['powerrate'], 
