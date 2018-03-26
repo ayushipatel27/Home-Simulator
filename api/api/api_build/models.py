@@ -1,3 +1,4 @@
+# This is an auto-generated Django model module.
 # You'll have to do the following manually to clean this up:
 #   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
@@ -12,6 +13,7 @@ class Appliances(models.Model):
     sensorid = models.ForeignKey('Sensors', models.DO_NOTHING, db_column='sensorid')
     powerusage = models.IntegerField()
     powerrate = models.TextField()
+    appliancename = models.CharField(max_length=50)
 
     class Meta:
         managed = False
@@ -88,10 +90,10 @@ class Dailyusage(models.Model):
     date = models.DateField(primary_key=True)
     totalwaterusage = models.FloatField()
     totalpowerusage = models.IntegerField()
-    totalpowercost = models.TextField()  # This field type is a guess.
-    totalwatercost = models.TextField()  # This field type is a guess.
+    totalpowercost = models.FloatField()  # This field type is a guess.
+    totalwatercost = models.FloatField()  # This field type is a guess.
     totalhvacusage = models.FloatField()
-    totalhvaccost = models.TextField()  # This field type is a guess.
+    totalhvaccost = models.FloatField()  # This field type is a guess.
 
     class Meta:
         managed = False
@@ -147,7 +149,7 @@ class Hvacusage(models.Model):
     sensorid = models.IntegerField()
     endtimestamp = models.DateTimeField(blank=True, null=True)
     usage = models.FloatField()
-    cost = models.TextField()  # This field type is a guess.
+    cost = models.FloatField()  # This field type is a guess.
     temperature = models.FloatField()
 
     class Meta:
@@ -162,7 +164,7 @@ class Powerusage(models.Model):
     sensorid = models.IntegerField()
     endtimestamp = models.DateTimeField(blank=True, null=True)
     usage = models.IntegerField()
-    cost = models.DecimalField(max_digits=10, decimal_places=2)
+    cost = models.FloatField()
 
     class Meta:
         managed = False
@@ -195,7 +197,7 @@ class Waterusage(models.Model):
     sensorid = models.IntegerField()
     endtimestamp = models.DateTimeField(blank=True, null=True)
     usage = models.FloatField()
-    cost = models.TextField()  # This field type is a guess.
+    cost = models.FloatField()  # This field type is a guess.
 
     class Meta:
         managed = False
