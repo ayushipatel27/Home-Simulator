@@ -83,7 +83,7 @@ urlpatterns = [
 
     path('insert/rooms/', InsertRooms, name='insert-rooms'),
 
-    path('insert/sensors/', InsertSensors, name='insert-sensers'),
+    path('insert/sensors/', InsertSensors, name='insert-sensors'),
 
     path('insert/dailyusage/', InsertDailyusage, name='insert-dailyusage'),
 
