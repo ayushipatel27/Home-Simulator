@@ -21,6 +21,7 @@ class DailyusageSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Dailyusage
 		fields = [
+			'dailyusageid',
 			'date',
 			'totalwaterusage',
 			'totalpowerusage',
@@ -35,6 +36,7 @@ class HvacusageSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Hvacusage
 		fields = [
+			'hvacid',
 			'timestamp',
 			'sensorid',
 			'endtimestamp',
@@ -81,6 +83,7 @@ class WaterusageSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Waterusage
 		fields = [
+			'waterid',
 			'timestamp',
 			'sensorid',
 			'endtimestamp',
@@ -93,6 +96,7 @@ class WeatherSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Weather
 		fields = [
+			'weatherid',
 			'timestamp',
 			'temperature',
 			'precipitation',
