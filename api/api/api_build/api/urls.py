@@ -23,6 +23,9 @@ from .views import (
                      WaterusageRudView, 
                      WeatherRudView,
 
+                     GetSensors,
+                     GetAppliances,
+
                      InsertSensors, 
                      InsertAppliances, 
                      InsertRooms, 
@@ -76,6 +79,12 @@ urlpatterns = [
     path('waterusage/<int:waterusageid>/', WaterusageRudView.as_view(), name='waterusage-rud'),
 
     path('weather/<int:weatherid>/', WeatherRudView.as_view(), name='weather-rud'),
+
+    # Get Filtered Lists
+
+    path('getsensors/<int:roomid>/', GetSensors.as_view(), name='get-sensors'),   
+
+    path('getappliances/<int:sensorid>/', GetAppliances.as_view(), name='get-appliances'),
 
     # Inserts
 

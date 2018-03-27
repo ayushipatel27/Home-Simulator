@@ -156,9 +156,26 @@ class WeatherRudView(generics.RetrieveUpdateDestroyAPIView):
 		return self.update(request, *args, **kwargs)
 
 
+class GetSensors(generics.ListAPIView):
+	serializer_class = SensorsSerializer
+
+	def get_queryset(self):
+
+		roomid = self.kwargs['roomid']
+		return Sensors.objects.filter(roomid=roomid)
+
+class GetAppliances(generics.ListAPIView):
+	serializer_class = AppliancesSerializer
+
+	def get_queryset(self):
+
+		sensorid = self.kwargs['sensorid']
+		return Appliances.objects.filter(sensorid=sensorid)
+
+
 
 #######################################################################
-#                       LIST CREATE VIEWS                             #
+#                       LIST VIEWS                                    #
 #######################################################################
 
 class AppliancesAPIView(mixins.CreateModelMixin, generics.ListAPIView):
