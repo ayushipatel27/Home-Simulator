@@ -163,7 +163,7 @@ class Powerusage(models.Model):
     timestamp = models.DateTimeField()
     sensorid = models.IntegerField()
     endtimestamp = models.DateTimeField(blank=True, null=True)
-    usage = models.IntegerField()
+    usage = models.FloatField()
     cost = models.FloatField()
 
     class Meta:

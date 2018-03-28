@@ -21,60 +21,60 @@ headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
 
 
-url1 = 'http://127.0.0.1:8000/api/insert/appliances/'
+# url1 = 'http://127.0.0.1:8000/api/insert/appliances/'
 
-appliances = [{"sensorid":1, "powerusage":12, "powerrate":0.15, "appliancename":"testytesterson"}]
+# appliances = [{"sensorid":1, "powerusage":12, "powerrate":0.15, "appliancename":"testytesterson"}]
 
-headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+# headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
-req = requests.post(url1, data=json.dumps(appliances), headers=headers)
-
-
-url2 = 'http://127.0.0.1:8000/api/insert/rooms/'
-
-rooms = [{"roomname":"testytestersonsgarage"}]
-
-headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-
-req = requests.post(url2, data=json.dumps(rooms), headers=headers)
+# req = requests.post(url1, data=json.dumps(appliances), headers=headers)
 
 
-url3 = 'http://127.0.0.1:8000/api/insert/sensors/'
+# url2 = 'http://127.0.0.1:8000/api/insert/rooms/'
 
-sensors = [{"sensorname":"Light", "sensorstate":0, "roomid":1}, {"sensorname":"Light", "sensorstate":1, "roomid":2}]
+# rooms = [{"roomname":"testytestersonsgarage"}]
 
-headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+# headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
-req = requests.post(url3, data=json.dumps(sensors), headers=headers)
-
-
-
-url4 = 'http://127.0.0.1:8000/api/insert/powerusage/'
-
-powerusage = [{"cost":0.585, "endtimestamp": "2015-02-28 10:11:38", "sensorid": 22, "timestamp": "2015-02-28 20:13:56", "usage": 25 }]
-
-req = requests.post(url4, data=json.dumps(powerusage), headers=headers)
+# req = requests.post(url2, data=json.dumps(rooms), headers=headers)
 
 
-url5 = 'http://127.0.0.1:8000/api/insert/hvacusage/'
+# url3 = 'http://127.0.0.1:8000/api/insert/sensors/'
 
-hvacusage = [{"timestamp":'2015-03-26 12:12:10', "sensorid":2, "endtimestamp":'2015-03-26 19:10:25', "usage":12.0, "cost":12.0, "temperature":65.0}]
+# sensors = [{"sensorname":"Light", "sensorstate":0, "roomid":1}, {"sensorname":"Light", "sensorstate":1, "roomid":2}]
 
-req = requests.post(url5, data=json.dumps(hvacusage), headers=headers)
+# headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
-
-url6 = 'http://127.0.0.1:8000/api/insert/waterusage/'
-
-waterusage = [{"timestamp":'2015-03-26 10:12:10', "sensorid":3, "endtimestamp":'2015-03-26 19:10:25', "usage":12.0, "cost":12.0}]
-
-req = requests.post(url6, data=json.dumps(waterusage), headers=headers)
+# req = requests.post(url3, data=json.dumps(sensors), headers=headers)
 
 
-url7 = 'http://127.0.0.1:8000/api/insert/dailyusage/'
 
-dailyusage = [{"date":"2015-02-23", "totalwaterusage":10.0, "totalpowerusage":75, "totalpowercost":12.0, "totalwatercost":12.0, "totalhvacusage":12.0, "totalhvaccost":12.0}]
+# url4 = 'http://127.0.0.1:8000/api/insert/powerusagenoendtime/'
 
-req = requests.post(url7, data=json.dumps(dailyusage), headers=headers)
+# powerusage = [{"timestamp":'2018-03-26 12:12:10', "cost":0.585, "sensorid": 22, "usage": 25 }]
+
+# req = requests.post(url4, data=json.dumps(powerusage), headers=headers)
+
+
+# url5 = 'http://127.0.0.1:8000/api/insert/hvacusagenoendtime/'
+
+# hvacusage = [{"timestamp":'2018-03-27 12:12:10', "sensorid":2, "usage":12.0, "cost":12.0, "temperature":65.0}]
+
+# req = requests.post(url5, data=json.dumps(hvacusage), headers=headers)
+
+
+# url6 = 'http://127.0.0.1:8000/api/insert/waterusagenoendtime/'
+
+# waterusage = [{"timestamp":'2018-03-27 10:12:10', "sensorid":1, "usage":12.0, "cost":12.0}, {"timestamp":'2018-03-27 11:12:10', "sensorid":2, "usage":12.0, "cost":12.0}]
+
+# req = requests.post(url6, data=json.dumps(waterusage), headers=headers)
+
+
+# url7 = 'http://127.0.0.1:8000/api/insert/dailyusage/'
+
+# dailyusage = [{"date":"2015-02-23", "totalwaterusage":10.0, "totalpowerusage":75, "totalpowercost":12.0, "totalwatercost":12.0, "totalhvacusage":12.0, "totalhvaccost":12.0}]
+
+# req = requests.post(url7, data=json.dumps(dailyusage), headers=headers)
 
 
 
@@ -106,3 +106,5 @@ req = requests.post(url7, data=json.dumps(dailyusage), headers=headers)
 #         self.perform_update(serializer)
 
 #         return Response(serializer.data)
+
+
