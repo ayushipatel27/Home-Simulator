@@ -5,6 +5,8 @@ from rest_framework import generics, mixins, viewsets
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect, HttpResponse
+from django.core import serializers
+#from housestate import HouseState
 import json
 from rest_framework.generics import UpdateAPIView
 
@@ -154,6 +156,10 @@ class WeatherRudView(generics.RetrieveUpdateDestroyAPIView):
 
 	def patch(self, request, *args, **kwargs):
 		return self.update(request, *args, **kwargs)
+
+#######################################################################
+#                   GET SPECIFIED COLLECTIONS                         #
+#######################################################################
 
 
 class GetSensors(generics.ListAPIView):
@@ -369,16 +375,27 @@ def UpdateHouseState(request):
 
 def GetCurrentHouseState(request):
 
-    room = Rooms.objects.latest('roomid')
+    hs = HouseState
 
-    sensor = Sensors.objects.latest('sensorid')
+    rooms = Rooms.objects.all()
 
-    appliance = Appliances.objects.latest('applianceid')
+    sensors = Sensors.objects.all()
 
-    print("\n Room: " + str(room.roomname) + "\n Sensor: " + str(sensor.sensorname) + "\n Appliance: " + str(appliance.appliancename) + "\n")
+    appliances = Appliances.objects.all()
+
+    dailyusage = Dailyusage.objects.latest('dailyusageid')
+
+    data = serializers.serialize('json', Powerusage.objects.filter(endtimestamp__isnull=True))
+    powerusage = json.loads(data)
+
+    data = serializers.serialize('json', Hvacusage.objects.filter(endtimestamp__isnull=True))
+    hvacusage = json.loads(data)
+
+    data = serializers.serialize('json', Waterusage.objects.filter(endtimestamp__isnull=True))
+    waterusage = json.loads(data)
 
     return HttpResponse('')
-
+    
 
 #######################################################################
 #                       INSERT STATES                                 #
@@ -433,6 +450,20 @@ def InsertPowerusage(request):
 
     return HttpResponse('')
 
+@csrf_exempt
+def InsertPowerusageNoEndtime(request):
+    if request.method=='POST':
+        data = json.loads(request.body)
+
+        for i in data:
+            powerusage = Powerusage.objects.create(timestamp    = i['timestamp'],
+                                                   sensorid     = i['sensorid'],
+                                                   usage        = i['usage'],
+                                                   cost         = i['cost'])
+            powerusage.save()
+
+    return HttpResponse('')
+
 
 @csrf_exempt
 def InsertHvacusage(request):
@@ -445,6 +476,20 @@ def InsertHvacusage(request):
 											     usage          = i['usage'],
 											     cost           = i['cost'],
 											     temperature    = i['temperature'])
+            hvacusage.save()
+
+    return HttpResponse('')
+
+@csrf_exempt
+def InsertHvacusageNoEndtime(request):
+    if request.method=='POST':
+        data = json.loads(request.body)
+
+        for i in data:
+            hvacusage = Hvacusage.objects.create(timestamp      = i['timestamp'],
+                                                 usage          = i['usage'],
+                                                 cost           = i['cost'],
+                                                 temperature    = i['temperature'])
             hvacusage.save()
 
     return HttpResponse('')
@@ -493,6 +538,21 @@ def InsertWaterusage(request):
 
     return HttpResponse('')
 
+@csrf_exempt
+def InsertWaterusageNoEndtime(request):
+    if request.method=='POST':
+        data = json.loads(request.body)
+
+        for i in data:
+            #sensor = Sensors.objects.get(sensorid=i['sensorid'])
+            waterusage = Waterusage.objects.create(timestamp    = i['timestamp'],
+                                                   sensorid     = i['sensorid'],
+                                                   usage        = i['usage'],
+                                                   cost         = i['cost'])
+            waterusage.save()
+
+    return HttpResponse('')
+
 
 @csrf_exempt
 def InsertWeather(request):
@@ -508,12 +568,6 @@ def InsertWeather(request):
             weather.save()
 
     return HttpResponse('')
-
-
-
-
-
-
 
 
 

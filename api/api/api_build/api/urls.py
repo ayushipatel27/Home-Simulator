@@ -35,8 +35,11 @@ from .views import (
                      InsertWaterusage, 
                      InsertWeather,
 
-                     UpdateHouseState,
+                     InsertPowerusageNoEndtime, 
+                     InsertHvacusageNoEndtime,
+                     InsertWaterusageNoEndtime,
 
+                     UpdateHouseState,
                      GetCurrentHouseState, 
                     )
 
@@ -60,7 +63,7 @@ urlpatterns = [
 
     path('weather/', WeatherAPIView.as_view(), name='weather-listcreate'),
 
-    path('chs/', GetCurrentHouseState, name='list-chs'),
+    path('gethousestate/', GetCurrentHouseState, name='get-housestate'),
 
     # Individual Views:
 
@@ -103,6 +106,14 @@ urlpatterns = [
     path('insert/waterusage/', InsertWaterusage, name='insert-waterusage'),
 
     path('insert/weather/', InsertWeather, name='insert-weather'),
+
+    # Inserts without endtimes
+
+    path('insert/powerusagenoendtime/', InsertPowerusageNoEndtime, name='insert-powerusage-no-endtime'),
+
+    path('insert/hvacusagenoendtime/', InsertHvacusageNoEndtime, name='insert-hvacusage-no-endtime'),
+
+    path('insert/waterusagenoendtime/', InsertWaterusageNoEndtime, name='insert-waterusage-no-endtime'),
 
     # Updates
 
