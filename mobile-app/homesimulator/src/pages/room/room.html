@@ -12,9 +12,9 @@
     <ion-card class="rooms-card">
       <ion-list class="rooms-list">
         <ion-item-group>
-            <ion-item-divider class="header-divider" color="light">{{name}} Appliances</ion-item-divider>
-          <ion-item text-wrap *ngFor="let appliance of appliances" class="room-item" (click)="navigateToApplianceDetailsPage(appliance)">
-            <ion-label>Sensor: {{appliance.sensorname}} Appliance: {{appliance.appliancename}}</ion-label>
+            <ion-item-divider class="header-divider" color="light">{{name}} Room</ion-item-divider>
+          <ion-item text-wrap *ngFor="let sensor of sensors" class="room-item" (click)="navigateToSensorDetailsPage(sensor)">
+            <ion-label>Sensor: {{sensor.sensorname}}</ion-label>
           </ion-item>
         </ion-item-group>
       </ion-list>

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ApplianceDetailsPage } from '../appliancedetails/appliancedetails';
+import { ApiProvider } from '../../providers/api/api';
+
 
 
 /**
@@ -22,27 +24,20 @@ export class AppliancesPage {
   perPage = 0;
   totalData = 0;
   totalPage = 0;
+  //appliances;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public ApiProvider: ApiProvider) {
   }
 
-  appliances = [
-    {'sensorname': 'kitchenlightsensor', 'sensorid': 1, 'applianceid': 1, 'appliancename': 'kitchenlight1', 'poweruseage': 20, 'powerrate': 1.40},
-    {'sensorname': 'kitchenlightsensor', 'sensorid': 1, 'applianceid': 4, 'appliancename': 'kitchenlight3', 'poweruseage': 23, 'powerrate': 1.40},
-    {'sensorname': 'kitchenappliancesensor', 'sensorid': 3, 'applianceid': 6, 'appliancename': 'oven', 'poweruseage': 34, 'powerrate': 1.70},
-    {'sensorname': 'kitchenappliancesensor', 'sensorid': 3, 'applianceid': 7, 'appliancename': 'refrigerator', 'poweruseage': 40, 'powerrate': 1.93},
-    {'sensorname': 'guestbathroomlightsensor', 'sensorid': 8, 'applianceid': 23, 'appliancename': 'guestbathroomlight', 'poweruseage': 12, 'powerrate': 1.14},
-    {'sensorname': 'guestbathroomwatersensor', 'sensorid': 9, 'applianceid': 26, 'appliancename': 'guestbathroomfaucet', 'wateruseage': 3.0, 'waterrate': 1.95},
-    {'sensorname': 'kitchenlightsensor', 'sensorid': 1, 'applianceid': 1, 'appliancename': 'kitchenlight1', 'poweruseage': 20, 'powerrate': 1.40},
-    {'sensorname': 'kitchenlightsensor', 'sensorid': 1, 'applianceid': 4, 'appliancename': 'kitchenlight3', 'poweruseage': 23, 'powerrate': 1.40},
-    {'sensorname': 'kitchenappliancesensor', 'sensorid': 3, 'applianceid': 6, 'appliancename': 'oven', 'poweruseage': 34, 'powerrate': 1.70},
-    {'sensorname': 'kitchenappliancesensor', 'sensorid': 3, 'applianceid': 7, 'appliancename': 'refrigerator', 'poweruseage': 40, 'powerrate': 1.93},
-    {'sensorname': 'guestbathroomlightsensor', 'sensorid': 8, 'applianceid': 23, 'appliancename': 'guestbathroomlight', 'poweruseage': 12, 'powerrate': 1.14},
-    {'sensorname': 'guestbathroomwatersensor', 'sensorid': 9, 'applianceid': 26, 'appliancename': 'guestbathroomfaucet', 'wateruseage': 3.0, 'waterrate': 1.95},
-  ];
+  appliances;
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AppliancesPage');
+    this.ApiProvider.getAppliances().subscribe(res => {
+      console.log(res)
+      this.appliances = res
+    });
+    console.log(this.appliances);
   }
 
   navigateToApplianceDetailsPage(appliance) {

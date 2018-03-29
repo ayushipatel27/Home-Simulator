@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { RoomPage } from '../room/room';
+import { ApiProvider } from '../../providers/api/api';
 
 
 /**
@@ -19,10 +20,10 @@ import { RoomPage } from '../room/room';
 export class RoomsPage {
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public ApiProvider: ApiProvider) {
   }
 
-  rooms = [
+  rooms; /** = [
     {'name': 'garage', 'id': 1},
     {'name': 'living room', 'id': 2},
     {'name': 'kitchen', 'id': 3},
@@ -31,10 +32,14 @@ export class RoomsPage {
     {'name': 'guestroom1', 'id': 6},
     {'name': 'guestroom2', 'id': 7},
     {'name': 'guestbathroom', 'id': 8}
-  ];
+  ]; **/
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad RoomsPage');
+    this.ApiProvider.getRooms().subscribe(res => {
+      console.log(res)
+      this.rooms = res
+    })
   }
 
   navigateToRoomPage(room) {

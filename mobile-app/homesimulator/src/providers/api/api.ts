@@ -1,0 +1,64 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+
+
+/*
+  Generated class for the ApiProvider provider.
+
+  See https://angular.io/guide/dependency-injection for more info on providers
+  and Angular DI.
+*/
+@Injectable()
+export class ApiProvider {
+
+  rooms: any;
+  sensors: any;
+  appliances: any;
+  dailyUse: any;
+  hvacUse: any;
+  waterUse: any;
+  weather: any;
+
+
+
+
+  constructor(public http: HttpClient) {
+    console.log('Hello ApiProvider Provider');
+  }
+
+  getRooms() {
+    return this.http.get('http://localhost:8000/api/rooms/');
+  }
+  getRoomDetails(id) {
+    return this.http.get('http://localhost:8000/api/getsensors/' + id);
+  }
+  getSensorDetails(id) {
+    return this.http.get('http://localhost:8000/api/getappliances/' + id);
+  }
+  getSensors() {
+    return this.http.get('http://localhost:8000/api/sensors/');
+  }
+  // getSensorDetails(id) {
+  //   return this.http.get('http://localhost:8000/api/sensors/' + id);
+  // }
+  getAppliances() {
+    return this.http.get('http://localhost:8000/api/appliances/')
+  }
+  getApplianceDetails(id) {
+    return this.http.get('http://localhost:8000/api/appliances/' + id);
+  }
+  getDailyUse() {
+    this.dailyUse = this.http.get('http://localhost:8000/api/rooms/');
+  }
+  getHvacUse() {
+    this.hvacUse = this.http.get('http://localhost:8000/api/rooms/');
+  }
+  getWaterUse() {
+    this.waterUse = this.http.get('http://localhost:8000/api/rooms/');
+  }
+  getWeather() {
+    this.rooms = this.http.get('http://localhost:8000/api/rooms/');
+  }
+
+}

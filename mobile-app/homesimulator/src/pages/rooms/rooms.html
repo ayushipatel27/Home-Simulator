@@ -10,14 +10,16 @@
 <ion-content class="background" padding>
 
   <ion-card class="rooms-card">
-    <ion-list class="rooms-list">
-      <ion-item-group>
-        <ion-item-divider class="header-divider" color="light">Rooms</ion-item-divider>
-        <ion-item *ngFor="let room of rooms" class="room-item" (click)="navigateToRoomPage(room)">
-          {{room.name}}
-        </ion-item>
-      </ion-item-group>
-    </ion-list>
+    <ion-scroll scrollY="true">
+      <ion-list class="rooms-list">
+        <ion-item-group>
+          <ion-item-divider class="header-divider" color="light">Rooms</ion-item-divider>
+          <ion-item *ngFor="let room of rooms" class="room-item" (click)="navigateToRoomPage(room)">
+            {{room.roomname}}
+          </ion-item>
+        </ion-item-group>
+      </ion-list>
+    </ion-scroll>
   </ion-card>
 
 </ion-content>

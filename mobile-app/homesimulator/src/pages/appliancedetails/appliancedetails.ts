@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { ApiProvider } from '../../providers/api/api';
+
 
 /**
  * Generated class for the AppliancedetailsPage page.
@@ -19,19 +21,20 @@ export class ApplianceDetailsPage {
    data;
    name: string;
    appliance;
+   powerrate;
+   powerusage;
    onoffswitch: boolean = false;
 
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    //this.id = this.navParams.get('id');
+  constructor(public navCtrl: NavController, public navParams: NavParams, public ApiProvider: ApiProvider) {
     console.log(this.navParams);
-    //this.data = this.navParams.data;
     this.appliance = this.navParams.data.appliance;
+    console.log(this.appliance);
     this.id = this.appliance.applianceid;
     this.name = this.appliance.appliancename;
-    //this.id = this.navParams.get('applianceid');
-
+    this.powerrate = this.appliance.powerrate;
+    this.powerusage = this.appliance.powerusage;
   }
 
   result = {'sensorname': 'guestbathroomlightsensor', 'sensorid': 8, 'applianceid': 23, 'appliancename': 'guestbathroomlight', 'poweruseage': 12, 'powerrate': 1.14, 'status': 0};
