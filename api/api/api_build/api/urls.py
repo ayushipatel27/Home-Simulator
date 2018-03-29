@@ -23,6 +23,10 @@ from .views import (
                      WaterusageRudView, 
                      WeatherRudView,
 
+                     GetSensors,
+                     GetSensorsTurnedOn,
+                     GetAppliances,
+
                      InsertSensors, 
                      InsertAppliances, 
                      InsertRooms, 
@@ -32,8 +36,17 @@ from .views import (
                      InsertWaterusage, 
                      InsertWeather,
 
-                     UpdateHouseState,
+                     InsertLivewaterusage,
+                     InsertLivepowerusage,
 
+                     InsertPowerusageNoEndtime, 
+                     InsertHvacusageNoEndtime,
+                     InsertWaterusageNoEndtime,
+
+                     InsertLivewaterusageNoEndtime,
+                     InsertLivepowerusageNoEndtime,
+
+                     UpdateHouseState,
                      GetCurrentHouseState, 
                     )
 
@@ -57,8 +70,6 @@ urlpatterns = [
 
     path('weather/', WeatherAPIView.as_view(), name='weather-listcreate'),
 
-    path('chs/', GetCurrentHouseState, name='list-chs'),
-
     # Individual Views:
 
     path('appliances/<int:applianceid>/', AppliancesRudView.as_view(), name='appliances-rud'),
@@ -76,6 +87,14 @@ urlpatterns = [
     path('waterusage/<int:waterusageid>/', WaterusageRudView.as_view(), name='waterusage-rud'),
 
     path('weather/<int:weatherid>/', WeatherRudView.as_view(), name='weather-rud'),
+
+    # Get Filtered Lists
+
+    path('getsensors/<int:roomid>/', GetSensors.as_view(), name='get-sensors'), 
+
+    path('inprogress/', GetSensorsTurnedOn.as_view(), name='get-sensors-turned-on'), 
+
+    path('getappliances/<int:sensorid>/', GetAppliances.as_view(), name='get-appliances'),
 
     # Inserts
 
@@ -95,7 +114,27 @@ urlpatterns = [
 
     path('insert/weather/', InsertWeather, name='insert-weather'),
 
-    # Updates
+    # Inserts without endtimes
+
+    path('insert/powerusagenoendtime/', InsertPowerusageNoEndtime, name='insert-powerusage-no-endtime'),
+
+    path('insert/hvacusagenoendtime/', InsertHvacusageNoEndtime, name='insert-hvacusage-no-endtime'),
+
+    path('insert/waterusagenoendtime/', InsertWaterusageNoEndtime, name='insert-waterusage-no-endtime'),
+
+    # HouseState
+
+    path('gethousestate/', GetCurrentHouseState, name='get-housestate'),
 
     path('update/housestate/', UpdateHouseState, name='update-housestate'),
+
+    # Living Nightmare
+
+    path('insert/livewaterusage/', InsertLivewaterusage, name='insert-livewaterusage'), 
+
+    path('insert/livepowerusage/', InsertLivepowerusage, name='insert-livepowerusage'),   
+
+    path('insert/livepowerusagenoendtime/', InsertLivepowerusageNoEndtime, name='insert-powerusage-no-endtime'),
+
+    path('insert/livewaterusagenoendtime/', InsertLivewaterusageNoEndtime, name='insert-waterusage-no-endtime'),
 ]

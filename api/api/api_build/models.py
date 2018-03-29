@@ -158,6 +158,32 @@ class Hvacusage(models.Model):
         db_table = 'hvacusage'
 
 
+class Livepowerusage(models.Model):
+    livepowerusageid = models.AutoField(primary_key=True)
+    timestamp = models.DateTimeField()
+    sensorids = models.CharField(max_length=200)
+    endtimestamp = models.DateTimeField(blank=True, null=True)
+    usage = models.FloatField()
+    cost = models.FloatField()
+
+    class Meta:
+        managed = False
+        db_table = 'livepowerusage'
+
+
+class Livewaterusage(models.Model):
+    livewaterusageid = models.AutoField(primary_key=True)
+    timestamp = models.DateTimeField()
+    sensorids = models.CharField(max_length=200)
+    endtimestamp = models.DateTimeField(blank=True, null=True)
+    usage = models.FloatField()
+    cost = models.FloatField()
+
+    class Meta:
+        managed = False
+        db_table = 'livewaterusage'
+
+
 class Powerusage(models.Model):
     energyusageid = models.AutoField(primary_key=True)
     timestamp = models.DateTimeField()
