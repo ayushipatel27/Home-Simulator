@@ -70,8 +70,6 @@ urlpatterns = [
 
     path('weather/', WeatherAPIView.as_view(), name='weather-listcreate'),
 
-    path('gethousestate/', GetCurrentHouseState, name='get-housestate'),
-
     # Individual Views:
 
     path('appliances/<int:applianceid>/', AppliancesRudView.as_view(), name='appliances-rud'),
@@ -124,7 +122,9 @@ urlpatterns = [
 
     path('insert/waterusagenoendtime/', InsertWaterusageNoEndtime, name='insert-waterusage-no-endtime'),
 
-    # Updates
+    # HouseState
+
+    path('gethousestate/', GetCurrentHouseState, name='get-housestate'),
 
     path('update/housestate/', UpdateHouseState, name='update-housestate'),
 

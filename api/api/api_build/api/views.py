@@ -19,7 +19,9 @@ from api_build.models import ( Appliances,
 							   Rooms, 
 							   Sensors, 
 							   Waterusage, 
-							   Weather
+							   Weather,
+                               Livewaterusage,
+                               Livepowerusage
 							 )
 
 from .serializers import ( AppliancesSerializer, 
@@ -398,26 +400,30 @@ def GetCurrentHouseState(request):
                     dbAppliance = Appliances.objects.get(applianceid = sensor_elem['sensor id'])
                     appliance_elem['usage'] = dbAppliance.powerusage
 
-    # GET CURRENTLY ACTIVE POWER, WATER, AND HVAC 
-    data = serializers.serialize('json', Powerusage.objects.filter(endtimestamp__isnull=True))
-    powerusage = json.loads(data)
 
-    data = serializers.serialize('json', Hvacusage.objects.filter(endtimestamp__isnull=True))
-    hvacusage = json.loads(data)
+    # GET CURRENTLY ACTIVE POWER, WATER, AND HVAC
+    powerObj = Livepowerusage.objects.latest('livepowerusageid')
+    power = serializers.serialize('json', [powerObj])
+    powerusage = json.loads(power)
 
-    data = serializers.serialize('json', Waterusage.objects.filter(endtimestamp__isnull=True))
-    waterusage = json.loads(data)
+    havacObj = Hvacusage.objects.latest('hvacusageid')
+    hvac = serializers.serialize('json', [havacObj])
+    hvacusage = json.loads(hvac)
 
-    data = serializers.serialize('json', Weather.objects.filter(endtimestamp__isnull=True))
-    waterusage = json.loads(data)
+    waterObj = Livewaterusage.objects.latest('livewaterusageid')
+    water = serializers.serialize('json', [waterObj])
+    waterusage = json.loads(water)
 
-    HouseState['home']['hvacusage']  = hvacusage
-    HouseState['home']['waterusage'] = waterusage
-    HouseState['home']['powerusage'] = powerusage
+    weatherObj = Weather.objects.latest('weatherid')
+    weath = serializers.serialize('json', [weatherObj])
+    weather = json.loads(weath)
 
-    #payload = json.dumps(HouseState)
+    HouseState['home']['hvacusage']  = hvacusage[0]['fields']
+    HouseState['home']['waterusage'] = waterusage[0]['fields']
+    HouseState['home']['powerusage'] = powerusage[0]['fields']
+    HouseState['home']['weather']    = weather[0]['fields']
 
-    return HttpResponse()
+    return HttpResponse(json.dumps(HouseState, indent=4, sort_keys=True), content_type="application/json")
     
 
 #######################################################################

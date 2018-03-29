@@ -616,8 +616,3 @@ HouseState = {
         }
     }
 }
-
-
-WaterUsageDictionary = {
-    
-}
