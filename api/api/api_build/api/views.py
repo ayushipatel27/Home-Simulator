@@ -193,6 +193,75 @@ class GetSensorsTurnedOn(generics.ListAPIView):
         return Sensors.objects.filter(sensorstate=1)
 
 
+def GetWeekOfPower(request):
+
+    power_dict = []
+
+    one_week_ago = date.today() - timedelta(days=7)
+    today = date.today()
+
+    powerObj = Powerusage.objects.filter(endtimestamp__isnull=False, timestamp__gte=one_week_ago, endtimestamp__lte=today)
+
+    power = serializers.serialize('json', powerObj)
+    powerusage = json.loads(power)
+
+    for p in powerusage:
+        power_dict.append(p['fields'])
+
+    return HttpResponse(json.dumps(power_dict, indent=4, sort_keys=True), content_type="application/json")
+
+def GetWeekOfWater(request):
+
+    water_dict = []
+
+    one_week_ago = date.today() - timedelta(days=7)
+    today = date.today()
+
+    waterObj = Waterusage.objects.filter(endtimestamp__isnull=False, timestamp__gte=one_week_ago, endtimestamp__lte=today)
+
+    water = serializers.serialize('json', waterObj)
+    waterusage = json.loads(water)
+
+    for p in waterusage:
+        water_dict.append(p['fields'])
+
+    return HttpResponse(json.dumps(water_dict, indent=4, sort_keys=True), content_type="application/json")
+
+def GetMonthOfPower(request):
+
+    power_dict = []
+
+    one_month_ago = date.today() - timedelta(days=30)
+    today = date.today()
+
+    powerObj = Powerusage.objects.filter(endtimestamp__isnull=False, timestamp__gte=one_month_ago, endtimestamp__lte=today)
+
+    power = serializers.serialize('json', powerObj)
+    powerusage = json.loads(power)
+
+    for p in powerusage:
+        power_dict.append(p['fields'])
+
+    return HttpResponse(json.dumps(power_dict, indent=4, sort_keys=True), content_type="application/json")
+
+def GetMonthOfWater(request):
+
+    water_dict = []
+
+    one_month_ago = date.today() - timedelta(days=30)
+    today = date.today()
+
+    waterObj = Waterusage.objects.filter(endtimestamp__isnull=False, timestamp__gte=one_month_ago, endtimestamp__lte=today)
+
+    water = serializers.serialize('json', waterObj)
+    waterusage = json.loads(water)
+
+    for p in waterusage:
+        water_dict.append(p['fields'])
+
+    return HttpResponse(json.dumps(water_dict, indent=4, sort_keys=True), content_type="application/json")
+
+
 #######################################################################
 #                       LIST VIEWS                                    #
 #######################################################################
