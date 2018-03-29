@@ -90,7 +90,7 @@ class Dailyusage(models.Model):
     dailyusageid = models.AutoField(primary_key=True)
     date = models.DateField()
     totalwaterusage = models.FloatField()
-    totalpowerusage = models.IntegerField()
+    totalpowerusage = models.FloatField()
     totalpowercost = models.FloatField()
     totalwatercost = models.FloatField()
     totalhvacusage = models.FloatField()
@@ -163,7 +163,7 @@ class Powerusage(models.Model):
     timestamp = models.DateTimeField()
     sensorid = models.IntegerField()
     endtimestamp = models.DateTimeField(blank=True, null=True)
-    usage = models.IntegerField()
+    usage = models.FloatField()
     cost = models.FloatField()
 
     class Meta:
