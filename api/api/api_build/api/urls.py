@@ -24,6 +24,7 @@ from .views import (
                      WeatherRudView,
 
                      GetSensors,
+                     GetSensorsTurnedOn,
                      GetAppliances,
 
                      InsertSensors, 
@@ -35,9 +36,15 @@ from .views import (
                      InsertWaterusage, 
                      InsertWeather,
 
+                     InsertLivewaterusage,
+                     InsertLivepowerusage,
+
                      InsertPowerusageNoEndtime, 
                      InsertHvacusageNoEndtime,
                      InsertWaterusageNoEndtime,
+
+                     InsertLivewaterusageNoEndtime,
+                     InsertLivepowerusageNoEndtime,
 
                      UpdateHouseState,
                      GetCurrentHouseState, 
@@ -85,7 +92,9 @@ urlpatterns = [
 
     # Get Filtered Lists
 
-    path('getsensors/<int:roomid>/', GetSensors.as_view(), name='get-sensors'),   
+    path('getsensors/<int:roomid>/', GetSensors.as_view(), name='get-sensors'), 
+
+    path('inprogress/', GetSensorsTurnedOn.as_view(), name='get-sensors-turned-on'), 
 
     path('getappliances/<int:sensorid>/', GetAppliances.as_view(), name='get-appliances'),
 
@@ -118,4 +127,14 @@ urlpatterns = [
     # Updates
 
     path('update/housestate/', UpdateHouseState, name='update-housestate'),
+
+    # Living Nightmare
+
+    path('insert/livewaterusage/', InsertLivewaterusage, name='insert-livewaterusage'), 
+
+    path('insert/livepowerusage/', InsertLivepowerusage, name='insert-livepowerusage'),   
+
+    path('insert/livepowerusagenoendtime/', InsertLivepowerusageNoEndtime, name='insert-powerusage-no-endtime'),
+
+    path('insert/livewaterusagenoendtime/', InsertLivewaterusageNoEndtime, name='insert-waterusage-no-endtime'),
 ]

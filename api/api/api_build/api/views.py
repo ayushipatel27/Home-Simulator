@@ -6,7 +6,9 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core import serializers
-#from housestate import HouseState
+from .housestate import HouseState
+from datetime import datetime, timedelta, time, date
+from django.db.models import Sum
 import json
 from rest_framework.generics import UpdateAPIView
 
@@ -27,7 +29,9 @@ from .serializers import ( AppliancesSerializer,
 						   RoomsSerializer, 
 						   SensorsSerializer, 
 						   WaterusageSerializer, 
-						   WeatherSerializer
+						   WeatherSerializer,
+                           LivepowerusageSerializer,
+                           LivewaterusageSerializer
 						 )
 
 #######################################################################
@@ -178,6 +182,13 @@ class GetAppliances(generics.ListAPIView):
 		sensorid = self.kwargs['sensorid']
 		return Appliances.objects.filter(sensorid=sensorid)
 
+
+class GetSensorsTurnedOn(generics.ListAPIView):
+    serializer_class = SensorsSerializer
+
+    def get_queryset(self):
+
+        return Sensors.objects.filter(sensorstate=1)
 
 
 #######################################################################
@@ -375,16 +386,19 @@ def UpdateHouseState(request):
 
 def GetCurrentHouseState(request):
 
-    hs = HouseState
+    for room_key, room_elem in HouseState['home']['rooms'].items():
 
-    rooms = Rooms.objects.all()
+        for sensor_key, sensor_elem in room_elem['sensors'].items():
 
-    sensors = Sensors.objects.all()
+            dbSensor = Sensors.objects.get(sensorid = sensor_elem['sensor id'])
+            sensor_elem['state'] = dbSensor.sensorstate
 
-    appliances = Appliances.objects.all()
+            for appliance_key, appliance_elem in sensor_elem['appliances'].items():
 
-    dailyusage = Dailyusage.objects.latest('dailyusageid')
+                    dbAppliance = Appliances.objects.get(applianceid = sensor_elem['sensor id'])
+                    appliance_elem['usage'] = dbAppliance.powerusage
 
+    # GET CURRENTLY ACTIVE POWER, WATER, AND HVAC 
     data = serializers.serialize('json', Powerusage.objects.filter(endtimestamp__isnull=True))
     powerusage = json.loads(data)
 
@@ -394,7 +408,16 @@ def GetCurrentHouseState(request):
     data = serializers.serialize('json', Waterusage.objects.filter(endtimestamp__isnull=True))
     waterusage = json.loads(data)
 
-    return HttpResponse('')
+    data = serializers.serialize('json', Weather.objects.filter(endtimestamp__isnull=True))
+    waterusage = json.loads(data)
+
+    HouseState['home']['hvacusage']  = hvacusage
+    HouseState['home']['waterusage'] = waterusage
+    HouseState['home']['powerusage'] = powerusage
+
+    #payload = json.dumps(HouseState)
+
+    return HttpResponse()
     
 
 #######################################################################
@@ -571,5 +594,111 @@ def InsertWeather(request):
 
 
 
+# Living Nightmare
+
+@csrf_exempt
+def InsertLivewaterusage(request):
+    if request.method=='POST':
+        data = json.loads(request.body)
+
+        for i in data:
+            #sensor = Sensors.objects.get(sensorid=i['sensorid'])
+            waterusage = Livewaterusage.objects.create(timestamp    = i['timestamp'],
+                                                       sensorid     = i['sensorids'],
+                                                       endtimestamp = i['endtimestamp'],
+                                                       usage        = i['usage'],
+                                                       cost         = i['cost'])
+            waterusage.save()
+
+    return HttpResponse('')
+
+@csrf_exempt
+def InsertLivewaterusageNoEndtime(request):
+    if request.method=='POST':
+        data = json.loads(request.body)
+
+        for i in data:
+            #sensor = Sensors.objects.get(sensorid=i['sensorid'])
+            waterusage = Livewaterusage.objects.create(timestamp    = i['timestamp'],
+                                                       sensorid     = i['sensorids'],
+                                                       usage        = i['usage'],
+                                                       cost         = i['cost'])
+            waterusage.save()
+
+    return HttpResponse('')
+
+
+@csrf_exempt
+def InsertLivepowerusage(request):
+    if request.method=='POST':
+        data = json.loads(request.body)
+
+        for i in data:
+            #sensor = Sensors.objects.get(sensorid=i['sensorid'])
+            powerusage = Livepowerusage.objects.create(timestamp    = i['timestamp'],
+                                                       sensorid     = i['sensorids'],
+                                                       endtimestamp = i['endtimestamp'],
+                                                       usage        = i['usage'],
+                                                       cost         = i['cost'])
+            powerusage.save()
+
+    return HttpResponse('')
+
+@csrf_exempt
+def InsertLivepowerusageNoEndtime(request):
+    if request.method=='POST':
+        data = json.loads(request.body)
+
+        for i in data:
+            #sensor = Sensors.objects.get(sensorid=i['sensorid'])
+            powerusage = Livewaterusage.objects.create(timestamp    = i['timestamp'],
+                                                       sensorid     = i['sensorids'],
+                                                       usage        = i['usage'],
+                                                       cost         = i['cost'])
+            powerusage.save()
+
+    return HttpResponse('')
+
+
+class LivewaterusageAPIView(mixins.CreateModelMixin, generics.ListAPIView):
+    serializer_class = LivewaterusageSerializer
+
+    def get_queryset(self):
+        qs = Livewaterusage.objects.all()
+        query = self.request.GET.get("q")
+        if query is not None:
+            qs = qs.filter(Q(timestamp__icontains=query)|
+                           Q(sensorids__icontains=query)|
+                           Q(endtimestamp__icontains=query)|
+                           Q(usage__icontains=query)|
+                           Q(cost__icontains=query)).distinct()
+        return qs
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        serializer.save(timestamp=self.request.timestamp)
+
+
+class LivepowerusageAPIView(mixins.CreateModelMixin, generics.ListAPIView):
+    serializer_class = LivepowerusageSerializer
+
+    def get_queryset(self):
+        qs = Livepowerusage.objects.all()
+        query = self.request.GET.get("q")
+        if query is not None:
+            qs = qs.filter(Q(timestamp__icontains=query)|
+                           Q(sensorids__icontains=query)|
+                           Q(endtimestamp__icontains=query)|
+                           Q(usage__icontains=query)|
+                           Q(cost__icontains=query)).distinct()
+        return qs
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        serializer.save(timestamp=self.request.timestamp)
 
 

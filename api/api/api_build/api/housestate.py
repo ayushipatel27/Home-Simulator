@@ -565,6 +565,7 @@ HouseState = {
                             } 
                         }
                     }
+                }
             },
             "Laundry Room":
             {
@@ -597,16 +598,6 @@ HouseState = {
                 }
             }
         },
-        "dailyusage": 
-        {
-            "date":"2015-02-23", 
-            "totalwaterusage":0.0, 
-            "totalpowerusage":0, 
-            "totalpowercost":0.0, 
-            "totalwatercost":0.0, 
-            "totalhvacusage":0.0, 
-            "totalhvaccost":0.0
-        },
         "hvacusage": 
         {
 
@@ -624,4 +615,9 @@ HouseState = {
 
         }
     }
+}
+
+
+WaterUsageDictionary = {
+    
 }

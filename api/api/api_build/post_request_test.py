@@ -56,9 +56,9 @@ headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 # req = requests.post(url4, data=json.dumps(powerusage), headers=headers)
 
 
-# url5 = 'http://127.0.0.1:8000/api/insert/hvacusagenoendtime/'
+# url5 = 'http://127.0.0.1:8000/api/insert/hvacusage/'
 
-# hvacusage = [{"timestamp":'2018-03-27 12:12:10', "sensorid":2, "usage":12.0, "cost":12.0, "temperature":65.0}]
+# hvacusage = [{"timestamp":'2018-03-28 12:12:10', "sensorid":2, "usage":50.0,"endtimestamp":'2018-03-28 12:54:10', "cost":12.0, "temperature":65.0}]
 
 # req = requests.post(url5, data=json.dumps(hvacusage), headers=headers)
 
@@ -108,3 +108,52 @@ headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 #         return Response(serializer.data)
 
 
+
+
+
+
+
+
+# print(str(HouseState['home']['dailyusage']['totalwaterusage']))
+
+#     for room_key, room_elem in HouseState['home']['rooms'].items():
+
+#         for sensor_key, sensor_elem in room_elem['sensors'].items():
+
+#             dbSensor = Sensors.objects.get(sensorid = sensor_elem['sensor id'])
+#             sensor_elem['state'] = dbSensor.sensorstate
+
+#             for appliance_key, appliance_elem in sensor_elem['appliances'].items():
+
+#                     dbAppliance = Appliances.objects.get(applianceid = sensor_elem['sensor id'])
+#                     appliance_elem['usage'] = dbAppliance.powerusage
+
+#     # CALCULATE DAILY USAGE
+
+#     dailyusage = Dailyusage.objects.latest('dailyusageid')
+
+#     HouseState['home']['dailyusage']['date']            = dailyusage.date
+
+#     HouseState['home']['dailyusage']['totalpowerusage'] = Powerusage.objects.filter(endtimestamp__isnull=False, timestamp__date=date.today()).aggregate(Sum('usage'))['usage__sum']
+#     HouseState['home']['dailyusage']['totalwaterusage'] = Waterusage.objects.filter(endtimestamp__isnull=False, timestamp__date=date.today()).aggregate(Sum('usage'))['usage__sum']
+#     HouseState['home']['dailyusage']['totalhvacusage']  = Hvacusage.objects.filter(endtimestamp__isnull=False, timestamp__date=date.today()).aggregate(Sum('usage'))['usage__sum']
+
+#     HouseState['home']['dailyusage']['totalpowercost']  = HouseState['home']['dailyusage']['totalpowerusage'] * 0.12
+#     HouseState['home']['dailyusage']['totalwatercost']  = HouseState['home']['dailyusage']['totalwaterusage'] * 0.12
+#     HouseState['home']['dailyusage']['totalhvaccost']   = HouseState['home']['dailyusage']['totalhvacusage'] * 0.12
+
+#     # GET CURRENTLY ACTIVE POWER, WATER, AND HVAC 
+#     data = serializers.serialize('json', Powerusage.objects.filter(endtimestamp__isnull=True))
+#     powerusage = json.loads(data)
+
+#     data = serializers.serialize('json', Hvacusage.objects.filter(endtimestamp__isnull=True))
+#     hvacusage = json.loads(data)
+
+#     data = serializers.serialize('json', Waterusage.objects.filter(endtimestamp__isnull=True))
+#     waterusage = json.loads(data)
+
+#     HouseState['home']['hvacusage']  = hvacusage
+#     HouseState['home']['waterusage'] = waterusage
+#     HouseState['home']['powerusage'] = powerusage
+
+#     #payload = json.dumps(HouseState)
