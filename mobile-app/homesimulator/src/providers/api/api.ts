@@ -19,6 +19,11 @@ export class ApiProvider {
   hvacUse: any;
   waterUse: any;
   weather: any;
+  weekPower: any;
+  weekWater: any;
+  monthPower: any;
+  monthWater: any;
+
 
 
 
@@ -58,7 +63,15 @@ export class ApiProvider {
     this.waterUse = this.http.get('http://localhost:8000/api/rooms/');
   }
   getWeather() {
-    this.rooms = this.http.get('http://localhost:8000/api/rooms/');
+    this.weather = this.http.get('http://localhost:8000/api/rooms/');
   }
+  getWeekofUsage() {
+    return this.http.get('http://localhost:8000/api/getweekofusage/');
+  }
+  getMonthofUsage() {
+    return this.http.get('http://localhost:8000/api/getmonthofusage/');
+  }
+  
+  
 
 }
