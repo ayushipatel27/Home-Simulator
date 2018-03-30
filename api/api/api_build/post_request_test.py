@@ -157,3 +157,485 @@ headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 #     HouseState['home']['powerusage'] = powerusage
 
 #     #payload = json.dumps(HouseState)
+
+
+
+payload = [{
+    "home": {
+        "hvacusage": {
+            "cost": 12.0,
+            "endtimestamp": "2018-04-01T12:54:10",
+            "temperature": 65.0,
+            "timestamp": "2018-04-01T12:12:10",
+            "usage": 50.0
+        },
+        "powerusage": {
+            "cost": 0.2,
+            "endtimestamp": "",
+            "sensorids": "[1,3,4, 7, 23, 41]",
+            "timestamp": "2018-04-01T19:40:32",
+            "usage": 0.05
+        },
+        "rooms": {
+            "Garage": {
+                "sensors": {
+                    "Window 1 sensor": {
+                        "appliances": {
+                            "Window 1": {
+                                "usage": 0
+                            }
+                        },
+                        "sensor id": 27,
+                        "state": 0
+                    },
+                    "garage door 1 sensor": {
+                        "appliances": {
+                            "Garage Door 1": {
+                                "usage": 0
+                            }
+                        },
+                        "sensor id": 25,
+                        "state": 0
+                    },
+                    "garage door 2 sensor": {
+                        "appliances": {
+                            "Garage Door 2": {
+                                "usage": 0
+                            }
+                        },
+                        "sensor id": 26,
+                        "state": 0
+                    },
+                    "hvac sensor": {
+                        "appliances": {
+                            "HVAC": {
+                                "usage": 3500
+                            }
+                        },
+                        "sensor id": 28,
+                        "state": 0
+                    }
+                }
+            },
+            "Kid 1 Bedroom": {
+                "sensors": {
+                    "Window 2 sensor": {
+                        "appliances": {
+                            "Window 2": {
+                                "usage": 0
+                            }
+                        },
+                        "sensor id": 11,
+                        "state": 0
+                    },
+                    "lamp 1 sensor": {
+                        "appliances": {
+                            "Lamp 1": {
+                                "usage": 60
+                            }
+                        },
+                        "sensor id": 8,
+                        "state": 0
+                    },
+                    "lamp 2 sensor": {
+                        "appliances": {
+                            "Lamp 2": {
+                                "usage": 60
+                            }
+                        },
+                        "sensor id": 9,
+                        "state": 0
+                    },
+                    "overhead light sensor": {
+                        "appliances": {
+                            "Overhead Light": {
+                                "usage": 60
+                            }
+                        },
+                        "sensor id": 7,
+                        "state": 0
+                    },
+                    "window 1 sensor": {
+                        "appliances": {
+                            "Window 1": {
+                                "usage": 0
+                            }
+                        },
+                        "sensor id": 10,
+                        "state": 0
+                    }
+                }
+            },
+            "Kid 2 Bedroom": {
+                "sensors": {
+                    "Window 2 sensor": {
+                        "appliances": {
+                            "Window 2": {
+                                "usage": 0
+                            }
+                        },
+                        "sensor id": 16,
+                        "state": 0
+                    },
+                    "lamp 1 sensor": {
+                        "appliances": {
+                            "Lamp 1": {
+                                "usage": 60
+                            }
+                        },
+                        "sensor id": 13,
+                        "state": 0
+                    },
+                    "lamp 2 sensor": {
+                        "appliances": {
+                            "Lamp 2": {
+                                "usage": 60
+                            }
+                        },
+                        "sensor id": 14,
+                        "state": 0
+                    },
+                    "overhead light sensor": {
+                        "appliances": {
+                            "Overhead Light": {
+                                "usage": 60
+                            }
+                        },
+                        "sensor id": 12,
+                        "state": 0
+                    },
+                    "window 1 sensor": {
+                        "appliances": {
+                            "Window 1": {
+                                "usage": 0
+                            }
+                        },
+                        "sensor id": 15,
+                        "state": 0
+                    }
+                }
+            },
+            "Kids Bathroom": {
+                "sensors": {
+                    "bath exhaust fan sensor": {
+                        "appliances": {
+                            "Bath Exhaust Fan": {
+                                "usage": 30
+                            }
+                        },
+                        "sensor id": 22,
+                        "state": 0
+                    },
+                    "bath sensor": {
+                        "appliances": {
+                            "Bath": {
+                                "usage": 0
+                            }
+                        },
+                        "sensor id": 23,
+                        "state": 0
+                    },
+                    "overhead light sensor": {
+                        "appliances": {
+                            "Overhead Light": {
+                                "usage": 60
+                            }
+                        },
+                        "sensor id": 21,
+                        "state": 0
+                    },
+                    "shower sensor": {
+                        "appliances": {
+                            "Shower": {
+                                "usage": 0
+                            }
+                        },
+                        "sensor id": 24,
+                        "state": 0
+                    }
+                }
+            },
+            "Kitchen": {
+                "sensors": {
+                    "dishwasher sensor": {
+                        "appliances": {
+                            "Dishwasher": {
+                                "usage": 1800
+                            }
+                        },
+                        "sensor id": 42,
+                        "state": 0
+                    },
+                    "garage door into home sensor": {
+                        "appliances": {
+                            "Garage Door Into Home": {
+                                "usage": 0
+                            }
+                        },
+                        "sensor id": 43,
+                        "state": 0
+                    },
+                    "microwave sensor": {
+                        "appliances": {
+                            "Microwave": {
+                                "usage": 1100
+                            }
+                        },
+                        "sensor id": 40,
+                        "state": 0
+                    },
+                    "oven sensor": {
+                        "appliances": {
+                            "Oven": {
+                                "usage": 4000
+                            }
+                        },
+                        "sensor id": 39,
+                        "state": 0
+                    },
+                    "overhead light sensor": {
+                        "appliances": {
+                            "Overhead Light": {
+                                "usage": 60
+                            }
+                        },
+                        "sensor id": 37,
+                        "state": 0
+                    },
+                    "refrigerator sensor": {
+                        "appliances": {
+                            "Refrigerator": {
+                                "usage": 150
+                            }
+                        },
+                        "sensor id": 41,
+                        "state": 0
+                    },
+                    "stove sensor": {
+                        "appliances": {
+                            "Stove": {
+                                "usage": 3500
+                            }
+                        },
+                        "sensor id": 38,
+                        "state": 0
+                    }
+                }
+            },
+            "Laundry Room": {
+                "sensors": {
+                    "clothes dryer sensor": {
+                        "appliances": {
+                            "Clothes Dryer": {
+                                "usage": 3000
+                            }
+                        },
+                        "sensor id": 45,
+                        "state": 0
+                    },
+                    "clothes washer sensor": {
+                        "appliances": {
+                            "Clothes Washer": {
+                                "usage": 500
+                            }
+                        },
+                        "sensor id": 44,
+                        "state": 0
+                    }
+                }
+            },
+            "Living Room": {
+                "sensors": {
+                    "Window 2 sensor": {
+                        "appliances": {
+                            "Window 2": {
+                                "usage": 0
+                            }
+                        },
+                        "sensor id": 35,
+                        "state": 0
+                    },
+                    "back door sensor": {
+                        "appliances": {
+                            "Back Door": {
+                                "usage": 0
+                            }
+                        },
+                        "sensor id": 32,
+                        "state": 0
+                    },
+                    "front door sensor": {
+                        "appliances": {
+                            "Front Door": {
+                                "usage": 0
+                            }
+                        },
+                        "sensor id": 33,
+                        "state": 0
+                    },
+                    "hvac sensor": {
+                        "appliances": {
+                            "Hvac": {
+                                "usage": 3500
+                            }
+                        },
+                        "sensor id": 36,
+                        "state": 0
+                    },
+                    "lamp sensor": {
+                        "appliances": {
+                            "Lamp": {
+                                "usage": 60
+                            }
+                        },
+                        "sensor id": 30,
+                        "state": 0
+                    },
+                    "living room tv sensor": {
+                        "appliances": {
+                            "Living Room TV": {
+                                "usage": 636
+                            }
+                        },
+                        "sensor id": 31,
+                        "state": 0
+                    },
+                    "overhead light sensor": {
+                        "appliances": {
+                            "Overhead Light": {
+                                "usage": 60
+                            }
+                        },
+                        "sensor id": 29,
+                        "state": 0
+                    },
+                    "window 1 sensor": {
+                        "appliances": {
+                            "Window 1": {
+                                "usage": 0
+                            }
+                        },
+                        "sensor id": 34,
+                        "state": 0
+                    }
+                }
+            },
+            "Master Bathroom": {
+                "sensors": {
+                    "bath exhaust fan sensor": {
+                        "appliances": {
+                            "Bath Exhaust Fan": {
+                                "usage": 30
+                            }
+                        },
+                        "sensor id": 18,
+                        "state": 0
+                    },
+                    "bath sensor": {
+                        "appliances": {
+                            "Bath": {
+                                "usage": 0
+                            }
+                        },
+                        "sensor id": 19,
+                        "state": 0
+                    },
+                    "overhead light sensor": {
+                        "appliances": {
+                            "Overhead Light": {
+                                "usage": 60
+                            }
+                        },
+                        "sensor id": 17,
+                        "state": 0
+                    },
+                    "shower sensor": {
+                        "appliances": {
+                            "Shower": {
+                                "usage": 0
+                            }
+                        },
+                        "sensor id": 20,
+                        "state": 0
+                    }
+                }
+            },
+            "master bedroom": {
+                "sensors": {
+                    "Window 2 sensor": {
+                        "appliances": {
+                            "Window 2": {
+                                "usage": 0
+                            }
+                        },
+                        "sensor id": 6,
+                        "state": 1
+                    },
+                    "bedroom tv sensor": {
+                        "appliances": {
+                            "Bedroom TV": {
+                                "usage": 636
+                            }
+                        },
+                        "sensor id": 4,
+                        "state": 1
+                    },
+                    "lamp 1 sensor": {
+                        "appliances": {
+                            "Lamp 1": {
+                                "usage": 60
+                            }
+                        },
+                        "sensor id": 2,
+                        "state": 1
+                    },
+                    "lamp 2 sensor": {
+                        "appliances": {
+                            "Lamp 2": {
+                                "usage": 60
+                            }
+                        },
+                        "sensor id": 3,
+                        "state": 1
+                    },
+                    "overhead light sensor": {
+                        "appliances": {
+                            "Overhead Light": {
+                                "usage": 60
+                            }
+                        },
+                        "sensor id": 1,
+                        "state": 1
+                    },
+                    "window 1 sensor": {
+                        "appliances": {
+                            "Window 1": {
+                                "usage": 0
+                            }
+                        },
+                        "sensor id": 5,
+                        "state": 1
+                    }
+                }
+            }
+        },
+        "waterusage": {
+            "cost": 0.2,
+            "endtimestamp": "",
+            "sensorids": "[2,5,6,12]",
+            "timestamp": "2018-04-01T19:40:32",
+            "usage": 0.05
+        },
+        "weather": {
+            "chanceofprecipitation": 30.0,
+            "precipitation": 20.0,
+            "state": "Sunny",
+            "temperature": 65.0,
+            "timestamp": "2018-04-01T19:46:49"
+        }
+    }
+}]
+
+url = 'http://127.0.0.1:8000/api/update/housestate/'
+
+r = requests.post(url, data=json.dumps(payload), headers=headers)

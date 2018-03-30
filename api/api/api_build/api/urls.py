@@ -100,11 +100,11 @@ urlpatterns = [
 
     path('getappliances/<int:sensorid>/', GetAppliances.as_view(), name='get-appliances'),
 
-    path('getweekofpower/', GetWeekOfPower, name='GetWeekOfPower'),
+    path('getweekofusage/', GetWeekOfPower, name='GetWeekOfPower'),
 
     path('getweekofwater/', GetWeekOfWater, name='GetWeekOfWater'),
 
-    path('getmonthofpower/', GetMonthOfPower, name='GetMonthOfPower'),
+    path('getmonthofusage/', GetMonthOfPower, name='GetMonthOfPower'),
 
     path('getmonthofwater/', GetMonthOfWater, name='GetMonthOfWater'),
 

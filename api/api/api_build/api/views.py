@@ -9,6 +9,7 @@ from django.core import serializers
 from .housestate import HouseState
 from datetime import datetime, timedelta, time, date
 from django.db.models import Sum
+import ast
 import json
 from rest_framework.generics import UpdateAPIView
 
@@ -197,10 +198,10 @@ def GetWeekOfPower(request):
 
     power_dict = []
 
-    one_week_ago = date.today() - timedelta(days=7)
+    one_week_ago = date.today() - timedelta(days=6)
     today = date.today()
 
-    powerObj = Powerusage.objects.filter(endtimestamp__isnull=False, timestamp__gte=one_week_ago, endtimestamp__lte=today)
+    powerObj = Dailyusage.objects.filter(date__gte=one_week_ago, date__lte=today)
 
     power = serializers.serialize('json', powerObj)
     powerusage = json.loads(power)
@@ -231,10 +232,10 @@ def GetMonthOfPower(request):
 
     power_dict = []
 
-    one_month_ago = date.today() - timedelta(days=30)
+    one_month_ago = date.today() - timedelta(days=29)
     today = date.today()
 
-    powerObj = Powerusage.objects.filter(endtimestamp__isnull=False, timestamp__gte=one_month_ago, endtimestamp__lte=today)
+    powerObj = Dailyusage.objects.filter(date__gte=one_month_ago, date__lte=today)
 
     power = serializers.serialize('json', powerObj)
     powerusage = json.loads(power)
@@ -441,16 +442,102 @@ class WeatherAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 @csrf_exempt
 def UpdateHouseState(request):
     if request.method=='POST':
-        #data = json.loads(request.body)
+        
+        newHouseState     = json.loads(request.body)
+        currentHouseState = json.loads(GetCurrentHouseStateLocal())
 
-        GetCurrentHouseState()
+        # POWER
+        power_new = newHouseState[0]['home']['powerusage']
+        power_cur = currentHouseState['home']['powerusage']
 
-        #print("\n" + str(data) + "\n")
+        new_power_sensors = power_new['sensorids']
+        cur_power_sensors = power_cur['sensorids']
 
-        # for i in data:
-        #     tmp = Rooms.objects.get(roomid=i['roomid'])
-        #     tmp.roomname = i['roomname']
-        #     tmp.save()
+        new_power_sensors = ast.literal_eval(new_power_sensors)
+        cur_power_sensors = ast.literal_eval(cur_power_sensors)
+
+        power_sensors_to_turn_on  = []
+        power_sensors_to_turn_off = []
+
+        for np in new_power_sensors:
+            if np not in cur_power_sensors:
+                power_sensors_to_turn_on.append(np)
+
+        print('\nPower On: ' + str(power_sensors_to_turn_on) + "\n")
+
+        for cp in cur_power_sensors:
+            if cp not in new_power_sensors:
+                power_sensors_to_turn_off.append(cp)
+
+        print('\nPower Off: ' + str(power_sensors_to_turn_off) + "\n")
+
+        for pon in power_sensors_to_turn_on:
+            pon_sensor = Sensors.objects.get(sensorid = pon)
+            pon_sensor.update(sensorstate = 1)
+            pon_sensor.save()
+
+        for poff in power_sensors_to_turn_off:
+            poff_sensor = Sensors.objects.get(sensorid = poff)
+            poff_sensor.update(sensorstate = 0)
+            poff_sensor.save()
+
+        livepowerusage_current = Livepowerusage.objects.get(livepowerusageid = currentHouseState['home']['powerusage']['powerusageid'])
+
+        livepowerusage_current.update(endtimestamp = newHouseState['home']['powerusage']['endtimestamp'], 
+                                      usage = newHouseState['home']['powerusage']['usage'], 
+                                      cost = newHouseState['home']['powerusage']['cost']) 
+        livepowerusage_current.save()
+            
+        livepowerusage_new = Livepowerusage.objects.create(timestamp = newHouseState['home']['powerusage']['endtimestamp'],
+                                                           sensorids = newHouseState['home']['powerusage']['sensorids'])
+        livepowerusage_new.save()
+
+
+        # WATER
+        water_new = newHouseState[0]['home']['waterusage']
+        water_cur = currentHouseState['home']['waterusage']
+
+        new_water_sensors = water_new['sensorids']
+        cur_water_sensors = water_cur['sensorids']
+
+        new_water_sensors = ast.literal_eval(new_water_sensors)
+        cur_water_sensors = ast.literal_eval(cur_water_sensors)
+
+        water_sensors_to_turn_on  = []
+        water_sensors_to_turn_off = []
+
+        for nw in new_water_sensors:
+            if nw not in cur_water_sensors:
+                water_sensors_to_turn_on.append(nw)
+
+        print('\nWater On: ' + str(water_sensors_to_turn_on) + "\n")
+
+        for cw in cur_water_sensors:
+            if cw not in new_water_sensors:
+                water_sensors_to_turn_off.append(cw)
+
+        print('\nWater Off: ' + str(water_sensors_to_turn_off) + "\n")        
+
+        for won in water_sensors_to_turn_on:
+            won_sensor = Sensors.objects.get(sensorid = won)
+            won_sensor.update(sensorstate = 1)
+            won_sensor.save()
+
+        for woff in power_sensors_to_turn_off:
+            woff_sensor = Sensors.objects.get(sensorid = woff)
+            woff_sensor.update(sensorstate = 0)
+            woff_sensor.save()
+
+        livewaterusage_current = Livepowerusage.objects.get(livepowerusageid = currentHouseState['home']['powerusage']['powerusageid'])
+
+        livewaterusage_current.update(endtimestamp = newHouseState['home']['powerusage']['endtimestamp'], 
+                                      usage = newHouseState['home']['powerusage']['usage'], 
+                                      cost = newHouseState['home']['powerusage']['cost']) 
+        livepowerusage_current.save()
+            
+        livepowerusage_new = Livepowerusage.objects.create(timestamp = newHouseState['home']['powerusage']['endtimestamp'],
+                                                           sensorids = newHouseState['home']['powerusage']['sensorids'])
+        livepowerusage_new.save()
 
     return HttpResponse('')
 
@@ -493,6 +580,45 @@ def GetCurrentHouseState(request):
     HouseState['home']['weather']    = weather[0]['fields']
 
     return HttpResponse(json.dumps(HouseState, indent=4, sort_keys=True), content_type="application/json")
+
+def GetCurrentHouseStateLocal():
+
+    for room_key, room_elem in HouseState['home']['rooms'].items():
+
+        for sensor_key, sensor_elem in room_elem['sensors'].items():
+
+            dbSensor = Sensors.objects.get(sensorid = sensor_elem['sensor id'])
+            sensor_elem['state'] = dbSensor.sensorstate
+
+            for appliance_key, appliance_elem in sensor_elem['appliances'].items():
+
+                    dbAppliance = Appliances.objects.get(applianceid = sensor_elem['sensor id'])
+                    appliance_elem['usage'] = dbAppliance.powerusage
+
+
+    # GET CURRENTLY ACTIVE POWER, WATER, AND HVAC
+    powerObj = Livepowerusage.objects.latest('livepowerusageid')
+    power = serializers.serialize('json', [powerObj])
+    powerusage = json.loads(power)
+
+    havacObj = Hvacusage.objects.latest('hvacusageid')
+    hvac = serializers.serialize('json', [havacObj])
+    hvacusage = json.loads(hvac)
+
+    waterObj = Livewaterusage.objects.latest('livewaterusageid')
+    water = serializers.serialize('json', [waterObj])
+    waterusage = json.loads(water)
+
+    weatherObj = Weather.objects.latest('weatherid')
+    weath = serializers.serialize('json', [weatherObj])
+    weather = json.loads(weath)
+
+    HouseState['home']['hvacusage']  = hvacusage[0]['fields']
+    HouseState['home']['waterusage'] = waterusage[0]['fields']
+    HouseState['home']['powerusage'] = powerusage[0]['fields']
+    HouseState['home']['weather']    = weather[0]['fields']
+
+    return json.dumps(HouseState, indent=4, sort_keys=True)
     
 
 #######################################################################
