@@ -164,17 +164,17 @@ payload = [{
     "home": {
         "hvacusage": {
             "cost": 12.0,
-            "endtimestamp": "2018-04-01T12:54:10",
+            "endtimestamp": "2018-04-01 12:12:10",
             "temperature": 65.0,
-            "timestamp": "2018-04-01T12:12:10",
+            "timestamp": "2018-04-01 12:12:10",
             "usage": 50.0
         },
         "powerusage": {
-            "cost": 0.2,
-            "endtimestamp": "",
-            "sensorids": "[1,3,4, 7, 23, 41]",
-            "timestamp": "2018-04-01T19:40:32",
-            "usage": 0.05
+            "cost": 9.0,
+            "endtimestamp": "2018-04-01 12:18:10",
+            "sensorids": "[5,9]",
+            "timestamp": "2018-04-01 12:12:10",
+            "usage": 60.0
         },
         "rooms": {
             "Garage": {
@@ -620,11 +620,11 @@ payload = [{
             }
         },
         "waterusage": {
-            "cost": 0.2,
-            "endtimestamp": "",
-            "sensorids": "[2,5,6,12]",
-            "timestamp": "2018-04-01T19:40:32",
-            "usage": 0.05
+            "cost": 11.25,
+            "endtimestamp": "2018-04-01 12:15:10",
+            "sensorids": "[3,6]",
+            "timestamp": "2018-04-01 12:12:10",
+            "usage": 75
         },
         "weather": {
             "chanceofprecipitation": 30.0,
