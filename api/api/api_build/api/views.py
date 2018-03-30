@@ -446,112 +446,131 @@ def UpdateHouseState(request):
         newHouseState     = json.loads(request.body)
         currentHouseState = json.loads(GetCurrentHouseStateLocal())
 
-        # print("\nNEW: " + str(newHouseState) + "\n")
-        # print("\nCUR: " + str(currentHouseState) + "\n")
+        # # print("\nNEW: " + str(newHouseState) + "\n")
+        # # print("\nCUR: " + str(currentHouseState) + "\n")
 
-        # POWER
-        power_new = newHouseState[0]['home']['powerusage']
-        power_cur = currentHouseState['home']['powerusage']
+        # # POWER
+        # power_new = newHouseState[0]['home']['powerusage']
+        # power_cur = currentHouseState['home']['powerusage']
 
-        new_power_sensors = power_new['sensorids']
-        cur_power_sensors = power_cur['sensorids']
+        # new_power_sensors = power_new['sensorids']
+        # cur_power_sensors = power_cur['sensorids']
 
-        new_power_sensors = ast.literal_eval(new_power_sensors)
-        cur_power_sensors = ast.literal_eval(cur_power_sensors)
+        # new_power_sensors = ast.literal_eval(new_power_sensors)
+        # cur_power_sensors = ast.literal_eval(cur_power_sensors)
 
-        power_sensors_to_turn_on  = []
-        power_sensors_to_turn_off = []
+        # power_sensors_to_turn_on  = []
+        # power_sensors_to_turn_off = []
 
-        for np in new_power_sensors:
-            if np not in cur_power_sensors:
-                power_sensors_to_turn_on.append(np)
+        # for np in new_power_sensors:
+        #     if np not in cur_power_sensors:
+        #         power_sensors_to_turn_on.append(np)
 
-        #print('\nPower On: ' + str(power_sensors_to_turn_on) + "\n")
+        # #print('\nPower On: ' + str(power_sensors_to_turn_on) + "\n")
 
-        for cp in cur_power_sensors:
-            if cp not in new_power_sensors:
-                power_sensors_to_turn_off.append(cp)
+        # for cp in cur_power_sensors:
+        #     if cp not in new_power_sensors:
+        #         power_sensors_to_turn_off.append(cp)
 
-        #print('\nPower Off: ' + str(power_sensors_to_turn_off) + "\n")
+        # #print('\nPower Off: ' + str(power_sensors_to_turn_off) + "\n")
 
-        print('\nLength: ' + str(len(power_sensors_to_turn_on)) + "\n")
-        print('\nLength: ' + str(len(power_sensors_to_turn_off)) + "\n")
+        # print('\nLength: ' + str(len(power_sensors_to_turn_on)) + "\n")
+        # print('\nLength: ' + str(len(power_sensors_to_turn_off)) + "\n")
 
-        if len(power_sensors_to_turn_on) != 0 and len(power_sensors_to_turn_off) != 0:
-            for pon in power_sensors_to_turn_on:
-                pon_sensor = Sensors.objects.get(sensorid = pon)
-                pon_sensor.sensorstate = 1
-                pon_sensor.save()
+        # if len(power_sensors_to_turn_on) != 0 and len(power_sensors_to_turn_off) != 0:
+        #     for pon in power_sensors_to_turn_on:
+        #         pon_sensor = Sensors.objects.get(sensorid = pon)
+        #         pon_sensor.sensorstate = 1
+        #         pon_sensor.save()
 
-            for poff in power_sensors_to_turn_off:
-                poff_sensor = Sensors.objects.get(sensorid = poff)
-                poff_sensor.sensorstate = 0
-                poff_sensor.save()
+        #     for poff in power_sensors_to_turn_off:
+        #         poff_sensor = Sensors.objects.get(sensorid = poff)
+        #         poff_sensor.sensorstate = 0
+        #         poff_sensor.save()
 
-            livepowerusage_current = Livepowerusage.objects.latest('livepowerusageid')
+        #     livepowerusage_current = Livepowerusage.objects.latest('livepowerusageid')
 
-            livepowerusage_current.endtimestamp = power_new['endtimestamp']
-            livepowerusage_current.usage        = power_new['usage']
-            livepowerusage_current.cost         = power_new['cost']
-            livepowerusage_current.save()
+        #     livepowerusage_current.endtimestamp = power_new['endtimestamp']
+        #     livepowerusage_current.usage        = power_new['usage']
+        #     livepowerusage_current.cost         = power_new['cost']
+        #     livepowerusage_current.save()
                 
-            livepowerusage_new = Livepowerusage.objects.create(timestamp = power_new['endtimestamp'],
-                                                               sensorids = power_new['sensorids'],
-                                                               usage     = 0.0,
-                                                               cost      = 0.0)
-            livepowerusage_new.save()
+        #     livepowerusage_new = Livepowerusage.objects.create(timestamp = power_new['endtimestamp'],
+        #                                                        sensorids = power_new['sensorids'],
+        #                                                        usage     = 0.0,
+        #                                                        cost      = 0.0)
+        #     livepowerusage_new.save()
 
 
-        # WATER
-        water_new = newHouseState[0]['home']['waterusage']
-        water_cur = currentHouseState['home']['waterusage']
+        # # WATER
+        # water_new = newHouseState[0]['home']['waterusage']
+        # water_cur = currentHouseState['home']['waterusage']
 
-        new_water_sensors = water_new['sensorids']
-        cur_water_sensors = water_cur['sensorids']
+        # new_water_sensors = water_new['sensorids']
+        # cur_water_sensors = water_cur['sensorids']
 
-        new_water_sensors = ast.literal_eval(new_water_sensors)
-        cur_water_sensors = ast.literal_eval(cur_water_sensors)
+        # new_water_sensors = ast.literal_eval(new_water_sensors)
+        # cur_water_sensors = ast.literal_eval(cur_water_sensors)
 
-        water_sensors_to_turn_on  = []
-        water_sensors_to_turn_off = []
+        # water_sensors_to_turn_on  = []
+        # water_sensors_to_turn_off = []
 
-        for nw in new_water_sensors:
-            if nw not in cur_water_sensors:
-                water_sensors_to_turn_on.append(nw)
+        # for nw in new_water_sensors:
+        #     if nw not in cur_water_sensors:
+        #         water_sensors_to_turn_on.append(nw)
 
-        #print('\nWater On: ' + str(water_sensors_to_turn_on) + "\n")
+        # #print('\nWater On: ' + str(water_sensors_to_turn_on) + "\n")
 
-        for cw in cur_water_sensors:
-            if cw not in new_water_sensors:
-                water_sensors_to_turn_off.append(cw)
+        # for cw in cur_water_sensors:
+        #     if cw not in new_water_sensors:
+        #         water_sensors_to_turn_off.append(cw)
 
-        #print('\nWater Off: ' + str(water_sensors_to_turn_off) + "\n") 
+        # #print('\nWater Off: ' + str(water_sensors_to_turn_off) + "\n") 
 
-        if len(water_sensors_to_turn_on) != 0 and len(water_sensors_to_turn_off) != 0:
-            for won in water_sensors_to_turn_on:
-                won_sensor = Sensors.objects.get(sensorid = won)
-                won_sensor.sensorstate = 1
-                won_sensor.save()
+        # if len(water_sensors_to_turn_on) != 0 and len(water_sensors_to_turn_off) != 0:
+        #     for won in water_sensors_to_turn_on:
+        #         won_sensor = Sensors.objects.get(sensorid = won)
+        #         won_sensor.sensorstate = 1
+        #         won_sensor.save()
 
-            for woff in water_sensors_to_turn_off:
-                woff_sensor = Sensors.objects.get(sensorid = woff)
-                woff_sensor.sensorstate = 0
-                woff_sensor.save()
+        #     for woff in water_sensors_to_turn_off:
+        #         woff_sensor = Sensors.objects.get(sensorid = woff)
+        #         woff_sensor.sensorstate = 0
+        #         woff_sensor.save()
 
-            livewaterusage_current = Livewaterusage.objects.latest('livewaterusageid')
+        #     livewaterusage_current = Livewaterusage.objects.latest('livewaterusageid')
 
-            livewaterusage_current.endtimestamp = water_new['endtimestamp']
-            livewaterusage_current.usage        = water_new['usage']
-            livewaterusage_current.cost         = water_new['cost']
-            livewaterusage_current.save()
+        #     livewaterusage_current.endtimestamp = water_new['endtimestamp']
+        #     livewaterusage_current.usage        = water_new['usage']
+        #     livewaterusage_current.cost         = water_new['cost']
+        #     livewaterusage_current.save()
                 
-            livewaterusage_new = Livewaterusage.objects.create(timestamp = water_new['endtimestamp'],
-                                                               sensorids = water_new['sensorids'],
-                                                               usage     = 0.0,
-                                                               cost      = 0.0)
-            livewaterusage_new.save()
+        #     livewaterusage_new = Livewaterusage.objects.create(timestamp = water_new['endtimestamp'],
+        #                                                        sensorids = water_new['sensorids'],
+        #                                                        usage     = 0.0,
+        #                                                        cost      = 0.0)
+        #     livewaterusage_new.save()
 
 
+
+            #HVAC
+
+        hvac_new = newHouseState[0]['home']['hvacusage']
+        hvac_cur = currentHouseState['home']['hvacusage']
+
+        if hvac_new['endtimestamp'] is not None:
+            hvacusage_current = Hvacusage.objects.latest('hvacusageid')
+
+            hvacusage_current.endtimestamp = hvac_new['endtimestamp']
+            hvacusage_current.usage        = hvac_new['usage']
+            hvacusage_current.cost         = hvac_new['cost']
+            hvacusage_current.save()
+                
+            hvacusage_new = Hvacusage.objects.create(timestamp   = hvac_new['endtimestamp'],
+                                                     usage       = 0.0,
+                                                     cost        = 0.0,
+                                                     temperature = hvac_new['temperature'])
+            hvacusage_new.save()
 
     return HttpResponse('')
 

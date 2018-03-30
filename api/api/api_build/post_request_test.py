@@ -163,9 +163,9 @@ headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 payload = [{
     "home": {
         "hvacusage": {
-            "cost": 12.0,
-            "endtimestamp": "2018-04-01 12:12:10",
-            "temperature": 65.0,
+            "cost": 7.5,
+            "endtimestamp": "2018-04-01 12:35:10",
+            "temperature": 73.0,
             "timestamp": "2018-04-01 12:12:10",
             "usage": 50.0
         },
