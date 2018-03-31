@@ -39,7 +39,8 @@ $colors: (
   powder:     #66b9bf, // #66b9b powder blue
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #222,
+  lightBlue: #F1F3F3
 );
 
 $toolbar-md-background: color($colors, secondary);
@@ -50,7 +51,7 @@ $tabs-md-tab-color-active: color($colors, light);
 $tabs-md-tab-color: color($colors, light);
 $tabs-md-tab-text-color: color($colors, light);
 
-$list-md-background-color: color($colors, secondary);
+$list-md-background-color: color($colors, lightBlue);
 $list-md-text-color: color($colors, light);
 $card-md-title-font-size: 100px;
 
