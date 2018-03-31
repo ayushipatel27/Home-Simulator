@@ -553,7 +553,7 @@ def UpdateHouseState(request):
 
 
 
-        #HVAC
+        # HVAC
 
         hvac_new = newHouseState[0]['home']['hvacusage']
         hvac_cur = currentHouseState['home']['hvacusage']
@@ -587,6 +587,18 @@ def UpdateHouseState(request):
 
         else:  
             print("\n ERROR: HVAC failed miserably. \n")
+
+
+        # WEATHER
+
+        weather_new = newHouseState[0]['home']['weather']
+
+        weatherState_new = Weather.objects.create(timestamp             = weather_new['timestamp'],
+                                                  temperature           = weather_new['temperature'],
+                                                  precipitation         = weather_new['precipitation'],
+                                                  chanceofprecipitation = weather_new['chanceofprecipitation'],
+                                                  state                 = weather_new['state'])
+        weatherState_new.save()
 
     return HttpResponse('')
 
