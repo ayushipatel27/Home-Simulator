@@ -26,6 +26,10 @@ from .views import (
                      GetSensors,
                      GetSensorsTurnedOn,
                      GetAppliances,
+                     GetWeekOfPower,
+                     GetWeekOfWater,
+                     GetMonthOfPower,
+                     GetMonthOfWater,
 
                      InsertSensors, 
                      InsertAppliances, 
@@ -95,6 +99,14 @@ urlpatterns = [
     path('inprogress/', GetSensorsTurnedOn.as_view(), name='get-sensors-turned-on'), 
 
     path('getappliances/<int:sensorid>/', GetAppliances.as_view(), name='get-appliances'),
+
+    path('getweekofusage/', GetWeekOfPower, name='GetWeekOfPower'),
+
+    path('getweekofwater/', GetWeekOfWater, name='GetWeekOfWater'),
+
+    path('getmonthofusage/', GetMonthOfPower, name='GetMonthOfPower'),
+
+    path('getmonthofwater/', GetMonthOfWater, name='GetMonthOfWater'),
 
     # Inserts
 

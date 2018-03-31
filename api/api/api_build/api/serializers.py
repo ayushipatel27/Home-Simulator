@@ -34,7 +34,7 @@ class HvacusageSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Hvacusage
 		fields = [
-			'hvacid',
+			'hvacusageid',
 			'timestamp',
 			'sensorid',
 			'endtimestamp',

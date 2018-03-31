@@ -118,47 +118,47 @@ class Simulation(object):
     def createHome(self):
         self.home = Home()
 
-        self.home.addRooms({Room(1, "Master Bedroom"), Room(2, "Kid 1 Bedroom"), Room(3, "Kid 2 Bedroom"), Room(4, "Master Bathroom"),
+        self.home.addRooms([Room(1, "Master Bedroom"), Room(2, "Kid 1 Bedroom"), Room(3, "Kid 2 Bedroom"), Room(4, "Master Bathroom"),
                  Room(5, "Kids Bathroom"), Room(6, "Garage"), Room(7, "Living Room"), Room(8, "Kitchen"),
-                 Room(9, "Laundry Room")})
+                 Room(9, "Laundry Room")])
 
         self.home.getRoom("Master Bedroom").addAppliances(
-            {Appliance(1, "Overhead Light", 60), Appliance(2, "Lamp 1",  60), Appliance(3, "Lamp 2",  60),
-            Appliance(4, "Bedroom TV", 636), Appliance(5, "Window", 0), Appliance(6, "Window", 0)})
+            [Appliance(1, "Overhead Light", 60), Appliance(2, "Lamp 1",  60), Appliance(3, "Lamp 2",  60),
+            Appliance(4, "Bedroom TV", 636), Appliance(5, "Window", 0), Appliance(6, "Window 2", 0)])
 
         self.home.getRoom("Kid 1 Bedroom").addAppliances(
-            {Appliance(7, "Overhead Light", 60), Appliance(8, "Lamp 1", 60), Appliance(9, "Lamp 2", 60),
-             Appliance(10, "Window 1", 0), Appliance(11, "Window 2", 0)})
+            [Appliance(7, "Overhead Light", 60), Appliance(8, "Lamp 1", 60), Appliance(9, "Lamp 2", 60),
+             Appliance(10, "Window", 0), Appliance(11, "Window 2", 0)])
 
         self.home.getRoom("Kid 2 Bedroom").addAppliances(
-            {Appliance(12, "Overhead Light", 60), Appliance(13, "Lamp 1", 60), Appliance(14, "Lamp 2", 60),
-             Appliance(15, "Window 1", 0), Appliance(16, "Window 2", 0)})
+            [Appliance(12, "Overhead Light", 60), Appliance(13, "Lamp 1", 60), Appliance(14, "Lamp 2", 60),
+             Appliance(15, "Window", 0), Appliance(16, "Window 2", 0)])
 
         self.home.getRoom("Master Bathroom").addAppliances(
-            {Appliance(17, "Overhead Light", 60), Appliance(18, "Bath Exhaust Fan", 30), Appliance(19, "Bath", 0),
-             Appliance(20, "Shower", 0)})
+            [Appliance(17, "Overhead Light", 60), Appliance(18, "Bath Exhaust Fan", 30), Appliance(19, "Bath", 0),
+             Appliance(20, "Shower", 0)])
 
         self.home.getRoom("Kids Bathroom").addAppliances(
-            {Appliance(21, "Overhead Light", 60), Appliance(22, "Bath Exhaust Fan", 30), Appliance(23, "Bath", 0),
-             Appliance(24, "Shower", 0)})
+            [Appliance(21, "Overhead Light", 60), Appliance(22, "Bath Exhaust Fan", 30), Appliance(23, "Bath", 0),
+             Appliance(24, "Shower", 0)])
 
         self.home.getRoom("Garage").addAppliances(
-            {Appliance(25, "Garage Door 1", 0), Appliance(26, "Garage Door 2", 0), Appliance(27, "Window 1", 0),
-             Appliance(28, "HVAC", 3500)})
+            [Appliance(25, "Garage Door 1", 0), Appliance(26, "Garage Door 2", 0), Appliance(27, "Window", 0),
+             Appliance(28, "Hot Water Heater", 3500)])
 
 
         self.home.getRoom("Living Room").addAppliances(
-            {Appliance(29, "Overhead Light", 60), Appliance(30, "Lamp",  60), Appliance(31, "Living Room TV", 636),
-             Appliance(32, "Back Door", 0), Appliance(33, "Front Door", 0), Appliance(34, "Window 1", 0),
-             Appliance(35, "Window 2", 0), Appliance(36, "Hvac", 3500)})
+            [Appliance(29, "Overhead Light", 60), Appliance(30, "Lamp",  60), Appliance(31, "Living Room TV", 636),
+             Appliance(32, "Back Door", 0), Appliance(33, "Front Door", 0), Appliance(34, "Window", 0),
+             Appliance(35, "Window 2", 0), Appliance(36, "HVAC", 3500)])
 
         self.home.getRoom("Kitchen").addAppliances(
-            {Appliance(37, "Overhead Light", 60), Appliance(38, "Stove", 3500), Appliance(39, "Oven", 4000),
+            [Appliance(37, "Overhead Light", 60), Appliance(38, "Stove", 3500), Appliance(39, "Oven", 4000),
              Appliance(40, "Microwave", 1100), Appliance(41, "Refrigerator", 150), Appliance(42, "Dishwasher", 1800),
-             Appliance(43, "Garage Door Into Home", 0)})
+             Appliance(43, "Garage Door Into Home", 0)])
 
-        self.home.getRoom("Laundry Room").addAppliances({
-            Appliance(44, "Clothes Washer", 500), Appliance(45, "Clothes Dryer", 3000)})
+        self.home.getRoom("Laundry Room").addAppliances(
+            [Appliance(44, "Clothes Washer", 500), Appliance(45, "Clothes Dryer", 3000)])
 
         for room in self.home.getRooms():
             for appliance in room.getAppliances():
@@ -472,17 +472,16 @@ class Simulation(object):
                         currentTime += (comeHomeTime - leaveTime)
 
                     usage = self.calculatePowerUsage(appliance.getWatts(), totalTimeOn)
-                    powerUsage += usage
                     cost = self.calculatePowerCost(appliance.getWatts(), totalTimeOn)
-                    powerCost += cost
 
                     if appliance.getApplianceName() == "HVAC":
                         temperature = random.randint(60, 80)
                         hvacUsage += usage
                         hvacCost += cost
-
                         self.addHvacUsage(sensor.getId(), startTime, endTime, temperature, usage, cost)
                     else:
+                        powerUsage += usage
+                        powerCost += cost
                         self.addPowerUsage(sensor.getId(), startTime, endTime, usage, cost)
 
                 else:
@@ -507,9 +506,7 @@ class Simulation(object):
                         sensor.setSensorState(0)
 
                         usage = self.calculatePowerUsage(appliance.getWatts(), totalTimeOn)
-                        powerUsage += usage
                         cost = self.calculatePowerCost(appliance.getWatts(), totalTimeOn)
-                        powerCost += cost
 
                         if appliance.getApplianceName() == "HVAC":
                             temperature = random.randint(60, 80)
@@ -517,6 +514,8 @@ class Simulation(object):
                             hvacCost += cost
                             self.addHvacUsage(sensor.getId(), startTime, endTime, temperature, usage, cost)
                         else:
+                            powerUsage += usage
+                            powerCost += cost
                             self.addPowerUsage(sensor.getId(), startTime, endTime, usage, cost)
 
                     else:
@@ -532,46 +531,44 @@ class Simulation(object):
 
         cleaningDays = random.choice(["0", "1", "2", "3", "4", "5", "6"])
 
-        if appliance.getApplianceName() == "HVAC":
-            usages = self.startRandomUsage(day, desiredTimeOn, appliance, singleDate)
-            return usages
+        if "Door" in appliance.getApplianceName():
+            return {'powerUsage' : 0, 'powerCost': 0, 'waterUsage': 0, 'waterCost': 0, 'hvacUsage': 0, 'hvacCost': 0}
+
+        if "Window" in appliance.getApplianceName():
+            return {'powerUsage' : 0, 'powerCost': 0, 'waterUsage': 0, 'waterCost': 0, 'hvacUsage': 0, 'hvacCost': 0}
+
+        elif appliance.getApplianceName() == "HVAC":
+            return self.startRandomUsage(day, desiredTimeOn, appliance, singleDate)
 
         elif appliance.getApplianceName() == "Refrigerator":
-            usages = self.startRoutineUsage(0, desiredTimeOn, appliance, singleDate)
-            return usages
+            return self.startRoutineUsage(0, desiredTimeOn, appliance, singleDate)
 
         elif appliance.getApplianceName() == "Clothes Dryer":
             if str(day) in cleaningDays:
                 randomTime = random.randint(63000, 72000)
-                usages = self.startRoutineUsage(randomTime, desiredTimeOn, appliance, singleDate)
-                return usages
+                return self.startRoutineUsage(randomTime, desiredTimeOn, appliance, singleDate)
+
 
         elif appliance.getApplianceName() == "Clothes Washer":
             if str(day) in cleaningDays:
                 randomTime = random.randint(63000, 72000)
-                usages = self.startRoutineUsage(randomTime, desiredTimeOn, appliance, singleDate)
-                return usages
+                return self.startRoutineUsage(randomTime, desiredTimeOn, appliance, singleDate)
 
         elif appliance.getApplianceName() == "Dishwasher":
             if str(day) in cleaningDays:
                 randomTime = random.randint(63000, 72000)
-                usages = self.startRoutineUsage(randomTime, desiredTimeOn, appliance, singleDate)
-                return usages
+                return self.startRoutineUsage(randomTime, desiredTimeOn, appliance, singleDate)
 
         elif appliance.getApplianceName() == "Bath":
             randomTime = random.randint(64800, 72000)
-            usages = self.startRoutineUsage(randomTime, desiredTimeOn, appliance, singleDate)
-            return usages
+            return self.startRoutineUsage(randomTime, desiredTimeOn, appliance, singleDate)
 
         elif appliance.getApplianceName() == "Shower":
             randomTime = random.randint(18000, 21600)
-            usages = self.startRoutineUsage(randomTime, desiredTimeOn, appliance, singleDate)
-            return usages
+            return self.startRoutineUsage(randomTime, desiredTimeOn, appliance, singleDate)
 
         else:
-            usages = self.startRandomUsage(day, desiredTimeOn, appliance, singleDate)
-            return usages
-
+            return self.startRandomUsage(day, desiredTimeOn, appliance, singleDate)
 
     def simulate(self):
         home = self.createHome()
@@ -580,8 +577,8 @@ class Simulation(object):
         self.addAppliances()
         self.addSensors()
 
-        startDate = date(2018, 2, 1)
-        endDate = date(2018, 3, 1)
+        startDate = date(2018, 1, 1)
+        endDate = date(2018, 4, 1)
 
         for singleDate in self.dateRange(startDate, endDate):
             day = singleDate.weekday()
@@ -595,18 +592,20 @@ class Simulation(object):
 
             for room in home.getRooms():
                 for appliance in room.getAppliances():
-                    if appliance.getApplianceName() == "HVAC":
+                    if "Door" in appliance.getApplianceName():
                         usages = self.simulateUsage(appliance, day, singleDate)
-                    if "Lamp" in appliance.getApplianceName():
+                    elif "Window" in appliance.getApplianceName():
                         usages = self.simulateUsage(appliance, day, singleDate)
-                    if appliance.getApplianceName() == "Shower":
+                    elif "Lamp" in appliance.getApplianceName():
+                        usages = self.simulateUsage(appliance, day, singleDate)
+                    elif appliance.getApplianceName() == "Shower":
                         if self.isWeekday(day):
                             for i in range(2):
                                 usages = self.simulateUsage(appliance, day, singleDate)
                         else:
                             for i in range(3):
                                 usages = self.simulateUsage(appliance, day, singleDate)
-                    if appliance.getApplianceName() == "Bath":
+                    elif appliance.getApplianceName() == "Bath":
                         if self.isWeekday(day):
                             for i in range(2):
                                 usages = self.simulateUsage(appliance, day, singleDate)
