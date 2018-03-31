@@ -360,6 +360,8 @@ class Simulation(object):
             if r > probability:
                 appliance.getSensor().setSensorState(0)
 
+        appliancesOn = str(appliancesOn)
+
         return self.addPowerUsage(appliancesOn, '', now, powerUsage, powerCost)
 
     def updateWaterUsage(self, appliances, home, state, now, day):
@@ -386,6 +388,8 @@ class Simulation(object):
                 appliancesOn.append(appliance.getSensor().getId())
             if r > probability:
                 appliance.getSensor().setSensorState(0)
+
+        appliancesOn = str(appliancesOn)
 
         return self.addWaterUsage(appliancesOn, '', now, waterUsage, waterCost)
 
@@ -436,6 +440,8 @@ class Simulation(object):
         else:
             hvacUsage = 0
             hvacCost = 0
+
+        applianceOn = str(applianceOn)
 
         return self.addHvacUsage(applianceOn, '', now, internalTemp, hvacUsage, hvacCost)
 

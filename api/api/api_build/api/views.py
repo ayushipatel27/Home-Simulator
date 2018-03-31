@@ -450,7 +450,7 @@ def UpdateHouseState(request):
         # print("\nCUR: " + str(currentHouseState) + "\n")
 
         # POWER
-        power_new = newHouseState[0]['home']['powerusage']
+        power_new = newHouseState['home']['powerusage']
         power_cur = currentHouseState['home']['powerusage']
 
         new_power_sensors = power_new['sensorids']
@@ -503,7 +503,7 @@ def UpdateHouseState(request):
 
 
         # WATER
-        water_new = newHouseState[0]['home']['waterusage']
+        water_new = newHouseState['home']['waterusage']
         water_cur = currentHouseState['home']['waterusage']
 
         new_water_sensors = water_new['sensorids']
@@ -555,7 +555,7 @@ def UpdateHouseState(request):
 
         # HVAC
 
-        hvac_new = newHouseState[0]['home']['hvacusage']
+        hvac_new = newHouseState['home']['hvacusage']
         hvac_cur = currentHouseState['home']['hvacusage']
 
         hvacStateCur = currentHouseState['home']['rooms']['Living Room']['sensors']['hvac sensor']['state']
@@ -591,7 +591,7 @@ def UpdateHouseState(request):
 
         # WEATHER
 
-        weather_new = newHouseState[0]['home']['weather']
+        weather_new = newHouseState['home']['weather']
 
         weatherState_new = Weather.objects.create(timestamp             = weather_new['timestamp'],
                                                   temperature           = weather_new['temperature'],
