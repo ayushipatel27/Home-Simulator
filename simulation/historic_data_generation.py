@@ -144,7 +144,7 @@ class Simulation(object):
 
         self.home.getRoom("Garage").addAppliances(
             [Appliance(25, "Garage Door 1", 0), Appliance(26, "Garage Door 2", 0), Appliance(27, "Window", 0),
-             Appliance(28, "Hot Water Heater", 3500)])
+             Appliance(28, "Hot Water Heater", 4500)])
 
 
         self.home.getRoom("Living Room").addAppliances(

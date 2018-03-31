@@ -1,5 +1,5 @@
 import random
-import requests, json
+import requests, json, ast
 from darksky import forecast
 import threading as t
 import datetime, time
@@ -125,40 +125,41 @@ class Simulation(object):
                  Room(9, "Laundry Room")})
 
         self.home.getRoom("Master Bedroom").addAppliances(
-            {Appliance(1, "Overhead Light", 60), Appliance(2, "Lamp",  60), Appliance(3, "Lamp",  60),
-            Appliance(4, "Bedroom TV", 636), Appliance(5, "Window", 0), Appliance(6, "Window", 0)})
+            [Appliance(1, "Overhead Light", 60), Appliance(2, "Lamp", 60), Appliance(3, "Lamp", 60),
+             Appliance(4, "Bedroom TV", 636), Appliance(5, "Window", 0), Appliance(6, "Window", 0)])
 
         self.home.getRoom("Kid 1 Bedroom").addAppliances(
-            {Appliance(7, "Overhead Light", 60), Appliance(8, "Lamp", 60), Appliance(10, "Lamp", 60),
-             Appliance(11, "Window", 0), Appliance(12, "Window", 0)})
+            [Appliance(7, "Overhead Light", 60), Appliance(8, "Lamp", 60), Appliance(9, "Lamp", 60),
+             Appliance(10, "Window", 0), Appliance(11, "Window", 0)])
 
         self.home.getRoom("Kid 2 Bedroom").addAppliances(
-            {Appliance(13, "Overhead Light", 60), Appliance(14, "Lamp", 60), Appliance(15, "Lamp", 60),
-             Appliance(16, "Window", 0), Appliance(17, "Window", 0)})
+            [Appliance(12, "Overhead Light", 60), Appliance(13, "Lamp", 60), Appliance(14, "Lamp", 60),
+             Appliance(15, "Window", 0), Appliance(16, "Window", 0)])
 
         self.home.getRoom("Master Bathroom").addAppliances(
-            {Appliance(18, "Overhead Light", 60), Appliance(19, "Bath Exhaust Fan", 30), Appliance(20, "Bath", 0),
-             Appliance(21, "Shower", 0)})
+            [Appliance(17, "Overhead Light", 60), Appliance(18, "Bath Exhaust Fan", 30), Appliance(19, "Bath", 0),
+             Appliance(20, "Shower", 0)])
 
         self.home.getRoom("Kids Bathroom").addAppliances(
-            {Appliance(22, "Overhead Light", 60), Appliance(23, "Bath Exhaust Fan", 30), Appliance(24, "Bath", 0),
-             Appliance(25, "Shower", 0)})
+            [Appliance(21, "Overhead Light", 60), Appliance(22, "Bath Exhaust Fan", 30), Appliance(23, "Bath", 0),
+             Appliance(24, "Shower", 0)])
 
         self.home.getRoom("Garage").addAppliances(
-            {Appliance(26, "Door", 0), Appliance(27, "Door", 0), Appliance(28, "Window", 0)})
+            [Appliance(25, "Door", 0), Appliance(26, "Door", 0), Appliance(27, "Window", 0),
+             Appliance(28, "Hot Water Heater", 4500)])
 
         self.home.getRoom("Living Room").addAppliances(
-            {Appliance(29, "Overhead Light", 60), Appliance(30, "Lamp",  60), Appliance(31, "Living Room TV", 636),
-             Appliance(32, "Door", 0), Appliance(32, "Door", 0), Appliance(34, "Window", 0),
-             Appliance(35, "Window", 0), Appliance(36, "Hvac", 3500)})
+            [Appliance(29, "Overhead Light", 60), Appliance(30, "Lamp", 60), Appliance(31, "Living Room TV", 636),
+             Appliance(32, "Door", 0), Appliance(33, "Front Door", 0), Appliance(34, "Window", 0),
+             Appliance(35, "Window", 0), Appliance(36, "HVAC", 3500)])
 
         self.home.getRoom("Kitchen").addAppliances(
-            {Appliance(37, "Overhead Light", 60), Appliance(38, "Stove", 3500), Appliance(39, "Oven", 4000),
+            [Appliance(37, "Overhead Light", 60), Appliance(38, "Stove", 3500), Appliance(39, "Oven", 4000),
              Appliance(40, "Microwave", 1100), Appliance(41, "Refrigerator", 150), Appliance(42, "Dishwasher", 1800),
-             Appliance(43, "Door", 0)})
+             Appliance(43, "Door", 0)])
 
-        self.home.getRoom("Laundry Room").addAppliances({
-            Appliance(44, "Clothes Washer", 500), Appliance(45, "Clothes Dryer", 3000)})
+        self.home.getRoom("Laundry Room").addAppliances(
+            [Appliance(44, "Clothes Washer", 500), Appliance(45, "Clothes Dryer", 3000)])
 
         for room in self.home.getRooms():
             for appliance in room.getAppliances():
@@ -204,7 +205,7 @@ class Simulation(object):
         r = random.random()
         if appliance.getApplianceName() == "Overhead Light":
             return r
-        if "Lamp" in appliance.getApplianceName():
+        if appliance.getApplianceName() == "Lamp":
             return r
         if appliance.getApplianceName() == "Living Room TV":
             if self.isWeekday(day):
@@ -251,15 +252,14 @@ class Simulation(object):
                 return 0.0417
             else:
                 return 0.0625
-        if "Door" in appliance.getApplianceName():
+        if appliance.getApplianceName() == "Door":
             if self.isWeekday(day):
                 return 0.0055
             else:
                 return 0.0111
-        if "Window" in appliance.getApplianceName():
+        if appliance.getApplianceName() == "Window":
             return r
-        if appliance.getApplianceName() == "HVAC":
-            return r
+
 
     def calculatePowerCost(self, watts, time):
         return ((watts * (time/3600))/1000) * .12         # returns $ for kilowatts per hour
@@ -284,30 +284,6 @@ class Simulation(object):
         else:
             return False
 
-    def convertSecondsToTime(self, seconds):
-        date = datetime.date.today().strftime('%Y-%m-%d ')
-        m, s = divmod(seconds, 60)
-        h, m = divmod(m, 60)
-        if h > 23:
-            h = 23
-            m = 59
-            s = 59
-        t = datetime.time(h,m,s)
-        time = t.strftime("%H:%M:%S")
-        return (date + time)
-
-
-    def currentHouseState(self):
-        for room in self.home.getRooms():
-            for appliance in room.getAppliances():
-                if "Door" in appliance.getApplianceName():
-                    if appliance.getSensor().getSensorState() == 1:
-                        return 1
-                elif "Window" in appliance.getApplianceName():
-                    if appliance.getSensor().getSensorState() == 1:
-                        return 2
-                else:
-                    return 0
 
     def getCurrentState(self):
         r = requests.get('http://127.0.0.1:8000/api/gethousestate/')
@@ -329,8 +305,9 @@ class Simulation(object):
                  'usage': usage,
                  'cost': cost}
 
-    def addHvacUsage(self, starttime, endtime, temperature, usage, cost):
+    def addHvacUsage(self, sensorid, starttime, endtime, temperature, usage, cost):
         return {'timestamp': starttime,
+                'sensorid': sensorid,
                  'endtimestamp': endtime,
                  'usage': usage,
                  'cost': cost,
@@ -343,73 +320,7 @@ class Simulation(object):
                 'chanceofprecipitation': chanceofprecipitation,
                 'state': state}
 
-    def updatePowerUsage(self, powerUsage, powerCost, appliance, time, day):
-        appliancesOn = []
-        r = random.random()
-        probability = self.getProbability(appliance, day)
-        if r < probability:
-            appliance.getSensor().setSensorState(1)
-            appliancesOn.append(appliance.getSensor().getId())
-            powerUsage += self.calculatePowerUsage(appliance.getWatts(), 600)
-            powerCost += self.calculatePowerCost(appliance.getWatts(), 600)
-        if r > probability:
-            appliance.getSensor().setSensorState(0)
-
-        return self.addPowerUsage(appliancesOn, '', self.convertSecondsToTime(time), powerUsage, powerCost)
-
-    def updateWaterUsage(self, waterUsage, waterCost, appliance, time, day):
-        waterUsage = 0
-        waterCost = 0
-        appliancesOn = []
-        r = random.random()
-        probability = self.getProbability(appliance, day)
-        if r < probability:
-            appliance.getSensor().setSensorState(1)
-            appliancesOn.append(appliance.getSensor().getId())
-            waterUsage += self.calculateWaterUsage(appliance)
-            waterCost += self.calculateWaterCost(appliance)
-        if r > probability:
-            appliance.getSensor().setSensorState(0)
-
-        return self.addWaterUsage(appliancesOn, '', self.convertSecondsToTime(time), waterUsage, waterCost)
-
-    def updateHvacUsage(self, hvacUsage, hvacCost, externalTemp, internalTemp, time, appliance, day):
-        lowestTemp = 68
-        highestTemp = 75
-
-        probability = self.getProbability(appliance, day)
-
-        r = random.random()
-        if r < probability:
-            appliance.getSensor().setSensorState(1)
-        if r > probability:
-            appliance.getSensor().setSensorState(0)
-
-        currentHouseState = self.currentHouseState()
-
-        if (currentHouseState == 0):
-            internalTemp = internalTemp + 0.0033 * (externalTemp - internalTemp) # multiply by fifteen for cron tab
-        elif (currentHouseState == 1):
-            internalTemp = internalTemp + 0.04 * (externalTemp - internalTemp) # multiply by fifteen for cron tab
-        elif (currentHouseState == 2):
-            internalTemp = internalTemp + 0.02 * (externalTemp - internalTemp) # multiply by fifteen for cron tab
-
-
-        if (internalTemp >= highestTemp):
-            hvacUsage += 0.0581
-            hvacCost += hvacUsage * 0.12
-            internalTemp -= 1
-            return self.addHvacUsage('', self.convertSecondsToTime(time), internalTemp, hvacUsage, hvacCost)
-        elif (internalTemp <= lowestTemp):
-            hvacUsage += 0.0581
-            hvacCost += hvacUsage * 0.12
-            internalTemp += 1
-            return self.addHvacUsage('', self.convertSecondsToTime(time), internalTemp, hvacUsage, hvacCost)
-        else:
-            return self.addHvacUsage('', '', '', '', '')
-
-
-    def updateWeather(self, currentTime):
+    def updateWeather(self, now):
         darkSkyKey = "ce3ee51d4f49051735382ee071219e87"
         bhamLatitude = 33.5207
         bhamLongitude = -86.8025
@@ -420,21 +331,122 @@ class Simulation(object):
         precipitationProbability = birmingham.precipProbability
         summary = birmingham.summary
 
-        self.addWeather(currentTime, externalTemp, precipitationIntensity, precipitationProbability, summary)
+        weather = self.addWeather(now, externalTemp, precipitationIntensity, precipitationProbability, summary)
 
-        return externalTemp
+        return weather
+
+    def updatePowerUsage(self, appliances, home, state, now, day):
+        appliancesOn = []
+        r = random.random()
+
+        powerUsage = 0
+        powerCost = 0
+
+        sensorids = state['home']['powerusage']['sensorids']
+        ids = ast.literal_eval(sensorids)
+
+        for room in home.getRooms():
+            for appliance in room.getAppliances():
+                for id in ids:
+                    if appliance.getId() == id:
+                        powerUsage += self.calculatePowerUsage(appliance.getWatts(), 600)
+                        powerCost += self.calculatePowerCost(appliance.getWatts(), 600)
+
+        for appliance in appliances:
+            probability = self.getProbability(appliance, day)
+            if r < probability:
+                appliance.getSensor().setSensorState(1)
+                appliancesOn.append(appliance.getSensor().getId())
+            if r > probability:
+                appliance.getSensor().setSensorState(0)
+
+        return self.addPowerUsage(appliancesOn, '', now, powerUsage, powerCost)
+
+    def updateWaterUsage(self, appliances, home, state, now, day):
+        appliancesOn = []
+        r = random.random()
+
+        waterUsage = 0
+        waterCost = 0
+
+        sensorids = state['home']['waterusage']['sensorids']
+        ids = ast.literal_eval(sensorids)
+
+        for room in home.getRooms():
+            for appliance in room.getAppliances():
+                for id in ids:
+                    if appliance.getId() == id:
+                        waterUsage += self.calculateWaterUsage(appliance)
+                        waterCost += self.calculateWaterCost(appliance)
+
+        for appliance in appliances:
+            probability = self.getProbability(appliance, day)
+            if r < probability:
+                appliance.getSensor().setSensorState(1)
+                appliancesOn.append(appliance.getSensor().getId())
+            if r > probability:
+                appliance.getSensor().setSensorState(0)
+
+        return self.addWaterUsage(appliancesOn, '', now, waterUsage, waterCost)
+
+    def updateHvacUsage(self, appliances, internalTemp, externalTemp, now, day):
+        applianceOn = []
+        currentHouseState = 0
+        lowestTemp = 68
+        highestTemp = 75
+        r = random.random()
+
+        for appliance in appliances:
+            if appliance == "Door":
+                if self.isWeekday(day):
+                    probability = 0.0055
+                else:
+                    probability = 0.0111
+                if r < probability:
+                    currentHouseState = 1
+                else:
+                    currentHouseState = 0
+            else:
+                probability = r
+                if r < probability:
+                    currentHouseState = 2
+                else:
+                    currentHouseState = 0
+
+        if (currentHouseState == 0):
+            internalTemp = internalTemp + 0.033 * (externalTemp - internalTemp)
+        elif (currentHouseState == 1):
+            internalTemp = internalTemp + 0.4 * (externalTemp - internalTemp)
+        elif (currentHouseState == 2):
+            internalTemp = internalTemp + 0.2 * (externalTemp - internalTemp)
+
+        deltaHigh = internalTemp - highestTemp
+        deltaLow = lowestTemp - internalTemp
+
+        if (deltaHigh > 0):
+            applianceOn.append(36)
+            hvacUsage = 58.3 + (58.3 * deltaHigh)
+            hvacCost = hvacUsage * 0.12
+            internalTemp = internalTemp - 1 + deltaHigh
+        elif (deltaLow > 0):
+            applianceOn.append(36)
+            hvacUsage = 0.0581
+            hvacCost = hvacUsage * 0.12
+            internalTemp = internalTemp + 1 + deltaLow
+        else:
+            hvacUsage = 0
+            hvacCost = 0
+
+        return self.addHvacUsage(applianceOn, '', now, internalTemp, hvacUsage, hvacCost)
 
 
     def simulateUsage(self, home):
-        now = self.convertToSeconds(time.localtime(time.time()))
+        now = time.strftime('%Y-%m-%d %H:%M:%S')
         day = datetime.date.today().weekday()
 
-        powerCost = 0
-        powerUsage = 0
-        waterCost = 0
-        waterUsage = 0
-        hvacCost = 0
-        hvacUsage = 0
+        power = []
+        water = []
+        hvac = []
 
         powerAppliances = ['Clothes Dryer', 'Clothes Washer', 'Dishwasher', 'Bath', 'Shower',
                            'Bedroom TV', 'Living Room TV', 'Oven', 'Stove', 'Microwave',
@@ -446,19 +458,31 @@ class Simulation(object):
 
         print(state)
 
-        externalTemp = int(self.updateWeather(time))
-        internalTemp = int(state['home']['hvacusage']['temperature'])
-
         for room in home.getRooms():
             for appliance in room.getAppliances():
                 if appliance.getApplianceName() in powerAppliances:
-                    state['home']['powerusage'] = self.updatePowerUsage(powerUsage, powerCost, appliance, now, day)
+                    power.append(appliance)
                 if appliance.getApplianceName() in waterAppliances:
-                    state['home']['waterusage'] = self.updateWaterUsage(waterUsage, waterCost, appliance, now, day)
+                    water.append(appliance)
                 if appliance.getApplianceName() in hvacAppliances:
-                    state['home']['hvacusage'] =self.updateHvacUsage(hvacUsage, hvacCost, externalTemp, internalTemp, now, appliance, day)
+                    hvac.append(appliance)
                 else:
                     pass
+
+        currrentWeatherState = self.updateWeather(now)
+
+        internalTemp = state['home']['hvacusage']['temperature']
+        externalTemp = currrentWeatherState['temperature']
+
+        currentPowerState = self.updatePowerUsage(power, home, state, now, day)
+        currentWaterState = self.updateWaterUsage(water, home, state, now, day)
+        currentHvacState = self.updateHvacUsage(hvac, internalTemp, externalTemp, now, day)
+
+        state['home']['powerusage'] = currentPowerState
+        state['home']['waterusage'] = currentWaterState
+        state['home']['hvacusage'] = currentHvacState
+        state['home']['weather'] = currrentWeatherState
+
 
         print(state)
 
@@ -470,6 +494,7 @@ class Simulation(object):
         home = self.createHome()
 
         self.simulateUsage(home)
+
 
 
 

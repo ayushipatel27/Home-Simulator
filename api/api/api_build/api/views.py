@@ -553,24 +553,52 @@ def UpdateHouseState(request):
 
 
 
-            #HVAC
+        # HVAC
 
         hvac_new = newHouseState[0]['home']['hvacusage']
         hvac_cur = currentHouseState['home']['hvacusage']
 
-        if hvac_new['endtimestamp'] is not None:
+        hvacStateCur = currentHouseState['home']['rooms']['Living Room']['sensors']['hvac sensor']['state']
+
+        if hvac_new['hvacusage']['sensorid'] == "[]" and hvacStateCur == 1:
+
+            hoff_sensor = Sensors.objects.get(sensorid = 36)
+            hoff_sensor.sensorstate = 0
+            hoff_sensor.save()
+
             hvacusage_current = Hvacusage.objects.latest('hvacusageid')
 
-            hvacusage_current.endtimestamp = hvac_new['endtimestamp']
-            hvacusage_current.usage        = hvac_new['usage']
-            hvacusage_current.cost         = hvac_new['cost']
+            hvacusage_current.endtimestamp = hvac_new['hvacusage']['endtimestamp']
+            hvacusage_current.usage        = hvac_new['hvacusage']['usage']
+            hvacusage_current.cost         = hvac_new['hvacusage']['cost']
             hvacusage_current.save()
-                
-            hvacusage_new = Hvacusage.objects.create(timestamp   = hvac_new['endtimestamp'],
+
+        elif hvac_new['hvacusage']['sensorid'] == "[36]" and hvacStateCur == 0:
+
+            hoff_sensor = Sensors.objects.get(sensorid = 36)
+            hoff_sensor.sensorstate = 1
+            hoff_sensor.save()
+
+            hvacusage_new = Hvacusage.objects.create(timestamp   = hvac_new['hvacusage']['endtimestamp'],
                                                      usage       = 0.0,
                                                      cost        = 0.0,
-                                                     temperature = hvac_new['temperature'])
+                                                     temperature = hvac_new['hvacusage']['temperature'],)
             hvacusage_new.save()
+
+        else:  
+            print("\n ERROR: HVAC failed miserably. \n")
+
+
+        # WEATHER
+
+        weather_new = newHouseState[0]['home']['weather']
+
+        weatherState_new = Weather.objects.create(timestamp             = weather_new['timestamp'],
+                                                  temperature           = weather_new['temperature'],
+                                                  precipitation         = weather_new['precipitation'],
+                                                  chanceofprecipitation = weather_new['chanceofprecipitation'],
+                                                  state                 = weather_new['state'])
+        weatherState_new.save()
 
     return HttpResponse('')
 
@@ -591,18 +619,29 @@ def GetCurrentHouseState(request):
 
 
     # GET CURRENTLY ACTIVE POWER, WATER, AND HVAC
+
+    # POWER
     powerObj = Livepowerusage.objects.latest('livepowerusageid')
     power = serializers.serialize('json', [powerObj])
     powerusage = json.loads(power)
 
+    # HVAC
     havacObj = Hvacusage.objects.latest('hvacusageid')
     hvac = serializers.serialize('json', [havacObj])
     hvacusage = json.loads(hvac)
+    hvacState = HouseState['home']['rooms']['Living Room']['sensors']['hvac sensor']['state']
 
+    if hvacState == 1:
+        hvacusage[0]['fields'].update({"sensorid": "[36]"})
+    else:
+        hvacusage[0]['fields'].update({"sensorid": "[]"})
+
+    # WATER
     waterObj = Livewaterusage.objects.latest('livewaterusageid')
     water = serializers.serialize('json', [waterObj])
     waterusage = json.loads(water)
 
+    # WEATHER
     weatherObj = Weather.objects.latest('weatherid')
     weath = serializers.serialize('json', [weatherObj])
     weather = json.loads(weath)
@@ -630,18 +669,29 @@ def GetCurrentHouseStateLocal():
 
 
     # GET CURRENTLY ACTIVE POWER, WATER, AND HVAC
+
+    # POWER
     powerObj = Livepowerusage.objects.latest('livepowerusageid')
     power = serializers.serialize('json', [powerObj])
     powerusage = json.loads(power)
 
+    # HVAC
     havacObj = Hvacusage.objects.latest('hvacusageid')
     hvac = serializers.serialize('json', [havacObj])
     hvacusage = json.loads(hvac)
+    hvacState = HouseState['home']['rooms']['Living Room']['sensors']['hvac sensor']['state']
 
+    if hvacState == 1:
+        hvacusage[0]['fields'].update({"sensorid": "[36]"})
+    else:
+        hvacusage[0]['fields'].update({"sensorid": "[]"})
+
+    # WATER
     waterObj = Livewaterusage.objects.latest('livewaterusageid')
     water = serializers.serialize('json', [waterObj])
     waterusage = json.loads(water)
 
+    # WEATHER
     weatherObj = Weather.objects.latest('weatherid')
     weath = serializers.serialize('json', [weatherObj])
     weather = json.loads(weath)

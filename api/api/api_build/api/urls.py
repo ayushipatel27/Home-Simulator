@@ -140,7 +140,7 @@ urlpatterns = [
 
     path('update/housestate/', UpdateHouseState, name='update-housestate'),
 
-    # Living Nightmare
+    # Formerly Living Nightmare, Now My Best Friend
 
     path('insert/livewaterusage/', InsertLivewaterusage, name='insert-livewaterusage'), 
 
