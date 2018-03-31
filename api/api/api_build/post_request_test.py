@@ -165,11 +165,11 @@ payload = {
         "hvacusage": {
             "hvacusage": {
             "cost": 7.5,
-            "endtimestamp": "2018-04-01 12:37:10",
-            "temperature": 73.0,
+            "endtimestamp": "2018-04-01 12:20:10",
+            "temperature": 68.0,
             "timestamp": "2018-04-01 12:12:10",
             "usage": 50.0,
-            "sensorid": "[36]",
+            "sensorid": "[]",
             },
         },
         "powerusage": {
