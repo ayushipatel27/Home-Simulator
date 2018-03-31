@@ -56,12 +56,9 @@ export class ApiProvider {
     this.weather = this.http.get('http://localhost:8000/api/rooms/');
   }
   getWeekofUsage() {
-    return this.http.get('http://localhost:8000/api/getweekofusage/');
+      return this.http.get('http://localhost:8000/api/getweekofusage/');
   }
   getMonthofUsage() {
     return this.http.get('http://localhost:8000/api/getmonthofusage/');
   }
-  
-  
-
 }
