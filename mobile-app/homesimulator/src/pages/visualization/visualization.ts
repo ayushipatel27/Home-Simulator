@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { PowerVisualizationPage } from '../powervisualization/powervisualization';
 import { WaterVisualizationPage } from '../watervisualization/watervisualization';
+import { HvacVisualizationPage } from '../hvacvisualization/hvacvisualization';
+
 import { ApiProvider } from '../../providers/api/api';
 
 
@@ -27,6 +29,10 @@ export class VisualizationPage {
   navigateToWaterVisualizationPage() {
     console.log('Navigating to Water Visualization Page.');
     this.navCtrl.push('WaterVisualizationPage');
+  }
+  navigateToHVACVisualizationPage(){
+    console.log('Navigating to HVAC Visualization Page.');
+    this.navCtrl.push('HvacvisualizationPage');
   }
 
 

@@ -7,24 +7,25 @@ var moment = require('moment');
 
 @IonicPage()
 @Component({
-  selector: 'page-powervisualization',
-  templateUrl: 'powervisualization.html',
+  selector: 'page-hvacvisualization',
+  templateUrl: 'hvacvisualization.html',
 })
-export class PowerVisualizationPage {
+export class HvacvisualizationPage {
+
   @ViewChild('monthlyLineCanvas') monthlyLineCanvas;
   @ViewChild('dailyLineCanvas') dailyLineCanvas;
 
   monthlyLineChart: any;
   monthlyData;
   monthlyDates;
-  monthlyPowerCost;
-  monthlyTotalPowerUsage;
+  monthlyHVACCost;
+  monthlyTotalHVACUsage;
 
   dailyLineChart: any;
   dailyData;
   dailyDates;
-  dailyPowerCost;
-  dailyTotalPowerUsage;
+  dailyHVACCost;
+  dailyTotalHVACUsage;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public ApiProvider: ApiProvider) {
   }
@@ -35,13 +36,13 @@ export class PowerVisualizationPage {
             data: {
                 labels: this.dailyDates,
                 datasets: [{
-                       data: this.dailyPowerCost,
-                       label: "Total Power Cost",
+                       data: this.dailyHVACCost,
+                       label: "Total HVAC Cost",
                        borderColor: "#3e95cd",
                        fill: false
                      },{
-                       data: this.dailyTotalPowerUsage,
-                       label: "Total Power Useage",
+                       data: this.dailyTotalHVACUsage,
+                       label: "Total HVAC Useage",
                        borderColor: "#e8c3b9",
                        fill: false
                      }
@@ -50,7 +51,7 @@ export class PowerVisualizationPage {
             options: {
               title: {
                     display: true,
-                    text: 'Daily Power Data'
+                    text: 'Daily HVAC Data'
                   }
             }
 
@@ -63,13 +64,13 @@ export class PowerVisualizationPage {
             data: {
                 labels: this.monthlyDates,
                 datasets: [{
-                       data: this.monthlyPowerCost,
-                       label: "Total Power Cost",
+                       data: this.monthlyHVACCost,
+                       label: "Total HVAC Cost",
                        borderColor: "#3e95cd",
                        fill: false
                      }, {
-                       data: this.monthlyTotalPowerUsage,
-                       label: "Total Power Useage",
+                       data: this.monthlyTotalHVACUsage,
+                       label: "Total HVAC Useage",
                        borderColor: "#e8c3b9",
                        fill: false
                      }
@@ -94,8 +95,8 @@ export class PowerVisualizationPage {
       this.dailyDates = t.map(function(v) {
         return moment(v).format('MMM DD');
       });
-      this.dailyPowerCost = _.map(this.dailyData,'totalpowercost');
-      this.dailyTotalPowerUsage = _.map(this.dailyData,'totalpowerusage');
+      this.dailyHVACCost = _.map(this.dailyData,'totalhvaccost');
+      this.dailyTotalHVACUsage = _.map(this.dailyData,'totalhvacusage');
 
       this.CreateDailyChart();
     });
@@ -108,8 +109,8 @@ export class PowerVisualizationPage {
       this.monthlyDates = q.map(function(v) {
         return moment(v).format('MMM DD');
       });
-      this.monthlyPowerCost = _.map(this.monthlyData,'totalpowercost');
-      this.monthlyTotalPowerUsage = _.map(this.monthlyData,'totalpowerusage');
+      this.monthlyHVACCost = _.map(this.monthlyData,'totalhvaccost');
+      this.monthlyTotalHVACUsage = _.map(this.monthlyData,'totalhvacusage');
       this.CreateMonthlyChart();
     });
   }
