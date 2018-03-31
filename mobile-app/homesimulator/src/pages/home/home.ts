@@ -4,8 +4,6 @@ import { RoomsPage } from '../rooms/rooms';
 import { InProgressPage } from '../in-progress/in-progress';
 import { TemperaturePage } from '../temperature/temperature';
 import { AppliancesPage } from '../appliances/appliances';
-import { DataVisualizationPage } from '../data-visualization/data-visualization';
-
 
 @Component({
   selector: 'page-home',
