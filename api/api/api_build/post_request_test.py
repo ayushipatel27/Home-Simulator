@@ -164,15 +164,15 @@ payload = [{
     "home": {
         "hvacusage": {
             "cost": 7.5,
-            "endtimestamp": "2018-04-01 12:35:10",
+            "endtimestamp": "2018-04-01 12:37:10",
             "temperature": 73.0,
             "timestamp": "2018-04-01 12:12:10",
             "usage": 50.0
         },
         "powerusage": {
             "cost": 9.0,
-            "endtimestamp": "2018-04-01 12:18:10",
-            "sensorids": "[5,9]",
+            "endtimestamp": "2018-04-01 12:22:10",
+            "sensorids": "[5,8]",
             "timestamp": "2018-04-01 12:12:10",
             "usage": 60.0
         },
@@ -621,8 +621,8 @@ payload = [{
         },
         "waterusage": {
             "cost": 11.25,
-            "endtimestamp": "2018-04-01 12:15:10",
-            "sensorids": "[3,6]",
+            "endtimestamp": "2018-04-01 12:35:10",
+            "sensorids": "[3,1,4]",
             "timestamp": "2018-04-01 12:12:10",
             "usage": 75
         },
@@ -639,3 +639,5 @@ payload = [{
 url = 'http://127.0.0.1:8000/api/update/housestate/'
 
 r = requests.post(url, data=json.dumps(payload), headers=headers)
+
+
