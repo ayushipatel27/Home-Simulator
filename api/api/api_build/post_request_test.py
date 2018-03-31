@@ -163,16 +163,19 @@ headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 payload = [{
     "home": {
         "hvacusage": {
+            "hvacusage": {
             "cost": 7.5,
             "endtimestamp": "2018-04-01 12:37:10",
             "temperature": 73.0,
             "timestamp": "2018-04-01 12:12:10",
-            "usage": 50.0
+            "usage": 50.0,
+            "sensorid": "[36]",
+            },
         },
         "powerusage": {
             "cost": 9.0,
             "endtimestamp": "2018-04-01 12:22:10",
-            "sensorids": "[5,8]",
+            "sensorids": "[13,17,37]",
             "timestamp": "2018-04-01 12:12:10",
             "usage": 60.0
         },
@@ -206,10 +209,10 @@ payload = [{
                         "sensor id": 26,
                         "state": 0
                     },
-                    "hvac sensor": {
+                    "hot water heater sensor": {
                         "appliances": {
-                            "HVAC": {
-                                "usage": 3500
+                            "Hot Water Heater": {
+                                "usage": 4500
                             }
                         },
                         "sensor id": 28,
@@ -622,7 +625,7 @@ payload = [{
         "waterusage": {
             "cost": 11.25,
             "endtimestamp": "2018-04-01 12:35:10",
-            "sensorids": "[3,1,4]",
+            "sensorids": "[20,19,44]",
             "timestamp": "2018-04-01 12:12:10",
             "usage": 75
         },

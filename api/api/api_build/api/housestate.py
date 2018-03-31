@@ -361,13 +361,13 @@ HouseState = {
                             } 
                         }
                     },
-                    "hvac sensor": 
+                    "hot water heater sensor": 
                     {
                         "sensor id": 28,
                         "state": 0,
                         "appliances": 
                         {
-                            "HVAC":
+                            "Hot Water Heater":
                             {
                                 "usage":0
                             } 
@@ -600,7 +600,7 @@ HouseState = {
         },
         "hvacusage": 
         {
-
+            
         },
         "waterusage": 
         {
