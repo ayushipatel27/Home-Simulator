@@ -1,13 +1,15 @@
 <ion-header>
     <ion-navbar >
-      <ion-title>
-        Power Visualization
-      </ion-title>
     </ion-navbar>
 </ion-header>
 
 <ion-content class="background">
 
+  <ion-card class="detailscard">
+    <ion-item-divider class="header-divider" color="light">Power Visualization</ion-item-divider>
+  </ion-card>
+
+  <div className="Chart-Container">
       <ion-card class="detailscard" >
         <ion-card-header>
           Monthly Power Visualization
@@ -25,6 +27,7 @@
           <canvas #dailyLineCanvas ></canvas>
         </ion-card-content>
       </ion-card>
+    </div>
 
 
   </ion-content>

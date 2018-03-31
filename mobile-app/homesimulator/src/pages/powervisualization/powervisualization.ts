@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Chart } from 'chart.js';
 import { ApiProvider } from '../../providers/api/api';
 var _ = require('lodash');
+var moment = require('moment');
 
 @IonicPage()
 @Component({
@@ -18,20 +19,12 @@ export class PowerVisualizationPage {
   monthlyDates;
   monthlyPowerCost;
   monthlyTotalPowerUsage;
-  monthlyTotalHvacCost;
-  monthlyTotalHvacUseage;
-  monthlyTotalWaterCost;
-  monthlyTotalWaterUseage;
 
   dailyLineChart: any;
   dailyData;
   dailyDates;
   dailyPowerCost;
   dailyTotalPowerUsage;
-  dailyTotalHvacCost;
-  dailyTotalHvacUseage;
-  dailyTotalWaterCost;
-  dailyTotalWaterUseage;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public ApiProvider: ApiProvider) {
   }
@@ -99,9 +92,10 @@ export class PowerVisualizationPage {
     this.ApiProvider.getMonthofUsage().subscribe(res => {
       console.log(res)
       this.dailyData = res
-      this.dailyDates = _.map(this.dailyData, 'date');
-      // this.dailyTotalHvacCost = _.map(this.dailyData, 'totalhvaccost');
-      // this.dailyTotalHvacUseage = _.map(this.dailyData,'totalhvacusage');
+      var t = _.map(this.dailyData, 'date');
+      this.dailyDates = t.map(function(v) {
+        return moment(v).format('MMM DD');
+      });
       this.dailyPowerCost = _.map(this.dailyData,'totalpowercost');
       this.dailyTotalPowerUsage = _.map(this.dailyData,'totalpowerusage');
 
@@ -112,8 +106,10 @@ export class PowerVisualizationPage {
       console.log(res)
       this.monthlyData = res
       this.monthlyDates = _.map(this.monthlyData, 'date');
-      // this.monthlyTotalHvacCost = _.map(this.monthlyData, 'totalhvaccost');
-      // this.monthlyTotalHvacUseage = _.map(this.monthlyData,'totalhvacusage');
+      var q = _.map(this.monthlyData, 'date');
+      this.monthlyDates = q.map(function(v) {
+        return moment(v).format('MMM DD');
+      });
       this.monthlyPowerCost = _.map(this.monthlyData,'totalpowercost');
       this.monthlyTotalPowerUsage = _.map(this.monthlyData,'totalpowerusage');
       this.CreateMonthlyChart();
