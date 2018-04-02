@@ -260,7 +260,6 @@ class Simulation(object):
         if appliance.getApplianceName() == "Window":
             return r
 
-
     def calculatePowerCost(self, watts, time):
         return ((watts * (time/3600))/1000) * .12         # returns $ for kilowatts per hour
 
@@ -428,22 +427,27 @@ class Simulation(object):
         deltaLow = lowestTemp - internalTemp
 
         if (deltaHigh > 0):
-            applianceOn.append(36)
-            hvacUsage = 58.3 + (58.3 * deltaHigh)
+            hvacUsage = 0.0583 + (0.0583 * deltaHigh)
             hvacCost = hvacUsage * 0.12
             internalTemp = internalTemp - 1 + deltaHigh
+            time = 60 + (60 * deltaHigh)
+            deltaTime = datetime.timedelta(seconds=(-time))
         elif (deltaLow > 0):
-            applianceOn.append(36)
-            hvacUsage = 0.0581
+            hvacUsage = 0.0583 + (0.0583 * deltaLow)
             hvacCost = hvacUsage * 0.12
             internalTemp = internalTemp + 1 + deltaLow
+            time = 60 + (60 * deltaLow)
+            deltaTime = datetime.timedelta(seconds=(-time))
         else:
             hvacUsage = 0
             hvacCost = 0
+            deltaTime = 0
 
         applianceOn = str(applianceOn)
 
-        return self.addHvacUsage(applianceOn, '', now, internalTemp, hvacUsage, hvacCost)
+        startTime = datetime.datetime.now() + deltaTime
+
+        return self.addHvacUsage(applianceOn, startTime.strftime('%Y-%m-%d %H:%M:%S'), now, internalTemp, hvacUsage, hvacCost)
 
 
     def simulateUsage(self, home):

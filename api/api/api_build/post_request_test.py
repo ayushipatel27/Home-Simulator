@@ -160,7 +160,7 @@ headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
 
 
-payload = [{
+payload = {
     "home": {
         "hvacusage": {
             "hvacusage": {
@@ -637,7 +637,7 @@ payload = [{
             "timestamp": "2018-04-01T19:46:49"
         }
     }
-}]
+}
 
 url = 'http://127.0.0.1:8000/api/update/housestate/'
 

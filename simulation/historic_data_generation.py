@@ -146,7 +146,6 @@ class Simulation(object):
             [Appliance(25, "Garage Door 1", 0), Appliance(26, "Garage Door 2", 0), Appliance(27, "Window", 0),
              Appliance(28, "Hot Water Heater", 4500)])
 
-
         self.home.getRoom("Living Room").addAppliances(
             [Appliance(29, "Overhead Light", 60), Appliance(30, "Lamp",  60), Appliance(31, "Living Room TV", 636),
              Appliance(32, "Back Door", 0), Appliance(33, "Front Door", 0), Appliance(34, "Window", 0),
