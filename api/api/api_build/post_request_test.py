@@ -172,8 +172,8 @@ payload = {
         },
         "powerusage": {
             "cost": 9.0,
-            "endtimestamp": "2018-03-31 10:29:11",
-            "sensorids": "[13,17,37]",
+            "endtimestamp": "2018-03-31 10:14:10",
+            "sensorids": "[13,17]",
             "timestamp": "2018-03-31 10:13:10",
             "usage": 60.0
         },

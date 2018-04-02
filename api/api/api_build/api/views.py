@@ -477,7 +477,7 @@ def UpdateHouseState(request):
         print('\nLength: ' + str(len(power_sensors_to_turn_on)) + "\n")
         print('\nLength: ' + str(len(power_sensors_to_turn_off)) + "\n")
 
-        if len(power_sensors_to_turn_on) != 0 and len(power_sensors_to_turn_off) != 0:
+        if len(power_sensors_to_turn_on) != 0 or len(power_sensors_to_turn_off) != 0:
             for pon in power_sensors_to_turn_on:
                 pon_sensor = Sensors.objects.get(sensorid = pon)
                 pon_sensor.sensorstate = 1
