@@ -585,7 +585,7 @@ def UpdateHouseState(request):
                                                      temperature = hvac_new['temperature'],)
             hvacusage_new.save()
 
-        elif hvac_new['hvacusage']['sensorid'] == "[]" and hvacStateCur == 0:
+        elif hvac_new['sensorid'] == "[]" and hvacStateCur == 0:
 
             hoff_sensor = Sensors.objects.get(sensorid = 36)
             hoff_sensor.sensorstate = 0
