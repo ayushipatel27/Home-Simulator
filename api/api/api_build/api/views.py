@@ -585,7 +585,20 @@ def UpdateHouseState(request):
                                                      temperature = hvac_new['temperature'],)
             hvacusage_new.save()
 
-        else:  
+        elif hvac_new['hvacusage']['sensorid'] == "[]" and hvacStateCur == 0:
+
+            hoff_sensor = Sensors.objects.get(sensorid = 36)
+            hoff_sensor.sensorstate = 0
+            hoff_sensor.save()
+
+            hvacusage_new = Hvacusage.objects.create(timestamp    = hvac_new['endtimestamp'],
+                                                     endtimestamp = hvac_new['endtimestamp'],
+                                                     usage        = hvac_new['usage'],
+                                                     cost         = hvac_new['cost'],
+                                                     temperature  = hvac_new['temperature'],)
+            hvacusage_new.save()
+
+        else:
             print("\n ERROR: HVAC failed miserably. \n")
 
 

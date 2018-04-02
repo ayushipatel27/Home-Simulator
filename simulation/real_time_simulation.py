@@ -441,7 +441,7 @@ class Simulation(object):
         else:
             hvacUsage = 0
             hvacCost = 0
-            deltaTime = 0
+            deltaTime =datetime.timedelta(seconds=(0))
 
         applianceOn = str(applianceOn)
 

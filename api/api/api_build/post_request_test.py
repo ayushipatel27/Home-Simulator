@@ -165,18 +165,18 @@ payload = {
         "hvacusage": {
             "hvacusage": {
             "cost": 7.5,
-            "endtimestamp": "2018-04-01 12:37:10",
-            "temperature": 73.0,
+            "endtimestamp": "2018-04-01 12:20:10",
+            "temperature": 68.0,
             "timestamp": "2018-04-01 12:12:10",
             "usage": 50.0,
-            "sensorid": "[36]",
+            "sensorid": "[]",
             },
         },
         "powerusage": {
             "cost": 9.0,
-            "endtimestamp": "2018-04-01 12:22:10",
+            "endtimestamp": "2018-03-31 10:29:11",
             "sensorids": "[13,17,37]",
-            "timestamp": "2018-04-01 12:12:10",
+            "timestamp": "2018-03-31 10:13:10",
             "usage": 60.0
         },
         "rooms": {
@@ -624,9 +624,9 @@ payload = {
         },
         "waterusage": {
             "cost": 11.25,
-            "endtimestamp": "2018-04-01 12:35:10",
+            "endtimestamp": "2018-03-31 11:53:11",
             "sensorids": "[20,19,44]",
-            "timestamp": "2018-04-01 12:12:10",
+            "timestamp": "2018-03-31 12:35:11",
             "usage": 75
         },
         "weather": {
