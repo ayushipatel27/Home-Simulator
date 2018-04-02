@@ -519,15 +519,17 @@ def UpdateHouseState(request):
             if nw not in cur_water_sensors:
                 water_sensors_to_turn_on.append(nw)
 
-        #print('\nWater On: ' + str(water_sensors_to_turn_on) + "\n")
+        # print('\nWater On: ' + str(water_sensors_to_turn_on) + "\n")
 
         for cw in cur_water_sensors:
             if cw not in new_water_sensors:
                 water_sensors_to_turn_off.append(cw)
 
-        #print('\nWater Off: ' + str(water_sensors_to_turn_off) + "\n") 
+        # print('\nWater Off: ' + str(water_sensors_to_turn_off) + "\n") 
 
-        if len(water_sensors_to_turn_on) != 0 and len(water_sensors_to_turn_off) != 0:
+        # print('\nWater Off: ' + str(water_sensors_to_turn_off) + "\n")
+
+        if len(water_sensors_to_turn_on) != 0 or len(water_sensors_to_turn_off) != 0:
             for won in water_sensors_to_turn_on:
                 won_sensor = Sensors.objects.get(sensorid = won)
                 won_sensor.sensorstate = 1
