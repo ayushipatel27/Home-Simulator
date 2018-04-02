@@ -553,65 +553,65 @@ def UpdateHouseState(request):
 
 
 
-        # HVAC
+        # # HVAC
 
-        hvac_new = newHouseState['home']['hvacusage']
-        hvac_cur = currentHouseState['home']['hvacusage']
+        # hvac_new = newHouseState['home']['hvacusage']
+        # hvac_cur = currentHouseState['home']['hvacusage']
 
-        hvacStateCur = currentHouseState['home']['rooms']['Living Room']['sensors']['hvac sensor']['state']
+        # hvacStateCur = currentHouseState['home']['rooms']['Living Room']['sensors']['hvac sensor']['state']
 
-        if hvac_new['sensorid'] == "[]" and hvacStateCur == 1:
+        # if hvac_new['sensorid'] == "[]" and hvacStateCur == 1:
 
-            hoff_sensor = Sensors.objects.get(sensorid = 36)
-            hoff_sensor.sensorstate = 0
-            hoff_sensor.save()
+        #     hoff_sensor = Sensors.objects.get(sensorid = 36)
+        #     hoff_sensor.sensorstate = 0
+        #     hoff_sensor.save()
 
-            hvacusage_current = Hvacusage.objects.latest('hvacusageid')
+        #     hvacusage_current = Hvacusage.objects.latest('hvacusageid')
 
-            hvacusage_current.endtimestamp = hvac_new['endtimestamp']
-            hvacusage_current.usage        = hvac_new['usage']
-            hvacusage_current.cost         = hvac_new['cost']
-            hvacusage_current.save()
+        #     hvacusage_current.endtimestamp = hvac_new['endtimestamp']
+        #     hvacusage_current.usage        = hvac_new['usage']
+        #     hvacusage_current.cost         = hvac_new['cost']
+        #     hvacusage_current.save()
 
-        elif hvac_new['sensorid'] == "[36]" and hvacStateCur == 0:
+        # elif hvac_new['sensorid'] == "[36]" and hvacStateCur == 0:
 
-            hoff_sensor = Sensors.objects.get(sensorid = 36)
-            hoff_sensor.sensorstate = 1
-            hoff_sensor.save()
+        #     hoff_sensor = Sensors.objects.get(sensorid = 36)
+        #     hoff_sensor.sensorstate = 1
+        #     hoff_sensor.save()
 
-            hvacusage_new = Hvacusage.objects.create(timestamp   = hvac_new['endtimestamp'],
-                                                     usage       = 0.0,
-                                                     cost        = 0.0,
-                                                     temperature = hvac_new['temperature'],)
-            hvacusage_new.save()
+        #     hvacusage_new = Hvacusage.objects.create(timestamp   = hvac_new['endtimestamp'],
+        #                                              usage       = 0.0,
+        #                                              cost        = 0.0,
+        #                                              temperature = hvac_new['temperature'],)
+        #     hvacusage_new.save()
 
-        elif hvac_new['hvacusage']['sensorid'] == "[]" and hvacStateCur == 0:
+        # elif hvac_new['hvacusage']['sensorid'] == "[]" and hvacStateCur == 0:
 
-            hoff_sensor = Sensors.objects.get(sensorid = 36)
-            hoff_sensor.sensorstate = 0
-            hoff_sensor.save()
+        #     hoff_sensor = Sensors.objects.get(sensorid = 36)
+        #     hoff_sensor.sensorstate = 0
+        #     hoff_sensor.save()
 
-            hvacusage_new = Hvacusage.objects.create(timestamp    = hvac_new['endtimestamp'],
-                                                     endtimestamp = hvac_new['endtimestamp'],
-                                                     usage        = hvac_new['usage'],
-                                                     cost         = hvac_new['cost'],
-                                                     temperature  = hvac_new['temperature'],)
-            hvacusage_new.save()
+        #     hvacusage_new = Hvacusage.objects.create(timestamp    = hvac_new['endtimestamp'],
+        #                                              endtimestamp = hvac_new['endtimestamp'],
+        #                                              usage        = hvac_new['usage'],
+        #                                              cost         = hvac_new['cost'],
+        #                                              temperature  = hvac_new['temperature'],)
+        #     hvacusage_new.save()
 
-        else:  
-            print("\n ERROR: HVAC failed miserably. \n")
+        # else:  
+        #     print("\n ERROR: HVAC failed miserably. \n")
 
 
-        # WEATHER
+        # # WEATHER
 
-        weather_new = newHouseState['home']['weather']
+        # weather_new = newHouseState['home']['weather']
 
-        weatherState_new = Weather.objects.create(timestamp             = weather_new['timestamp'],
-                                                  temperature           = weather_new['temperature'],
-                                                  precipitation         = weather_new['precipitation'],
-                                                  chanceofprecipitation = weather_new['chanceofprecipitation'],
-                                                  state                 = weather_new['state'])
-        weatherState_new.save()
+        # weatherState_new = Weather.objects.create(timestamp             = weather_new['timestamp'],
+        #                                           temperature           = weather_new['temperature'],
+        #                                           precipitation         = weather_new['precipitation'],
+        #                                           chanceofprecipitation = weather_new['chanceofprecipitation'],
+        #                                           state                 = weather_new['state'])
+        # weatherState_new.save()
 
     return HttpResponse('')
 
