@@ -1,8 +1,10 @@
 import random
 import requests, json, ast
 from darksky import forecast
-import threading as t
 import datetime, time
+import crontab as c
+
+# cron = c.CronTab(user='Ayushi')
 
 class Sensor(object):
     def __init__(self, id, sensorName, sensorState):
