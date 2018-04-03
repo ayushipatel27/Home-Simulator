@@ -503,12 +503,8 @@ class Simulation(object):
     def simulate(self):
         home = self.createHome()
         while True:
-            t.Timer(600, self.simulateUsage(home))
-
-
-
-
-
+            self.simulateUsage(home)
+            time.sleep(600)                     # simulate usage every 10 minutes
 
 # calling simulation to simulate usage.
 s = Simulation()
