@@ -2,9 +2,7 @@ import random
 import requests, json, ast
 from darksky import forecast
 import datetime, time
-import crontab as c
-
-# cron = c.CronTab(user='Ayushi')
+import threading as t
 
 class Sensor(object):
     def __init__(self, id, sensorName, sensorState):
@@ -504,8 +502,9 @@ class Simulation(object):
 
     def simulate(self):
         home = self.createHome()
+        while True:
+            t.Timer(600, self.simulateUsage(home))
 
-        self.simulateUsage(home)
 
 
 

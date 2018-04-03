@@ -163,19 +163,17 @@ headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 payload = {
     "home": {
         "hvacusage": {
-            "hvacusage": {
-            "cost": 7.5,
-            "endtimestamp": "2018-04-01 12:20:10",
-            "temperature": 68.0,
-            "timestamp": "2018-04-01 12:12:10",
-            "usage": 50.0,
-            "sensorid": "[]",
-            },
+        "cost": 7.5,
+        "endtimestamp": "2018-04-01 12:20:10",
+        "temperature": 68.0,
+        "timestamp": "2018-04-01 12:12:10",
+        "usage": 50.0,
+        "sensorid": "[]",
         },
         "powerusage": {
             "cost": 9.0,
-            "endtimestamp": "2018-03-31 10:29:11",
-            "sensorids": "[13,17,37]",
+            "endtimestamp": "2018-03-31 10:14:10",
+            "sensorids": "[13,17]",
             "timestamp": "2018-03-31 10:13:10",
             "usage": 60.0
         },
@@ -624,9 +622,9 @@ payload = {
         },
         "waterusage": {
             "cost": 11.25,
-            "endtimestamp": "2018-03-31 11:53:11",
-            "sensorids": "[20,19,44]",
-            "timestamp": "2018-03-31 12:35:11",
+            "endtimestamp": "2018-04-02 11:53:11",
+            "sensorids": "[19,20,44]",
+            "timestamp": "2018-04-02 11:58:11",
             "usage": 75
         },
         "weather": {
