@@ -1,18 +1,22 @@
+
 <ion-header>
-    <ion-navbar >
-    </ion-navbar>
+
+  <ion-navbar>
+  </ion-navbar>
+
 </ion-header>
+
 
 <ion-content class="background">
 
   <ion-card class="detailscard">
-    <ion-item-divider class="header-divider" color="light">Power Visualization</ion-item-divider>
+    <ion-item-divider class="header-divider" color="light">HVAC Visualization</ion-item-divider>
   </ion-card>
 
   <div className="Chart-Container">
       <ion-card class="detailscard" >
         <ion-card-header>
-          Monthly Power Visualization
+          Monthly HVAC Visualization
         </ion-card-header>
         <ion-card-content>
           <canvas #monthlyLineCanvas ></canvas>
@@ -21,7 +25,7 @@
 
       <ion-card class="detailscard" >
         <ion-card-header>
-          Past 7 Days Power Visualization
+          Past 7 Days HVAC Visualization
         </ion-card-header>
         <ion-card-content>
           <canvas #dailyLineCanvas ></canvas>
@@ -29,5 +33,4 @@
       </ion-card>
     </div>
 
-
-  </ion-content>
+</ion-content>

@@ -1,20 +1,24 @@
-//page-home {
+page-home {
 
-//}
+  //Hide scrollbar on home page when viewing on computer
+  .scroll-content {
+    overflow-y: hidden !important;
+  }
+}
+
 ion-icon {
-    font-size: 100px;
-    vertical-align: middle;
-    width: 70%;
-    height: 70%;
-}
-button {
-    width: 100%;
-    height: 100%;
+  font-size: 100px;
+  vertical-align: middle;
+  // width: 70%;
+  // height: 70%;
 }
 
-.material-icons.md-36 {
-     font-size: 100px;
-    }
+button {
+  width: 90%;
+  height: 90%;
+}
+
 ion-col {
-    padding: 0px;
+  padding: 0px;
+  outline: none;
 }

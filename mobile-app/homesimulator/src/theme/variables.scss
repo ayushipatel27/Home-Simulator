@@ -34,12 +34,14 @@ $app-direction: ltr;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #d5d5d5, 
-  secondary:  #6D7993, // #66b9b powder blue
+  primary:    #3C6C80,
+  secondary:  #3E515A, // #66b9b powder blue
   powder:     #66b9bf, // #66b9b powder blue
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #222,
+  lightBlue: #F1F3F3,
+  dark2:    #3e515a
 );
 
 $toolbar-md-background: color($colors, secondary);
@@ -50,12 +52,16 @@ $tabs-md-tab-color-active: color($colors, light);
 $tabs-md-tab-color: color($colors, light);
 $tabs-md-tab-text-color: color($colors, light);
 
-$list-md-background-color: color($colors, secondary);
-$list-md-text-color: color($colors, light);
+$list-md-background-color: color($colors, lightBlue);
+$list-md-text-color: #3e515a;
 $card-md-title-font-size: 100px;
 
 $card-md-header-color: color($colors, light);
 
+$button-md-background-color: color($colors, light);
+$button-md-height: 80px;
+
+$label-md-text-color: #3e515a;
 
 // App iOS Variables
 // --------------------------------------------------

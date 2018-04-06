@@ -25,7 +25,7 @@ page-temperature {
     opacity: 1; /* Fully shown on mouse-over */
 }
 
-/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
 .slider::-webkit-slider-thumb {
     -webkit-appearance: none; /* Override default look */
     appearance: none;
@@ -45,9 +45,11 @@ page-temperature {
 #output {
     font-weight:bold;
     font-size: 80px;
-    color:white;
     text-align:center;
     margin-bottom: 0px;
+}
+#output::after {
+  content: "\00b0";
 }
 
 
@@ -65,7 +67,7 @@ page-temperature {
     font-weight: bold;
     font-size: 50px;
     text-align: center;
-    color: white;
+    // color: white;
 }
 
 ion-card-header {

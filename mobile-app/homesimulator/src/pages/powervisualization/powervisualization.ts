@@ -1,24 +1,11 @@
-import {
-  Component,
-  ViewChild
-} from '@angular/core';
-import {
-  IonicPage,
-  NavController,
-  NavParams
-} from 'ionic-angular';
-import {
-  ApiProvider
-} from '../../providers/api/api';
-import * as Chart from 'chartjs';
-
-
-/**
- * Generated class for the PowervisualizationPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Chart } from 'chart.js';
+import { ApiProvider } from '../../providers/api/api';
+// var _ = require('lodash');
+// var moment = require('moment');
+import * as _ from "lodash";
+import * as moment from 'moment';
 
 @IonicPage()
 @Component({
@@ -26,71 +13,107 @@ import * as Chart from 'chartjs';
   templateUrl: 'powervisualization.html',
 })
 export class PowerVisualizationPage {
+  @ViewChild('monthlyLineCanvas') monthlyLineCanvas;
+  @ViewChild('dailyLineCanvas') dailyLineCanvas;
 
-  @ViewChild('barCanvas')barCanvas;
+  monthlyLineChart: any;
+  monthlyData;
+  monthlyDates;
+  monthlyPowerCost;
+  monthlyTotalPowerUsage;
 
-  weekdata: object;
-  monthdata: object;
-  barChart: any;
-
-
+  dailyLineChart: any;
+  dailyData;
+  dailyDates;
+  dailyPowerCost;
+  dailyTotalPowerUsage;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public ApiProvider: ApiProvider) {
-    this.ApiProvider.getWeekofUsage().subscribe(res => {
-      console.log(res);
-      this.weekdata = res;
-    })
-    this.ApiProvider.getMonthofUsage().subscribe(res => {
-      console.log(res);
-      this.monthdata = res;
-    })
   }
+
+  CreateDailyChart(){
+    this.dailyLineChart = new Chart(this.dailyLineCanvas.nativeElement, {
+            type: 'line',
+            data: {
+                labels: this.dailyDates,
+                datasets: [{
+                       data: this.dailyPowerCost,
+                       label: "Total Power Cost",
+                       borderColor: "#3e95cd",
+                       fill: false
+                     },{
+                       data: this.dailyTotalPowerUsage,
+                       label: "Total Power Useage",
+                       borderColor: "#e8c3b9",
+                       fill: false
+                     }
+                   ]
+            },
+            options: {
+              title: {
+                    display: true,
+                    text: 'Daily Power Data'
+                  }
+            }
+
+        });
+  }
+
+  CreateMonthlyChart(){
+    this.monthlyLineChart = new Chart(this.monthlyLineCanvas.nativeElement, {
+            type: 'line',
+            data: {
+                labels: this.monthlyDates,
+                datasets: [{
+                       data: this.monthlyPowerCost,
+                       label: "Total Power Cost",
+                       borderColor: "#3e95cd",
+                       fill: false
+                     }, {
+                       data: this.monthlyTotalPowerUsage,
+                       label: "Total Power Useage",
+                       borderColor: "#e8c3b9",
+                       fill: false
+                     }
+                   ]
+            },
+            options: {
+              title: {
+                    display: true,
+                    text: 'Monthly Power Data'
+                  }
+            }
+        });
+  }
+
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad PowervisualizationPage');
+    console.log('load');
+    this.ApiProvider.getWeekofUsage().subscribe(res => {
+      console.log(res)
+      this.dailyData = res
+      var t = _.map(this.dailyData, 'date');
+      this.dailyDates = t.map(function(v) {
+        return moment(v).format('MMM DD');
+      });
+      this.dailyPowerCost = _.map(this.dailyData,'totalpowercost');
+      this.dailyTotalPowerUsage = _.map(this.dailyData,'totalpowerusage');
 
-    this.barChart = new Chart(this.barCanvas.nativeElement, {
- 
-      type: 'bar',
-      data: {
-          labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-          datasets: [{
-              label: '# of Votes',
-              data: [12, 19, 3, 5, 2, 3],
-              backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(153, 102, 255, 0.2)',
-                  'rgba(255, 159, 64, 0.2)'
-              ],
-              borderColor: [
-                  'rgba(255,99,132,1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(255, 206, 86, 1)',
-                  'rgba(75, 192, 192, 1)',
-                  'rgba(153, 102, 255, 1)',
-                  'rgba(255, 159, 64, 1)'
-              ],
-              borderWidth: 1
-          }]
-      },
-      options: {
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero:true
-                  }
-              }]
-          }
-      }
+      this.CreateDailyChart();
+    });
 
-  });
-  }
-
-  ionViewDidEnter() {
-
+    this.ApiProvider.getMonthofUsage().subscribe(res => {
+      console.log(res)
+      this.monthlyData = res
+      this.monthlyDates = _.map(this.monthlyData, 'date');
+      var q = _.map(this.monthlyData, 'date');
+      this.monthlyDates = q.map(function(v) {
+        return moment(v).format('MMM DD');
+      });
+      this.monthlyPowerCost = _.map(this.monthlyData,'totalpowercost');
+      this.monthlyTotalPowerUsage = _.map(this.monthlyData,'totalpowerusage');
+      this.CreateMonthlyChart();
+    });
   }
 
 }
