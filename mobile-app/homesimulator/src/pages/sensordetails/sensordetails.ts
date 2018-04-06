@@ -74,25 +74,29 @@ export class SensorDetailsPage {
 
   console.log(now);
   var usagefunction = function(page) {
+    var power;
+    var water;
     return new Promise(function(resolve, reject) {
     console.log(page);
-    let power = calculatePower(page.currentState); 
-    let water = calculateWater(page.currentState); 
-    //page.currentState.home.powerusage.cost = calculatePower(page.currentState).powercost;
-   // page.currentState.home.powerusage.usage = calculatePower(page.currentState).powerusage;
-    //page.currentState.home.waterusage.cost = calculateWater(page.currentState).watercost;
-    //page.currentState.home.waterusage.usage = calculateWater(page.currentState).waterusage;
-    page.currentState.home.powerusage.cost = power.powercost;
-    page.currentState.home.powerusage.usage = power.powerusage;
+    calculatePower(page.currentState).then(result => {
+      power = result;
+    }).then(result => {
+      calculateWater(page.currentState).then(result => {
+        water = result;
+        return water;
+      }).then(result => {
+        page.currentState.home.powerusage.cost = power.powercost;
+        page.currentState.home.powerusage.usage = power.powerusage;
 
-    page.currentState.home.watercost.cost = water.watercost;
-    page.currentState.home.waterusage.usage = water.waterusage;
-
+        page.currentState.home.watercost.cost = water.watercost;
+        page.currentState.home.waterusage.usage = water.waterusage;
+      }) 
+    })
     console.log("Promise finished." + page.currentState);
     resolve(page as JSON);
     });
   }
-  usagefunction(page).then(function(page) {
+  usagefunction(page).then((page: JSON) => {
     console.log("Entered then promise.");
     console.log(page.currentState.home.powerusage);
     console.log(page.currentState.home.waterusage);
@@ -266,6 +270,7 @@ function turnOff(page) {
 
 
 function calculatePower(currentState) {
+  return new Promise(function(resolve, reject) {
   var cost = 0.0;
   var usage = 0.0;
   var now = new Date();
@@ -285,16 +290,16 @@ function calculatePower(currentState) {
      usage += Math.abs(calculatePowerUsage(appliance.powerusage, interval));
      console.log('The power cost is currently: $' + cost);
      console.log('The power usage is currently: ' + usage + " kilowatts.");
+     
+     })
     });
+    var power = {powercost: cost, powerusage: usage};
+    resolve(power);
    });
-   //currentState.home.powerusage.cost = cost;
-   //console.log(cost);
-   //console.log(usage);
-   var power = {powercost: cost, powerusage: usage};
-   return power;
  }
 
  function calculateWater(currentState) {
+  return new Promise(function(resolve, reject) {
   var cost = 0.0;
   var usage = 0.0;
   var now = new Date();
@@ -314,12 +319,13 @@ function calculatePower(currentState) {
      usage += Math.abs(getGallons(appliance));
      console.log('The water cost is currently: $' + cost);
      console.log('The water usage is currently: ' + usage + ' gallons');
+     })
     });
+    currentState.home.waterusage.cost = cost;
+    currentState.home.waterusage.usage = usage;
+    var water = {watercost: cost, waterusage: usage};
+    resolve(water);
    });
-   currentState.home.waterusage.cost = cost;
-   currentState.home.waterusage.usage = usage;
-   var water = {watercost: cost, waterusage: usage};
-   return water;
  }
 
 function calculatePowerCost(watts, time) {
