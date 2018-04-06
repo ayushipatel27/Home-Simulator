@@ -20,10 +20,10 @@
 
     <div class=text-container text-center>
       <ion-label>On/Off Switch</ion-label>
-      <ion-toggle text-center id="onoffswitch" [(ngModel)]="onoffswitch"></ion-toggle>
+      <ion-toggle text-center id="onoffswitch" [(ngModel)]="onoffswitch" (ionChange)='sendState()'></ion-toggle>
       <p *ngIf="onoffswitch" class="powerstatus">The {{name}} is on</p>
-      <p>The powerrate is: {{powerrate}} cents per watt.</p>
-      <p>The {{name}} has used {{powerusage}} watts of power.</p>
+      <p>The powerrate is: {{powerrate}} cents per kilowatt hour.</p>
+      <p>The {{name}} uses {{powerusage}} watts of power per hour.</p>
 
     </div>
 

@@ -71,7 +71,11 @@ export class ApiProvider {
   getMonthofUsage() {
     return this.http.get('http://localhost:8000/api/getmonthofusage/');
   }
-  
-  
+  getInProgress() {
+    return this.http.get('http://localhost:8000/api/inprogress/');
+  }
+  getCurrentState() {
+    return this.http.get('http://localhost:8000/api/gethousestate/');
+  }
 
 }

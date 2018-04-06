@@ -15,7 +15,7 @@
         <ion-item-group>
           <ion-item-divider class="header-divider" color="light">Appliances</ion-item-divider>
           <ion-item text-wrap *ngFor="let appliance of appliances" class="room-item" (click)="navigateToApplianceDetailsPage(appliance)">
-            <ion-label>Sensor: {{appliance.sensorid}} Appliance: {{appliance.powerusage}}</ion-label>
+            <ion-label>Appliance Name: {{appliance.appliancename}}, SensorID: {{appliance.sensorid}}, Power Usage: {{appliance.powerusage}}</ion-label>
           </ion-item>
         </ion-item-group>
       </ion-list>
