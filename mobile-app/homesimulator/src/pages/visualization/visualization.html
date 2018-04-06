@@ -6,28 +6,29 @@
 
 </ion-header>
 
-
 <ion-content padding class="background">
-  <!-- <h2 class="home-header">Welcome to HomeSimulator!</h2> -->
-  <ion-row class="divider">
-    <button (click)="navigateToPowerVisualizationPage()">
-      <!-- <ion-icon name="thermometer" item-start></ion-icon> -->
-      <br/>
-      <h3>Power Visualization</h3>
-    </button>
+
+  <ion-row>
+    <ion-col col-12>
+      <button ion-button icon-start block (click)="navigateToPowerVisualizationPage()" id="PowerButton">
+        <ion-icon name="outlet"></ion-icon>
+        Power Visualization
+      </button>
+    </ion-col>
+
+    <ion-col col-12>
+      <button ion-button icon-start block (click)="navigateToWaterVisualizationPage()" id="WaterButton">
+        <ion-icon name="water"></ion-icon>
+        Water Visualization
+      </button>
+    </ion-col>
+
+    <ion-col col-12>
+      <button ion-button icon-start block (click)="navigateToHVACVisualizationPage()" id="HvacButton">
+        <i class="material-icons">highlight</i>
+        HVAC Visualization
+      </button>
+    </ion-col>
   </ion-row>
-  <ion-row class="divider">
-    <button (click)="navigateToWaterVisualizationPage()">
-      <!-- <ion-icon name="sync" item-start></ion-icon> -->
-      <br/>
-      <h3>Water Visualization</h3>
-    </button>
-  </ion-row>
-  <ion-row class="divider">
-    <button (click)="navigateToHVACVisualizationPage()">
-      <!-- <ion-icon name="sync" item-start></ion-icon> -->
-      <br/>
-      <h3>HVAC Visualization</h3>
-    </button>
-  </ion-row>
+
 </ion-content>

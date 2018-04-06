@@ -1,36 +1,28 @@
-
 <ion-header>
-
   <ion-navbar>
   </ion-navbar>
-
 </ion-header>
 
-
 <ion-content padding class="background">
-
   <ion-card class="detailscard">
     <ion-item-divider class="header-divider" color="light">Water Visualization</ion-item-divider>
   </ion-card>
-
   <div className="Chart-Container">
-  <ion-card class="detailscard" >
-    <ion-card-header>
-      Monthly Water Visualization
-    </ion-card-header>
-    <ion-card-content>
-      <canvas #monthlyLineCanvas ></canvas>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card class="detailscard" >
-    <ion-card-header>
-      Past 7 Days Water Visualization
-    </ion-card-header>
-    <ion-card-content>
-      <canvas #dailyLineCanvas ></canvas>
-    </ion-card-content>
-  </ion-card>
-</div>
-
+    <ion-card class="detailscard">
+      <ion-card-header>
+        Monthly Water Visualization
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #monthlyLineCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
+    <ion-card class="detailscard">
+      <ion-card-header>
+        Past 7 Days Water Visualization
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #dailyLineCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

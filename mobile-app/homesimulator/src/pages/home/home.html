@@ -1,41 +1,33 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>HomeSimulator</ion-title>
+    <ion-title>Home Simulator</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding class="background">
-  <!-- <h2 class="home-header">Welcome to HomeSimulator!</h2> -->
   <ion-row>
-    <ion-col>
-      <button (click)="navigateToRoomsPage()">
-        <!--<i class="material-icons md-36">home</i> -->
-        <img src="https://png.icons8.com/material/100/000000/door-closed.png">
-        <br/>
-        <h3>Rooms</h3>
+    <ion-col col-12>
+      <button  ion-button block icon-start (click)="navigateToRoomsPage()">
+        <ion-icon src="https://png.icons8.com/material/100/000000/door-closed.png"></ion-icon>
+        <b>Rooms</b>
       </button>
     </ion-col>
-    <ion-col>
-      <button (click)="navigateToAppliancesPage()">
+    <ion-col col-12>
+      <button ion-button block icon-start (click)="navigateToAppliancesPage()">
           <i class="material-icons md-36">local_laundry_service</i>
-          <br/>
-          <h3>Appliances</h3>
+          <b>Appliances</b>
       </button>
     </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col>
-      <button (click)="navigateToTemperaturePage()">
-        <ion-icon name="thermometer" item-start></ion-icon>
-        <br/>
-        <h3>Temperature</h3>
+    <ion-col col-12>
+      <button ion-button block icon-start (click)="navigateToTemperaturePage()">
+        <ion-icon name="thermometer"></ion-icon>
+        <b>Temperature</b>
       </button>
     </ion-col>
-    <ion-col>
-      <button (click)="navigateToInProgressPage()">
-        <ion-icon name="sync" item-start></ion-icon>
-        <br/>
-        <h3>In Progress</h3>
+    <ion-col col-12>
+      <button  ion-button block icon-start (click)="navigateToInProgressPage()">
+        <ion-icon name="sync"></ion-icon>
+        <b>In Progress</b>
       </button>
     </ion-col>
   </ion-row>

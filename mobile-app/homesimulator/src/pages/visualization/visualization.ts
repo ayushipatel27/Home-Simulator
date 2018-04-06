@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { PowerVisualizationPage } from '../powervisualization/powervisualization';
 import { WaterVisualizationPage } from '../watervisualization/watervisualization';
-import { HvacVisualizationPage } from '../hvacvisualization/hvacvisualization';
+import { HvacvisualizationPage } from '../hvacvisualization/hvacvisualization';
 
 import { ApiProvider } from '../../providers/api/api';
 

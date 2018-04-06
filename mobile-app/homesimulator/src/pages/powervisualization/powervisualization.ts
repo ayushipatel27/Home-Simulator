@@ -2,8 +2,10 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Chart } from 'chart.js';
 import { ApiProvider } from '../../providers/api/api';
-var _ = require('lodash');
-var moment = require('moment');
+// var _ = require('lodash');
+// var moment = require('moment');
+import * as _ from "lodash";
+import * as moment from 'moment';
 
 @IonicPage()
 @Component({
@@ -87,7 +89,7 @@ export class PowerVisualizationPage {
 
   ionViewDidLoad() {
     console.log('load');
-    this.ApiProvider.getMonthofUsage().subscribe(res => {
+    this.ApiProvider.getWeekofUsage().subscribe(res => {
       console.log(res)
       this.dailyData = res
       var t = _.map(this.dailyData, 'date');
@@ -100,7 +102,7 @@ export class PowerVisualizationPage {
       this.CreateDailyChart();
     });
 
-    this.ApiProvider.getWeekofUsage().subscribe(res => {
+    this.ApiProvider.getMonthofUsage().subscribe(res => {
       console.log(res)
       this.monthlyData = res
       this.monthlyDates = _.map(this.monthlyData, 'date');
