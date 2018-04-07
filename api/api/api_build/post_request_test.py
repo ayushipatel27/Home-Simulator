@@ -177,8 +177,8 @@ payload = {
         },
         "powerusage": {
             "cost": 0.0,
-            "endtimestamp": "2018-04-06 21:42:10",
-            "sensorids": "[7, 8, 9, 12, 14, 17, 1, 29]",
+            "endtimestamp": "2018-04-07 13:03:10",
+            "sensorids": [7,8,9,12,14,17,1,29],
             "timestamp": "2018-04-02 19:53:19",
             "usage": 0.0
         },
@@ -627,8 +627,8 @@ payload = {
         },
         "waterusage": {
             "cost": 0.0,
-            "endtimestamp": "2018-04-06 22:34:10",
-            "sensorids": "[19,20]",
+            "endtimestamp": "2018-04-07 13:03:10",
+            "sensorids": [19,20],
             "timestamp": "2018-04-02 11:58:11",
             "usage": 0
         },
@@ -642,7 +642,7 @@ payload = {
     }
 }
 
-url = 'http://127.0.0.1:8000/api/update/housestate/'
+url = 'http://127.0.0.1:8000/api/update/homestate/'
 
 r = requests.post(url, data=json.dumps(payload), headers=headers)
 

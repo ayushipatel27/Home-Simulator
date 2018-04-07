@@ -51,6 +51,7 @@ from .views import (
                      InsertLivepowerusageNoEndtime,
 
                      UpdateHouseState,
+                     UpdateHomeState,
                      GetCurrentHouseState, 
                     )
 
@@ -139,6 +140,9 @@ urlpatterns = [
     path('gethousestate/', GetCurrentHouseState, name='get-housestate'),
 
     path('update/housestate/', UpdateHouseState, name='update-housestate'),
+
+    path('update/homestate/', UpdateHomeState, name='update-homestate'),
+
 
     # Formerly Living Nightmare, Now My Best Friend
 

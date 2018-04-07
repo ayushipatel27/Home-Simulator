@@ -594,8 +594,6 @@ def UpdateHouseState(request):
             hvacusage_current.cost         = hvacCost  # hvac_new['cost']
             hvacusage_current.save()
 
-            print("CORRECT! [] 1")
-
         elif hvac_new['sensorid'] == "[36]" and hvacStateCur == 0:
 
             hoff_sensor = Sensors.objects.get(sensorid = 36)
@@ -607,8 +605,6 @@ def UpdateHouseState(request):
                                                      cost        = 0.0,
                                                      temperature = hvac_new['temperature'],)
             hvacusage_new.save()
-
-            print("CORRECT! [36] 0")
 
         elif hvac_new['sensorid'] == "[]" and hvacStateCur == 0:
 
@@ -637,6 +633,129 @@ def UpdateHouseState(request):
                                                   chanceofprecipitation = weather_new['chanceofprecipitation'],
                                                   state                 = weather_new['state'])
         weatherState_new.save()
+
+    return HttpResponse('')
+
+
+
+
+# Front End Update House State:
+
+@csrf_exempt
+def UpdateHomeState(request):
+    if request.method=='POST':
+        
+        newHouseState     = json.loads(request.body)
+        currentHouseState = json.loads(GetCurrentHouseStateLocal())
+
+        # POWER
+        power_new = newHouseState['home']['powerusage']
+        power_cur = currentHouseState['home']['powerusage']
+
+        new_power_sensors = power_new['sensorids']
+        cur_power_sensors = power_cur['sensorids']
+
+        cur_power_sensors = ast.literal_eval(cur_power_sensors)
+
+        power_sensors_to_turn_on  = []
+        power_sensors_to_turn_off = []
+
+        for np in new_power_sensors:
+            if np not in cur_power_sensors:
+                power_sensors_to_turn_on.append(np)
+
+        for cp in cur_power_sensors:
+            if cp not in new_power_sensors:
+                power_sensors_to_turn_off.append(cp)
+
+        if len(power_sensors_to_turn_on) != 0 or len(power_sensors_to_turn_off) != 0:
+            for pon in power_sensors_to_turn_on:
+                pon_sensor = Sensors.objects.get(sensorid = pon)
+                pon_sensor.sensorstate = 1
+                pon_sensor.save()
+
+            for poff in power_sensors_to_turn_off:
+                poff_sensor = Sensors.objects.get(sensorid = poff)
+                poff_sensor.sensorstate = 0
+                poff_sensor.save()
+
+            time_difference = (datetime.strptime(power_new['endtimestamp'], "%Y-%m-%d %H:%M:%S") - datetime.strptime(power_new['timestamp'], "%Y-%m-%d %H:%M:%S")).total_seconds()
+
+            powerUsage = 0
+            powerCost  = 0.0
+
+            for sensor in cur_power_sensors:
+                appliance = Appliances.objects.get(sensorid = sensor)
+                watts = appliance.powerusage
+                powerUsage += calculatePowerUsage(watts, time_difference)
+                powerCost += calculatePowerCost(watts, time_difference)
+
+            livepowerusage_current = Livepowerusage.objects.latest('livepowerusageid')
+
+            livepowerusage_current.endtimestamp = power_new['endtimestamp']
+            livepowerusage_current.usage        = powerUsage  #power_new['usage']
+            livepowerusage_current.cost         = powerCost   #power_new['cost']
+            livepowerusage_current.save()
+                
+            livepowerusage_new = Livepowerusage.objects.create(timestamp = power_new['endtimestamp'],
+                                                               sensorids = power_new['sensorids'],
+                                                               usage     = 0.0,
+                                                               cost      = 0.0)
+            livepowerusage_new.save()
+
+
+        # WATER
+        water_new = newHouseState['home']['waterusage']
+        water_cur = currentHouseState['home']['waterusage']
+
+        new_water_sensors = water_new['sensorids']
+        cur_water_sensors = water_cur['sensorids']
+
+        cur_water_sensors = ast.literal_eval(cur_water_sensors)
+
+        water_sensors_to_turn_on  = []
+        water_sensors_to_turn_off = []
+
+        for nw in new_water_sensors:
+            if nw not in cur_water_sensors:
+                water_sensors_to_turn_on.append(nw)
+
+        for cw in cur_water_sensors:
+            if cw not in new_water_sensors:
+                water_sensors_to_turn_off.append(cw)
+
+        if len(water_sensors_to_turn_on) != 0 or len(water_sensors_to_turn_off) != 0:
+            for won in water_sensors_to_turn_on:
+                won_sensor = Sensors.objects.get(sensorid = won)
+                won_sensor.sensorstate = 1
+                won_sensor.save()
+
+            for woff in water_sensors_to_turn_off:
+                woff_sensor = Sensors.objects.get(sensorid = woff)
+                woff_sensor.sensorstate = 0
+                woff_sensor.save()
+
+            waterUsage = 0
+            waterCost  = 0.0
+
+            for sensor in cur_water_sensors:
+                appliance = Appliances.objects.get(sensorid = sensor)
+                appliancename = appliance.appliancename
+                waterUsage += calculateWaterUsage(appliancename)
+                waterCost  += calculateWaterCost(appliancename)
+
+            livewaterusage_current = Livewaterusage.objects.latest('livewaterusageid')
+
+            livewaterusage_current.endtimestamp = water_new['endtimestamp']
+            livewaterusage_current.usage        = waterUsage # water_new['usage']
+            livewaterusage_current.cost         = waterCost  # water_new['cost']
+            livewaterusage_current.save()
+                
+            livewaterusage_new = Livewaterusage.objects.create(timestamp = water_new['endtimestamp'],
+                                                               sensorids = water_new['sensorids'],
+                                                               usage     = 0.0,
+                                                               cost      = 0.0)
+            livewaterusage_new.save()
 
     return HttpResponse('')
 
