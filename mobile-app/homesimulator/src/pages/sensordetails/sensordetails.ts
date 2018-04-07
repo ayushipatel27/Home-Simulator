@@ -2,8 +2,11 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ApiProvider } from '../../providers/api/api';
 import { HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+import {Observable} from 'rxjs/Rx';
 import * as $ from 'jquery';
 import * as _ from 'lodash';
+import { lab } from 'd3';
 
 /**
  * Generated class for the SensordetailsPage page.
@@ -27,7 +30,6 @@ export class SensorDetailsPage {
   powerrate;
   powerusage;
   onoffswitch: boolean = false;
-  onoropen: boolean = false;
   currentState;
 
 
@@ -60,328 +62,143 @@ export class SensorDetailsPage {
    console.log('ionViewDidLoad AppliancedetailsPage');
    console.log(this.name);
    console.log(this.id);
+   console.log(this.onoffswitch);
  }
 
  sendState() {
   console.log('Sending State');
-  var now = new Date();
-  this.currentState.home.hvacusage.endtimestamp = now;
-  this.currentState.home.powerusage.endtimestamp = now;
-  this.currentState.home.waterusage.endtimestamp = now;
+  console.log('The onoffswitch is st to: ' + this.onoffswitch);
+  var now = new Date(),
+    nowformat = [now.getFullYear(),
+               now.getMonth()+1,
+               now.getDate()].join('-')+' '+
+              [now.getHours(),
+               now.getMinutes(),
+               now.getSeconds()].join(':');
+  this.currentState.home.hvacusage.endtimestamp = nowformat;
+  this.currentState.home.powerusage.endtimestamp = nowformat;
+  this.currentState.home.waterusage.endtimestamp = nowformat;
 
-  var page = {id: this.id, currentState: this.currentState, onoropen: this.onoropen};
-
-  console.log(now);
-  let po;
-  let wa;
-
-  var usagefunction = function(page) {
-    alert("here");
-    console.log(page);
-    var prom = new Promise(function(resolve, reject) {
-      console.log(page);
-    });
-    return prom;
-  };
-  var cWat = function(page){
-    console.log('page' + page);
-    var promise = new Promise(function(resolve, reject){
-      wa = calculateWater(page.currentState);
-      console.log(wa);
-    });
-    return promise;
-  };
-  var cPow = function(page){
-    console.log('page' + page)
-    var promise = new Promise(function(resolve, reject){
-      po = calculatePower(page.currentState);
-      console.log(po);
-    });
-    return promise;
-  };
-
-  usagefunction(page).then(cPow(page)).then(cWat(page));
-  console.log('after calls');
-  //    console.log("Entered then promise.");
-  console.log(page.currentState.home.powerusage);
-  console.log(page.currentState.home.waterusage);
-  // uageF().calculatePower().calculateWater();
-}
-
- //
- //  sendState().then((page: JSON) => {
- //    console.log("Entered then promise.");
- //    // console.log(page.currentState.home.powerusage);
- //    // console.log(page.currentState.home.waterusage);
- //    if(page.onoropen == true) {
- //      turnOn(page);
- //      return page;
- //    }else {
- //      turnOff(page);
- //      return page;
- //    }
- //  }, function(err) {
- //    console.log(err); // Error: "It broke"
- //  })
- //  .then(function(page) {
- //    console.log('The page before post is: ' + JSON.stringify(page));
- //    this.http.post('http://localhost:8000/api/update/housestate/');
- //  });
- // }
-
-//  turnOn(id) {
-//   var waterids = [19,20,23,24,42,44];
-//   var hvacid = 36;
-//   if(waterids.includes(id)) {
-//     this.currentState.home.waterusage.sensorids.push(id);
-//   }
-//   if(id = hvacid) {
-//     this.currentState.home.hvacusage.sensorids.push(id);
-//   }
-//   if(!waterids.includes(id) && !hvacid == id) {
-//     this.currentState.home.powerusage.sensorids.push(id);
-//   }
-//   console.log('Turned on ' + JSON.stringify(this.currentState.home.powerusage));
+  var page = this;
+  var newpage;
+  console.log(page);
+  console.log('This sensor is on or open: ' + this.onoffswitch);
+  if(this.onoffswitch == true) {
+    console.log('About to turn something on.');
+    turnOn(page).then((newpage: any) => {
+      console.log('Entered then promise');
+      this.ApiProvider.postCurrentState(newpage.currentState).subscribe( data => {
+        return true;
+      }, error => {
+        console.log("Error posting state.");
+        console.log(error);
+        return Observable.throw(error);
+      })
+    })
+  }else {
+    console.log('About to turn something off.');
+    //newpage = turnOff(page);
+    turnOff(page).then((newpage: any) => {
+      console.log('Entered then promise');
+      this.ApiProvider.postCurrentState(newpage.currentState).subscribe( data => {
+        return true;
+      }, error => {
+        console.log("Error posting state.");
+        console.log(error);
+        return Observable.throw(error);
+      })
+    })
+  }
+  }
 
  }
-//  turnOff(id) {
-//   var waterids = [19,20,23,24,42,44];
-//   var hvacid = [36];
 
-//   if(waterids.includes(id)) {
-//     _.pull(this.currentState.home.waterusage.sensorids, id);
-//     console.log(this.currentState.home.waterusage.sensorids);
-//     // console.log(this.currentState.home.waterusage.sensorids.indexOf(id));
-//     // var index = this.currentState.home.waterusage.sensorids.indexOf(id);
-//     // if (index !== -1) {
-//     //     this.currentState.home.waterusage.sensorids.splice(index, 1);
-//     // }
-//   }
-//   if(id == hvacid) {
-//     _.pull(this.currentState.home.hvacusage.sensorids, id);
-//     console.log(this.currentState.home.hvacusage.sensorids);
-//     // console.log(this.currentState.home.hvacusage.sensorids.indexOf(id));
-//     // var index = this.currentState.home.hvacusage.sensorids.indexOf(id);
-//     // if (index !== -1) {
-//     //     this.currentState.home.hvacusage.sensorids.splice(index, 1);
-//     // }
-//   }
-//   if(!waterids.includes(id) && !hvacid == id) {
-//     _.pull(this.currentState.home.powerusage.sensorids, id);
-//     console.log(this.currentState.home.powerusage.sensorids);
-//     // console.log(this.currentState.home.powerusage.sensorids.indexOf(id));
-//     // var index = this.currentState.home.powerusage.sensorids.indexOf(id);
-//     // if (index !== -1) {
-//     //     this.currentState.home.powerusage.sensorids.splice(index, 1);
-//     // }
-//   }
-//   console.log('Turned off ' + JSON.stringify(this.currentState.home.powerusage));
-//  }
-
-//  calculatePower() {
-//   var cost = 0.0;
-//   var usage = 0.0;
-//   var now = new Date();
-//   var ids = JSON.parse(this.currentState.home.powerusage.sensorids);
-//   var pasttime = Date.parse(this.currentState.home.powerusage.timestamp);
-//   console.log(ids);
-//   ids.forEach(element => {
-//      let appliance;
-//      let link = 'http://localhost:8000/api/getappliances/' + element;
-//      $.get(link, function(data){
-//      console.log(data);
-//      appliance = data[0];
-//      var interval = (now.getTime() - pasttime)/1000;
-//      console.log("The interval between start and finish is: " + interval +" seconds.");
-//      console.log("The appliance's powerrate is: " + appliance.powerrate);
-//      cost += Math.abs(calculatePowerCost(appliance.powerusage, interval));
-//      usage += Math.abs(calculatePowerUsage(appliance.powerusage, interval));
-//      console.log('The power cost is currently: $' + cost);
-//      console.log('The power usage is currently: ' + usage + " kilowatts.");
-//     });
-//    });
-//    this.currentState.home.powerusage.cost = cost;
-//    console.log(cost);
-//  }
-
-//  calculateWater() {
-//   var cost = 0.0;
-//   var usage = 0.0;
-//   var now = new Date();
-//   var ids = JSON.parse(this.currentState.home.waterusage.sensorids);
-//   var pasttime = Date.parse(this.currentState.home.waterusage.timestamp);
-//   console.log(ids);
-//   ids.forEach(element => {
-//      let appliance;
-//      let link = 'http://localhost:8000/api/getappliances/' + element;
-//      $.get(link, function(data){
-//      console.log(data);
-//      appliance = data[0];
-//      var interval = (now.getTime() - pasttime)/1000;
-//      console.log("The interval between start and finish is: " + interval +" seconds.");
-//      console.log("The appliance's waterusage is: " + getGallons(appliance));
-//      cost += Math.abs(calculateWaterCost(appliance));
-//      usage += Math.abs(getGallons(appliance));
-//      console.log('The water cost is currently: $' + cost);
-//      console.log('The water usage is currently: ' + usage + ' gallons');
-//     });
-//    });
-//    this.currentState.home.waterusage.cost = cost;
-//    this.currentState.home.waterusage.usage = usage;
-//    //console.log(cost);
-//  }
-
-
-function turnOn(page) {
+function turnOn(page: any) {
+  return new Promise((resolve, reject) => {
   var waterids = [19,20,23,24,42,44];
   var hvacid = 36;
   if(waterids.includes(page.id)) {
-    page.currentState.home.waterusage.sensorids.push(page.id);
-  }
-  if(page.id = hvacid) {
-    page.currentState.home.hvacusage.sensorids.push(page.id);
-  }
-  if(!waterids.includes(page.id) && !hvacid == page.id) {
-    page.currentState.home.powerusage.sensorids.push(page.id);
-  }
-  console.log('Turned on ' + JSON.stringify(page.currentState.home.powerusage));
-}
-
-function turnOff(page) {
-  var waterids = [19,20,23,24,42,44];
-  var hvacid = [36];
-
-  if(waterids.includes(page.id)) {
-    _.pull(this.currentState.home.waterusage.sensorids, page.id);
-    console.log(page.currentState.home.waterusage.sensorids);
-    // console.log(this.currentState.home.waterusage.sensorids.indexOf(id));
-    // var index = this.currentState.home.waterusage.sensorids.indexOf(id);
-    // if (index !== -1) {
-    //     this.currentState.home.waterusage.sensorids.splice(index, 1);
-    // }
+    console.log('The currently on waterids are: ' + page.currentState.home.waterusage.sensorids);
+    let arr = JSON.parse(page.currentState.home.waterusage.sensorids);
+    let arr2 = JSON.parse(page.currentState.home.powerusage.sensorids)
+    let arr3 = JSON.parse(page.currentState.home.hvacusage.sensorid)
+    arr.push(page.id);
+    page.currentState.home.waterusage.sensorids = arr;
+    page.currentState.home.powerusage.sensorids = arr2;
+    page.currentState.home.hvacusage.sensorid = arr3;
+    console.log('Turned on ' + JSON.stringify(page.currentState.home.waterusage));
+    resolve(page)
   }
   if(page.id == hvacid) {
-    _.pull(this.currentState.home.hvacusage.sensorids, page.id);
-    console.log(page.currentState.home.hvacusage.sensorids);
-    // console.log(this.currentState.home.hvacusage.sensorids.indexOf(id));
-    // var index = this.currentState.home.hvacusage.sensorids.indexOf(id);
-    // if (index !== -1) {
-    //     this.currentState.home.hvacusage.sensorids.splice(index, 1);
-    // }
+    let arr = JSON.parse(page.currentState.home.hvacusage.sensorid);
+    let arr2 = JSON.parse(page.currentState.home.powerusage.sensorids);
+    let arr3 = JSON.parse(page.currentState.home.waterusage.sensorid);
+    arr.push(page.id);
+    console.log(arr);
+    page.currentState.home.hvacusage.sensorid = arr;
+    page.currentState.home.powerusage.sensorids = arr2;
+    page.currentState.home.waterusage.sensorids = arr3;
+    resolve(page);
   }
   if(!waterids.includes(page.id) && !hvacid == page.id) {
-    _.pull(page.currentState.home.powerusage.sensorids, page.id);
+    let arr = JSON.parse(page.currentState.home.waterusage.sensorids);
+    let arr2 = JSON.parse(page.currentState.home.waterusage.sensorids);
+    let arr3 = JSON.parse(page.currentState.home.hvacusage.sensorid);
+    console.log('The currently on powerids are: ' + page.currentState.home.powerusage.sensorids);
+    arr.push(page.id);
+    page.currentState.home.powerusage.sensorids = arr;
+    page.currentState.home.waterusage.sensorids = arr2;
+    page.currentState.home.hvacusage.sensorids = arr3;
+
+    console.log('Turned on ' + JSON.stringify(page.currentState.home.powerusage));
+    resolve(page);
+    }
+  });
+}
+
+function turnOff(page: any) {
+  return new Promise((resolve, reject) => {
+  console.log(page);
+  console.log(page.id);
+  var waterids = [19,20,23,24,42,44];
+  var hvacid = 36;
+
+  if(waterids.includes(page.id)) {
+    console.log('Entered if');
+    let arr = JSON.parse(page.currentState.home.waterusage.sensorids);
+    let arr2 = JSON.parse(page.currentState.home.powerusage.sensorids);
+    let arr3 = JSON.parse(page.currentState.home.hvacusage.sensorid);
+    _.pull(arr, page.id);
+    page.currentState.home.waterusage.sensorids = arr;
+    page.currentState.home.powerusage.sensorids = arr2;
+    page.currentState.home.hvacusage.sensorid = arr3;
+    console.log(page.currentState.home.waterusage.sensorids);
+    resolve(page);
+  }
+  if(page.id == hvacid) {
+    console.log('Entered if');
+    let arr = JSON.parse(page.currentState.home.hvacusage.sensorid);
+    let arr2 = JSON.parse(page.currentState.home.powerusage.sensorids)
+    let arr3 = JSON.parse(page.currentState.home.waterusage.sensorid)
+    _.pull(arr, page.id);
+    page.currentState.home.hvacusage.sensorid = arr;
+    page.currentState.home.powerusage.sensorids = arr2;
+    page.currentState.home.waterusage.sensorids = arr3;
+    console.log(page.currentState.home.hvacusage.sensorids);
+    resolve(page);
+  }
+  if(!waterids.includes(page.id) && hvacid != page.id) {
+    console.log('Entered if');
+    let arr = JSON.parse(page.currentState.home.powerusage.sensorids);
+    let arr2 = JSON.parse(page.currentState.home.waterusage.sensorids);
+    let arr3 = JSON.parse(page.currentState.home.hvacusage.sensorid);
+    _.pull(arr, page.id);
+    page.currentState.home.powerusage.sensorids = arr;
+    page.currentState.home.waterusage.sensorids = arr2;
+    page.currentState.home.hvacusage.sensorids = arr3;
     console.log(page.currentState.home.powerusage.sensorids);
-    // console.log(this.currentState.home.powerusage.sensorids.indexOf(id));
-    // var index = this.currentState.home.powerusage.sensorids.indexOf(id);
-    // if (index !== -1) {
-    //     this.currentState.home.powerusage.sensorids.splice(index, 1);
-    // }
+    resolve(page);
   }
   console.log('Turned off ' + JSON.stringify(page.currentState.home.powerusage));
- }
-
-
-function calculatePower(currentState)
-  return new Promise(function(resolve, reject) {
-  var cost = 0.0;
-  var usage = 0.0;
-  var now = new Date();
-  var ids = JSON.parse(currentState.home.powerusage.sensorids);
-  var pasttime = Date.parse(currentState.home.powerusage.timestamp);
-  console.log(ids);
-  ids.forEach(element => {
-     let appliance;
-     let link = 'http://localhost:8000/api/getappliances/' + element;
-     $.get(link, function(data){
-     console.log(data);
-     appliance = data[0];
-     var interval = (now.getTime() - pasttime)/1000;
-     console.log("The interval between start and finish is: " + interval +" seconds.");
-     console.log("The appliance's powerrate is: " + appliance.powerrate);
-     cost += Math.abs(calculatePowerCost(appliance.powerusage, interval));
-     usage += Math.abs(calculatePowerUsage(appliance.powerusage, interval));
-     console.log('The power cost is currently: $' + cost);
-     console.log('The power usage is currently: ' + usage + " kilowatts.");
-
-     })
-    });
-    var power = {powercost: cost, powerusage: usage};
-    resolve(power);
-   });
- }
-
- function calculateWater(currentState) {
-  return new Promise(function(resolve, reject) {
-  var cost = 0.0;
-  var usage = 0.0;
-  var now = new Date();
-  var ids = JSON.parse(currentState.home.waterusage.sensorids);
-  var pasttime = Date.parse(currentState.home.waterusage.timestamp);
-  console.log(ids);
-  ids.forEach(element => {
-     let appliance;
-     let link = 'http://localhost:8000/api/getappliances/' + element;
-     $.get(link, function(data){
-     console.log(data);
-     appliance = data[0];
-     var interval = (now.getTime() - pasttime)/1000;
-     console.log("The interval between start and finish is: " + interval +" seconds.");
-     console.log("The appliance's waterusage is: " + getGallons(appliance));
-     cost += Math.abs(calculateWaterCost(appliance));
-     usage += Math.abs(getGallons(appliance));
-     console.log('The water cost is currently: $' + cost);
-     console.log('The water usage is currently: ' + usage + ' gallons');
-     })
-    });
-    currentState.home.waterusage.cost = cost;
-    currentState.home.waterusage.usage = usage;
-    var water = {watercost: cost, waterusage: usage};
-    resolve(water);
-   });
- }
-
-function calculatePowerCost(watts, time) {
-  return ((watts * (time / 3600)) / 1000) * .12 // returns $ for kilowatts per hour
-}
-
-function calculatePowerUsage(watts, time) {
-  var convertedtime = time/3600;
-  var currentusage = ((watts / 1000)*convertedtime); // returns kilowatts per hour
-  console.log(currentusage);
-  return currentusage;
-}
-function calculateWaterCost(appliance) {
-  var timeHotWaterUsed = getGallons(appliance) * getHotWaterPercentage(appliance) * 240;
-  return calculatePowerCost(4500, timeHotWaterUsed);
-}
-
-function getGallons(appliance) {
-  console.log(appliance);
-  console.log(appliance.appliancename);
-  if (appliance.appliancename == "Bath")
-    return 30
-  if (appliance.appliancename == "Shower")
-    return 25
-  if (appliance.appliancename == "Dishwasher")
-    return 6
-  if (appliance.appliancename == "Clothes Washer")
-    return 20
-  else
-    return 0
-}
-
-
-function getHotWaterPercentage(appliance) {
-  if (appliance.appliancename == "Bath")
-    return 0.65
-  if (appliance.appliancename == "Shower")
-    return 0.65
-  if (appliance.appliancename == "Dishwasher")
-    return 1.00
-  if (appliance.appliancename == "Clothes Washer")
-    return 0.85
-  else {
-    return 0
-  }
+  })
 }

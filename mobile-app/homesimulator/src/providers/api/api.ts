@@ -1,6 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'text' })
+};
 
 @Injectable()
 export class ApiProvider {
@@ -66,6 +70,10 @@ export class ApiProvider {
   }
   getCurrentState() {
     return this.http.get('http://localhost:8000/api/gethousestate/');
+  }
+  postCurrentState(state) {
+    console.log('Sending post request of: ' + state);
+    return this.http.post('http://localhost:8000/api/update/homestate/', state as JSON, httpOptions);
   }
 
 }
