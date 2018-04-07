@@ -652,6 +652,8 @@ def UpdateHomeState(request):
         power_new = newHouseState['home']['powerusage']
         power_cur = currentHouseState['home']['powerusage']
 
+        power_new['endtimestamp'] = datetime.now()
+
         new_power_sensors = power_new['sensorids']
         cur_power_sensors = power_cur['sensorids']
 
@@ -686,7 +688,7 @@ def UpdateHomeState(request):
                 poff_sensor.sensorstate = 0
                 poff_sensor.save()
 
-            time_difference = (datetime.strptime(power_new['endtimestamp'], "%Y-%m-%d %H:%M:%S") - datetime.strptime(power_new['timestamp'], "%Y-%m-%d %H:%M:%S")).total_seconds()
+            time_difference = (datetime.strptime(power_new['endtimestamp'], "%Y-%m-%dT%H:%M:%S") - datetime.strptime(power_new['timestamp'], "%Y-%m-%dT%H:%M:%S")).total_seconds()
 
             powerUsage = 0
             powerCost  = 0.0
@@ -717,6 +719,8 @@ def UpdateHomeState(request):
 
         new_water_sensors = water_new['sensorids']
         cur_water_sensors = water_cur['sensorids']
+
+        water_new['endtimestamp'] = datetime.now()
 
         cur_water_sensors = ast.literal_eval(cur_water_sensors)
 
