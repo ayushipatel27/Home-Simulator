@@ -688,7 +688,7 @@ def UpdateHomeState(request):
                 poff_sensor.sensorstate = 0
                 poff_sensor.save()
 
-            time_difference = (datetime.strptime(endtimestampPOW, "%Y-%m-%d %H:%M:%S") - datetime.strptime(power_new['timestamp'], "%Y-%m-%d %H:%M:%S")).total_seconds()
+            time_difference = (datetime.strptime(endtimestampPOW, "%Y-%m-%d %H:%M:%S") - datetime.strptime(power_new['timestamp'], "%Y-%m-%dT%H:%M:%S")).total_seconds()
 
             powerUsage = 0
             powerCost  = 0.0
