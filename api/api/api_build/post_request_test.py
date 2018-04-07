@@ -160,22 +160,27 @@ headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
 
 
+
+# ssh -L 10000:cisdb.cis.uab.edu:5432 reyramos@moat.cis.uab.edu
+
+
+
 payload = {
     "home": {
         "hvacusage": {
-        "cost": 7.5,
-        "endtimestamp": "2018-04-01 12:20:10",
-        "temperature": 68.0,
-        "timestamp": "2018-04-01 12:12:10",
-        "usage": 50.0,
+        "cost": 0.0,
+        "endtimestamp": "2018-04-06 22:54:10",
+        "temperature": 65.0,
+        "timestamp": "2018-04-06 22:43:10",
+        "usage": 0.0,
         "sensorid": "[]",
         },
         "powerusage": {
-            "cost": 9.0,
-            "endtimestamp": "2018-03-31 10:14:10",
-            "sensorids": "[13,17]",
-            "timestamp": "2018-03-31 10:13:10",
-            "usage": 60.0
+            "cost": 0.0,
+            "endtimestamp": "2018-04-06 21:42:10",
+            "sensorids": "[7, 8, 9, 12, 14, 17, 1, 29]",
+            "timestamp": "2018-04-02 19:53:19",
+            "usage": 0.0
         },
         "rooms": {
             "Garage": {
@@ -621,11 +626,11 @@ payload = {
             }
         },
         "waterusage": {
-            "cost": 11.25,
-            "endtimestamp": "2018-04-02 11:53:11",
-            "sensorids": "[19,20,44]",
+            "cost": 0.0,
+            "endtimestamp": "2018-04-06 22:34:10",
+            "sensorids": "[19,20]",
             "timestamp": "2018-04-02 11:58:11",
-            "usage": 75
+            "usage": 0
         },
         "weather": {
             "chanceofprecipitation": 30.0,

@@ -446,9 +446,6 @@ def UpdateHouseState(request):
         newHouseState     = json.loads(request.body)
         currentHouseState = json.loads(GetCurrentHouseStateLocal())
 
-        # print("\nNEW: " + str(newHouseState) + "\n")
-        # print("\nCUR: " + str(currentHouseState) + "\n")
-
         # POWER
         power_new = newHouseState['home']['powerusage']
         power_cur = currentHouseState['home']['powerusage']
@@ -466,13 +463,11 @@ def UpdateHouseState(request):
             if np not in cur_power_sensors:
                 power_sensors_to_turn_on.append(np)
 
-        #print('\nPower On: ' + str(power_sensors_to_turn_on) + "\n")
-
         for cp in cur_power_sensors:
             if cp not in new_power_sensors:
                 power_sensors_to_turn_off.append(cp)
 
-        #print('\nPower Off: ' + str(power_sensors_to_turn_off) + "\n")
+        print('\nPower Off: ' + str(power_sensors_to_turn_off) + "\n")
 
         print('\nLength: ' + str(len(power_sensors_to_turn_on)) + "\n")
         print('\nLength: ' + str(len(power_sensors_to_turn_off)) + "\n")
@@ -488,11 +483,22 @@ def UpdateHouseState(request):
                 poff_sensor.sensorstate = 0
                 poff_sensor.save()
 
+            time_difference = (datetime.strptime(power_new['endtimestamp'], "%Y-%m-%d %H:%M:%S") - datetime.strptime(power_new['timestamp'], "%Y-%m-%d %H:%M:%S")).total_seconds()
+
+            powerUsage = 0
+            powerCost  = 0.0
+
+            for sensor in cur_power_sensors:
+                appliance = Appliances.objects.get(sensorid = sensor)
+                watts = appliance.powerusage
+                powerUsage += calculatePowerUsage(watts, time_difference)
+                powerCost += calculatePowerCost(watts, time_difference)
+
             livepowerusage_current = Livepowerusage.objects.latest('livepowerusageid')
 
             livepowerusage_current.endtimestamp = power_new['endtimestamp']
-            livepowerusage_current.usage        = power_new['usage']
-            livepowerusage_current.cost         = power_new['cost']
+            livepowerusage_current.usage        = powerUsage  #power_new['usage']
+            livepowerusage_current.cost         = powerCost   #power_new['cost']
             livepowerusage_current.save()
                 
             livepowerusage_new = Livepowerusage.objects.create(timestamp = power_new['endtimestamp'],
@@ -519,15 +525,9 @@ def UpdateHouseState(request):
             if nw not in cur_water_sensors:
                 water_sensors_to_turn_on.append(nw)
 
-        # print('\nWater On: ' + str(water_sensors_to_turn_on) + "\n")
-
         for cw in cur_water_sensors:
             if cw not in new_water_sensors:
                 water_sensors_to_turn_off.append(cw)
-
-        # print('\nWater Off: ' + str(water_sensors_to_turn_off) + "\n") 
-
-        # print('\nWater Off: ' + str(water_sensors_to_turn_off) + "\n")
 
         if len(water_sensors_to_turn_on) != 0 or len(water_sensors_to_turn_off) != 0:
             for won in water_sensors_to_turn_on:
@@ -540,11 +540,20 @@ def UpdateHouseState(request):
                 woff_sensor.sensorstate = 0
                 woff_sensor.save()
 
+            waterUsage = 0
+            waterCost  = 0.0
+
+            for sensor in cur_water_sensors:
+                appliance = Appliances.objects.get(sensorid = sensor)
+                appliancename = appliance.appliancename
+                waterUsage += calculateWaterUsage(appliancename)
+                waterCost  += calculateWaterCost(appliancename)
+
             livewaterusage_current = Livewaterusage.objects.latest('livewaterusageid')
 
             livewaterusage_current.endtimestamp = water_new['endtimestamp']
-            livewaterusage_current.usage        = water_new['usage']
-            livewaterusage_current.cost         = water_new['cost']
+            livewaterusage_current.usage        = waterUsage # water_new['usage']
+            livewaterusage_current.cost         = waterCost  # water_new['cost']
             livewaterusage_current.save()
                 
             livewaterusage_new = Livewaterusage.objects.create(timestamp = water_new['endtimestamp'],
@@ -552,7 +561,6 @@ def UpdateHouseState(request):
                                                                usage     = 0.0,
                                                                cost      = 0.0)
             livewaterusage_new.save()
-
 
 
         # HVAC
@@ -568,12 +576,25 @@ def UpdateHouseState(request):
             hoff_sensor.sensorstate = 0
             hoff_sensor.save()
 
+            time_difference = (datetime.strptime(hvac_new['endtimestamp'], "%Y-%m-%d %H:%M:%S") - datetime.strptime(hvac_new['timestamp'], "%Y-%m-%d %H:%M:%S")).total_seconds()
+
+            hvacUsage = 0
+            hvacCost  = 0.0
+
+            appliance = Appliances.objects.get(sensorid = 36)
+
+            watts = appliance.powerusage
+            hvacUsage += calculatePowerUsage(watts, time_difference)
+            hvacCost += calculatePowerCost(watts, time_difference)
+
             hvacusage_current = Hvacusage.objects.latest('hvacusageid')
 
             hvacusage_current.endtimestamp = hvac_new['endtimestamp']
-            hvacusage_current.usage        = hvac_new['usage']
-            hvacusage_current.cost         = hvac_new['cost']
+            hvacusage_current.usage        = hvacUsage  # hvac_new['usage']
+            hvacusage_current.cost         = hvacCost  # hvac_new['cost']
             hvacusage_current.save()
+
+            print("CORRECT! [] 1")
 
         elif hvac_new['sensorid'] == "[36]" and hvacStateCur == 0:
 
@@ -586,6 +607,8 @@ def UpdateHouseState(request):
                                                      cost        = 0.0,
                                                      temperature = hvac_new['temperature'],)
             hvacusage_new.save()
+
+            print("CORRECT! [36] 0")
 
         elif hvac_new['sensorid'] == "[]" and hvacStateCur == 0:
 
@@ -999,5 +1022,48 @@ class LivepowerusageAPIView(mixins.CreateModelMixin, generics.ListAPIView):
 
     def perform_create(self, serializer):
         serializer.save(timestamp=self.request.timestamp)
+
+
+
+def calculatePowerCost(watts, time):
+    return ((watts * (time/3600))/1000) * .12         # returns $ for kilowatts per hour
+
+def calculatePowerUsage(watts, time):
+    return (watts * (time/3600))/1000                 #returns kilowatts per hour
+
+def calculateWaterCost(appliancename):
+    timeHotWaterUsed = getGallons(appliancename) * getHotWaterPercentage(appliancename) * 240
+    return calculatePowerCost(4500, timeHotWaterUsed)
+
+def calculateWaterUsage(appliancename):
+    return getGallons(appliancename)
+
+
+def getGallons(appliancename):
+    if appliancename == "Bath":
+        return 30
+    if appliancename == "Shower":
+        return 25
+    if appliancename == "Dishwasher":
+        return 6
+    if appliancename == "Clothes Washer":
+        return 20
+    else:
+        return 0
+def getHotWaterPercentage(appliancename):
+    if appliancename == "Bath":
+        return 0.65
+    if appliancename == "Shower":
+        return 0.65
+    if appliancename == "Dishwasher":
+        return 1.00
+    if appliancename == "Clothes Washer":
+        return 0.85
+    else:
+        return 0
+
+
+
+
 
 
