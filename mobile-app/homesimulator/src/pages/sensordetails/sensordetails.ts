@@ -31,7 +31,6 @@ export class SensorDetailsPage {
   currentState;
 
 
-
  constructor(public navCtrl: NavController, public navParams: NavParams, public ApiProvider: ApiProvider) {
    console.log(this.navParams);
    this.sensor = this.navParams.data.sensor;
@@ -73,48 +72,62 @@ export class SensorDetailsPage {
   var page = {id: this.id, currentState: this.currentState, onoropen: this.onoropen};
 
   console.log(now);
-  var usagefunction = function(page) {
-    var power;
-    var water;
-    return new Promise(function(resolve, reject) {
-    console.log(page);
-    calculatePower(page.currentState).then(result => {
-      power = result;
-    }).then(result => {
-      calculateWater(page.currentState).then(result => {
-        water = result;
-        return water;
-      }).then(result => {
-        page.currentState.home.powerusage.cost = power.powercost;
-        page.currentState.home.powerusage.usage = power.powerusage;
+  let po;
+  let wa;
 
-        page.currentState.home.watercost.cost = water.watercost;
-        page.currentState.home.waterusage.usage = water.waterusage;
-      }) 
-    })
-    console.log("Promise finished." + page.currentState);
-    resolve(page as JSON);
+  var usagefunction = function(page) {
+    alert("here");
+    console.log(page);
+    var prom = new Promise(function(resolve, reject) {
+      console.log(page);
     });
-  }
-  usagefunction(page).then((page: JSON) => {
-    console.log("Entered then promise.");
-    console.log(page.currentState.home.powerusage);
-    console.log(page.currentState.home.waterusage);
-    if(page.onoropen == true) {
-      turnOn(page);
-      return page;
-    }else {
-      turnOff(page);
-      return page;
-    }
-  }, function(err) {
-    console.log(err); // Error: "It broke"
-  })
-  .then(function(page) {
-    console.log('The page before post is: ' + JSON.stringify(page));
-    this.http.post('http://localhost:8000/api/update/housestate/');
-  });
- }
+    return prom;
+  };
+  var cWat = function(page){
+    console.log('page' + page);
+    var promise = new Promise(function(resolve, reject){
+      wa = calculateWater(page.currentState);
+      console.log(wa);
+    });
+    return promise;
+  };
+  var cPow = function(page){
+    console.log('page' + page)
+    var promise = new Promise(function(resolve, reject){
+      po = calculatePower(page.currentState);
+      console.log(po);
+    });
+    return promise;
+  };
+
+  usagefunction(page).then(cPow(page)).then(cWat(page));
+  console.log('after calls');
+  //    console.log("Entered then promise.");
+  console.log(page.currentState.home.powerusage);
+  console.log(page.currentState.home.waterusage);
+  // uageF().calculatePower().calculateWater();
+}
+
+ //
+ //  sendState().then((page: JSON) => {
+ //    console.log("Entered then promise.");
+ //    // console.log(page.currentState.home.powerusage);
+ //    // console.log(page.currentState.home.waterusage);
+ //    if(page.onoropen == true) {
+ //      turnOn(page);
+ //      return page;
+ //    }else {
+ //      turnOff(page);
+ //      return page;
+ //    }
+ //  }, function(err) {
+ //    console.log(err); // Error: "It broke"
+ //  })
+ //  .then(function(page) {
+ //    console.log('The page before post is: ' + JSON.stringify(page));
+ //    this.http.post('http://localhost:8000/api/update/housestate/');
+ //  });
+ // }
 
 //  turnOn(id) {
 //   var waterids = [19,20,23,24,42,44];
@@ -142,7 +155,7 @@ export class SensorDetailsPage {
 //     // var index = this.currentState.home.waterusage.sensorids.indexOf(id);
 //     // if (index !== -1) {
 //     //     this.currentState.home.waterusage.sensorids.splice(index, 1);
-//     // } 
+//     // }
 //   }
 //   if(id == hvacid) {
 //     _.pull(this.currentState.home.hvacusage.sensorids, id);
@@ -151,7 +164,7 @@ export class SensorDetailsPage {
 //     // var index = this.currentState.home.hvacusage.sensorids.indexOf(id);
 //     // if (index !== -1) {
 //     //     this.currentState.home.hvacusage.sensorids.splice(index, 1);
-//     // } 
+//     // }
 //   }
 //   if(!waterids.includes(id) && !hvacid == id) {
 //     _.pull(this.currentState.home.powerusage.sensorids, id);
@@ -160,7 +173,7 @@ export class SensorDetailsPage {
 //     // var index = this.currentState.home.powerusage.sensorids.indexOf(id);
 //     // if (index !== -1) {
 //     //     this.currentState.home.powerusage.sensorids.splice(index, 1);
-//     // } 
+//     // }
 //   }
 //   console.log('Turned off ' + JSON.stringify(this.currentState.home.powerusage));
 //  }
@@ -217,7 +230,7 @@ export class SensorDetailsPage {
 //    this.currentState.home.waterusage.usage = usage;
 //    //console.log(cost);
 //  }
-      
+
 
 function turnOn(page) {
   var waterids = [19,20,23,24,42,44];
@@ -245,7 +258,7 @@ function turnOff(page) {
     // var index = this.currentState.home.waterusage.sensorids.indexOf(id);
     // if (index !== -1) {
     //     this.currentState.home.waterusage.sensorids.splice(index, 1);
-    // } 
+    // }
   }
   if(page.id == hvacid) {
     _.pull(this.currentState.home.hvacusage.sensorids, page.id);
@@ -254,7 +267,7 @@ function turnOff(page) {
     // var index = this.currentState.home.hvacusage.sensorids.indexOf(id);
     // if (index !== -1) {
     //     this.currentState.home.hvacusage.sensorids.splice(index, 1);
-    // } 
+    // }
   }
   if(!waterids.includes(page.id) && !hvacid == page.id) {
     _.pull(page.currentState.home.powerusage.sensorids, page.id);
@@ -263,13 +276,13 @@ function turnOff(page) {
     // var index = this.currentState.home.powerusage.sensorids.indexOf(id);
     // if (index !== -1) {
     //     this.currentState.home.powerusage.sensorids.splice(index, 1);
-    // } 
+    // }
   }
   console.log('Turned off ' + JSON.stringify(page.currentState.home.powerusage));
  }
 
 
-function calculatePower(currentState) {
+function calculatePower(currentState)
   return new Promise(function(resolve, reject) {
   var cost = 0.0;
   var usage = 0.0;
@@ -290,7 +303,7 @@ function calculatePower(currentState) {
      usage += Math.abs(calculatePowerUsage(appliance.powerusage, interval));
      console.log('The power cost is currently: $' + cost);
      console.log('The power usage is currently: ' + usage + " kilowatts.");
-     
+
      })
     });
     var power = {powercost: cost, powerusage: usage};
