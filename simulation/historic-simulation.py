@@ -245,9 +245,9 @@ class Simulation(object):
         print("HVAC Usages: " + hvac_usages_json)
         print("Daily Usages: " + daily_usages_json)
 
-        requests.post('http://127.0.0.1:8000/api/insert/rooms/', rooms_json)
-        requests.post('http://127.0.0.1:8000/api/insert/sensors/', sensors_json)
-        requests.post('http://127.0.0.1:8000/api/insert/appliances/', appliances_json)
+        # requests.post('http://127.0.0.1:8000/api/insert/rooms/', rooms_json)
+        # requests.post('http://127.0.0.1:8000/api/insert/sensors/', sensors_json)
+        # requests.post('http://127.0.0.1:8000/api/insert/appliances/', appliances_json)
         requests.post('http://127.0.0.1:8000/api/insert/powerusage/', power_usages_json)
         requests.post('http://127.0.0.1:8000/api/insert/waterusage/', water_usages_json)
         requests.post('http://127.0.0.1:8000/api/insert/hvacusage/', hvac_usages_json)
@@ -576,8 +576,8 @@ class Simulation(object):
         self.addAppliances()
         self.addSensors()
 
-        startDate = date(2018, 1, 1)
-        endDate = date(2018, 4, 1)
+        startDate = date(2018, 4, 15)
+        endDate = date(2018, 4, 16)
 
         for singleDate in self.dateRange(startDate, endDate):
             day = singleDate.weekday()
@@ -630,7 +630,6 @@ class Simulation(object):
 
         self.generateJson()
 
-        print(self.monthlyReport())
 
 
 # calling simulation to simulate usage.

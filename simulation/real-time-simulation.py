@@ -2,7 +2,7 @@ import random
 import requests, json, ast
 from darksky import forecast
 import datetime, time
-import threading as t
+
 
 class Sensor(object):
     def __init__(self, id, sensorName, sensorState):
@@ -167,15 +167,6 @@ class Simulation(object):
 
         return self.home
 
-    def printHouseDetail(self):
-        print("Home Detail: \n")
-
-        print("Rooms: \n")
-        for room in self.home.getRooms():
-            print(room.getRoomName() + ": \n")
-            for appliance in room.getAppliances():
-                print(appliance.toString())
-            print()
 
     def getGallons(self, appliance):
         if appliance.getApplianceName() == "Bath":
@@ -492,7 +483,6 @@ class Simulation(object):
         state['home']['waterusage'] = currentWaterState
         state['home']['hvacusage'] = currentHvacState
         state['home']['weather'] = currrentWeatherState
-
 
         print(state)
 
