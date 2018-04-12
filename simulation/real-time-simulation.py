@@ -325,7 +325,7 @@ class Simulation(object):
 
         return weather
 
-    def updatePowerUsage(self, appliances, home, state, now, day):
+    def updatePowerUsage(self, appliances, home, state, powertimestamp, now, day):
         appliancesOn = []
         r = random.random()
 
@@ -352,9 +352,9 @@ class Simulation(object):
 
         appliancesOn = str(appliancesOn)
 
-        return self.addPowerUsage(appliancesOn, '', now, powerUsage, powerCost)
+        return self.addPowerUsage(appliancesOn, powertimestamp, now, powerUsage, powerCost)
 
-    def updateWaterUsage(self, appliances, home, state, now, day):
+    def updateWaterUsage(self, appliances, home, state, watertimestamp, now, day):
         appliancesOn = []
         r = random.random()
 
@@ -381,7 +381,7 @@ class Simulation(object):
 
         appliancesOn = str(appliancesOn)
 
-        return self.addWaterUsage(appliancesOn, '', now, waterUsage, waterCost)
+        return self.addWaterUsage(appliancesOn, watertimestamp , now, waterUsage, waterCost)
 
     def updateHvacUsage(self, appliances, internalTemp, externalTemp, now, day):
         applianceOn = []
@@ -449,7 +449,7 @@ class Simulation(object):
         water = []
         hvac = []
 
-        powerAppliances = ['Clothes Dryer', 'Clothes Washer', 'Dishwasher', 'Bath', 'Shower',
+        powerAppliances = ['Clothes Dryer', 'Clothes Washer', 'Dishwasher',
                            'Bedroom TV', 'Living Room TV', 'Oven', 'Stove', 'Microwave',
                            'Refrigerator', 'Bath Exhaust Fan', 'Lamp', 'Overhead Light']
         waterAppliances = ['Clothes Dryer', 'Clothes Washer', 'Dishwasher', 'Bath', 'Shower']
@@ -474,9 +474,12 @@ class Simulation(object):
 
         internalTemp = state['home']['hvacusage']['temperature']
         externalTemp = currrentWeatherState['temperature']
+        powertimestamp = state['home']['powerusage']['timestamp']
+        watertimestamp = state['home']['waterusage']['timestamp']
 
-        currentPowerState = self.updatePowerUsage(power, home, state, now, day)
-        currentWaterState = self.updateWaterUsage(water, home, state, now, day)
+
+        currentPowerState = self.updatePowerUsage(power, home, state, powertimestamp, now, day)
+        currentWaterState = self.updateWaterUsage(water, home, state, watertimestamp, now, day)
         currentHvacState = self.updateHvacUsage(hvac, internalTemp, externalTemp, now, day)
 
         state['home']['powerusage'] = currentPowerState
@@ -494,7 +497,7 @@ class Simulation(object):
         home = self.createHome()
         while True:
             self.simulateUsage(home)
-            time.sleep(600)                     # simulate usage every 10 minutes
+            time.sleep(60)                     # simulate usage every 10 minutes
 
 # calling simulation to simulate usage.
 s = Simulation()
