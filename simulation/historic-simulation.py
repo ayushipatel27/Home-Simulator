@@ -245,9 +245,9 @@ class Simulation(object):
         print("HVAC Usages: " + hvac_usages_json)
         print("Daily Usages: " + daily_usages_json)
 
-        # requests.post('http://127.0.0.1:8000/api/insert/rooms/', rooms_json)
-        # requests.post('http://127.0.0.1:8000/api/insert/sensors/', sensors_json)
-        # requests.post('http://127.0.0.1:8000/api/insert/appliances/', appliances_json)
+        requests.post('http://127.0.0.1:8000/api/insert/rooms/', rooms_json)
+        requests.post('http://127.0.0.1:8000/api/insert/sensors/', sensors_json)
+        requests.post('http://127.0.0.1:8000/api/insert/appliances/', appliances_json)
         requests.post('http://127.0.0.1:8000/api/insert/powerusage/', power_usages_json)
         requests.post('http://127.0.0.1:8000/api/insert/waterusage/', water_usages_json)
         requests.post('http://127.0.0.1:8000/api/insert/hvacusage/', hvac_usages_json)
