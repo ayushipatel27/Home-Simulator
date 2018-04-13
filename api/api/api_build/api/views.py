@@ -576,7 +576,7 @@ def UpdateHouseState(request):
             hoff_sensor.sensorstate = 0
             hoff_sensor.save()
 
-            time_difference = (datetime.strptime(hvac_new['endtimestamp'], "%Y-%m-%d %H:%M:%S") - datetime.strptime(hvac_new['timestamp'], "%Y-%m-%d %H:%M:%S")).total_seconds()
+            time_difference = (datetime.strptime(hvac_new['endtimestamp'], "%Y-%m-%d %H:%M:%S") - datetime.strptime(hvac_new['timestamp'], "%Y-%m-%dT%H:%M:%S")).total_seconds()
 
             hvacUsage = 0
             hvacCost  = 0.0

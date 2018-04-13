@@ -177,9 +177,9 @@ payload = {
         },
         "powerusage": {
             "cost": 0.0,
-            "endtimestamp": "2018-04-07 14:53:10",
+            "endtimestamp": "2018-04-11 14:53:10",
             "sensorids": [7,8,9,12,14,17,1,29],
-            "timestamp": "2018-04-07 12:53:19",
+            "timestamp": "2018-04-11 12:53:19",
             "usage": 0.0
         },
         "rooms": {
@@ -627,9 +627,9 @@ payload = {
         },
         "waterusage": {
             "cost": 0.0,
-            "endtimestamp": "2018-04-07 13:03:10",
+            "endtimestamp": "2018-04-11 13:03:10",
             "sensorids": [19,20],
-            "timestamp": "2018-04-02 11:58:11",
+            "timestamp": "2018-04-11 11:58:11",
             "usage": 0
         },
         "weather": {
@@ -637,7 +637,7 @@ payload = {
             "precipitation": 20.0,
             "state": "Sunny",
             "temperature": 65.0,
-            "timestamp": "2018-04-01T19:46:49"
+            "timestamp": "2018-04-11T19:46:49"
         }
     }
 }
