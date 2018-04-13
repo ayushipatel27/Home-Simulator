@@ -1,6 +1,6 @@
 from rest_framework import serializers 
 
-from api_build.models import Appliances, Dailyusage, Powerusage, Hvacusage, Rooms, Sensors, Waterusage, Weather
+from api_build.models import Appliances, Dailyusage, Powerusage, Hvacusage, Rooms, Sensors, Waterusage, Weather, Livewaterusage, Livepowerusage
 
 # Converts to JSON
 # Validates for data passed
@@ -13,13 +13,14 @@ class AppliancesSerializer(serializers.ModelSerializer):
 			'sensorid',
 		    'powerusage',
 		    'powerrate',
+		    'appliancename',
 		]
-		read_only_fields = ['applianceid', 'sensorid']
 
 class DailyusageSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Dailyusage
 		fields = [
+			'dailyusageid',
 			'date',
 			'totalwaterusage',
 			'totalpowerusage',
@@ -28,12 +29,12 @@ class DailyusageSerializer(serializers.ModelSerializer):
 			'totalhvacusage',
 			'totalhvaccost',
 		]
-		read_only_fields = ['applianceid', 'sensorid']
 
 class HvacusageSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Hvacusage
 		fields = [
+			'hvacusageid',
 			'timestamp',
 			'sensorid',
 			'endtimestamp',
@@ -41,7 +42,30 @@ class HvacusageSerializer(serializers.ModelSerializer):
 			'cost',
 			'temperature',
 		]
-		read_only_fields = ['timestamp']
+
+class LivepowerusageSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Livepowerusage
+		fields = [
+			'livepowerusageid',
+			'timestamp',
+			'sensorids',
+			'endtimestamp',
+			'usage',
+			'cost',
+		]
+
+class LivewaterusageSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Livewaterusage
+		fields = [
+			'livewaterusageid',
+			'timestamp',
+			'sensorids',
+			'endtimestamp',
+			'usage',
+			'cost',
+		]
 
 class PowerusageSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -54,7 +78,6 @@ class PowerusageSerializer(serializers.ModelSerializer):
 			'usage',
 			'cost',
 		]
-		read_only_fields = ['energyusageid']
 
 class RoomsSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -63,7 +86,6 @@ class RoomsSerializer(serializers.ModelSerializer):
 			'roomid',
 			'roomname',
 		]
-		read_only_fields = ['roomid']
 
 class SensorsSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -74,30 +96,29 @@ class SensorsSerializer(serializers.ModelSerializer):
 			'sensorstate',
 			'roomid',
 		]
-		read_only_fields = ['sensorid', 'roomid']
 
 class WaterusageSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Waterusage
 		fields = [
+			'waterusageid',
 			'timestamp',
 			'sensorid',
 			'endtimestamp',
 			'usage',
 			'cost',
 		]
-		read_only_fields = ['timestamp']
 
 class WeatherSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Weather
 		fields = [
+			'weatherid',
 			'timestamp',
 			'temperature',
 			'precipitation',
 			'chanceofprecipitation',
 			'state',
 		]
-		read_only_fields = ['timestamp']
 
 

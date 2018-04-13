@@ -4,11 +4,60 @@ from django.urls import path, re_path
 
 from rest_framework.generics import UpdateAPIView
 
-from .views import AppliancesAPIView, DailyusageAPIView, PowerusageAPIView, HvacusageAPIView, RoomsAPIView, SensorsAPIView, WaterusageAPIView, WeatherAPIView, AppliancesRudView, DailyusageRudView, PowerusageRudView, HvacusageRudView, RoomsRudView, SensorsRudView, WaterusageRudView, WeatherRudView, AppliancesViewSet, api_update, UpdateRoom, UpdateRoomNew, UpdateHouseState, InsertSensors, InsertAppliances, InsertRooms
+from .views import ( 
+                     AppliancesAPIView, 
+                     DailyusageAPIView, 
+                     PowerusageAPIView, 
+                     HvacusageAPIView, 
+                     RoomsAPIView, 
+                     SensorsAPIView, 
+                     WaterusageAPIView, 
+                     WeatherAPIView, 
+
+                     AppliancesRudView, 
+                     DailyusageRudView, 
+                     PowerusageRudView, 
+                     HvacusageRudView, 
+                     RoomsRudView, 
+                     SensorsRudView, 
+                     WaterusageRudView, 
+                     WeatherRudView,
+
+                     GetSensors,
+                     GetSensorsTurnedOn,
+                     GetAppliances,
+                     GetWeekOfPower,
+                     GetWeekOfWater,
+                     GetMonthOfPower,
+                     GetMonthOfWater,
+
+                     InsertSensors, 
+                     InsertAppliances, 
+                     InsertRooms, 
+                     InsertDailyusage, 
+                     InsertPowerusage, 
+                     InsertHvacusage, 
+                     InsertWaterusage, 
+                     InsertWeather,
+
+                     InsertLivewaterusage,
+                     InsertLivepowerusage,
+
+                     InsertPowerusageNoEndtime, 
+                     InsertHvacusageNoEndtime,
+                     InsertWaterusageNoEndtime,
+
+                     InsertLivewaterusageNoEndtime,
+                     InsertLivepowerusageNoEndtime,
+
+                     UpdateHouseState,
+                     UpdateHomeState,
+                     GetCurrentHouseState, 
+                    )
 
 urlpatterns = [
 
-	# List Create Views:
+	# List Views:
 
     path('appliances/', AppliancesAPIView.as_view(), name='appliances-listcreate'),
 
@@ -26,7 +75,7 @@ urlpatterns = [
 
     path('weather/', WeatherAPIView.as_view(), name='weather-listcreate'),
 
-    # Rud Views:
+    # Individual Views:
 
     path('appliances/<int:applianceid>/', AppliancesRudView.as_view(), name='appliances-rud'),
 
@@ -44,19 +93,21 @@ urlpatterns = [
 
     path('weather/<int:weatherid>/', WeatherRudView.as_view(), name='weather-rud'),
 
-    # ViewSets:
+    # Get Filtered Lists
 
-    path('appliances/viewsets/', AppliancesViewSet.as_view({'get': 'list'}), name='appliances-viewset'),
+    path('getsensors/<int:roomid>/', GetSensors.as_view(), name='get-sensors'), 
 
-    # Updates
+    path('inprogress/', GetSensorsTurnedOn.as_view(), name='get-sensors-turned-on'), 
 
-    path('rooms/aa/', api_update),
+    path('getappliances/<int:sensorid>/', GetAppliances.as_view(), name='get-appliances'),
 
-    path('updateroom/', UpdateRoom),
+    path('getweekofusage/', GetWeekOfPower, name='GetWeekOfPower'),
 
-    path('updateroomnew/', UpdateRoomNew, name='update-room'),
+    path('getweekofwater/', GetWeekOfWater, name='GetWeekOfWater'),
 
-    path('update/', UpdateHouseState, name='update'),
+    path('getmonthofusage/', GetMonthOfPower, name='GetMonthOfPower'),
+
+    path('getmonthofwater/', GetMonthOfWater, name='GetMonthOfWater'),
 
     # Inserts
 
@@ -64,5 +115,42 @@ urlpatterns = [
 
     path('insert/rooms/', InsertRooms, name='insert-rooms'),
 
-    path('insert/sensors/', InsertSensors, name='insert-sensers'),
+    path('insert/sensors/', InsertSensors, name='insert-sensors'),
+
+    path('insert/dailyusage/', InsertDailyusage, name='insert-dailyusage'),
+
+    path('insert/powerusage/', InsertPowerusage, name='insert-powerusage'),
+
+    path('insert/hvacusage/', InsertHvacusage, name='insert-hvacusage'),
+
+    path('insert/waterusage/', InsertWaterusage, name='insert-waterusage'),
+
+    path('insert/weather/', InsertWeather, name='insert-weather'),
+
+    # Inserts without endtimes
+
+    path('insert/powerusagenoendtime/', InsertPowerusageNoEndtime, name='insert-powerusage-no-endtime'),
+
+    path('insert/hvacusagenoendtime/', InsertHvacusageNoEndtime, name='insert-hvacusage-no-endtime'),
+
+    path('insert/waterusagenoendtime/', InsertWaterusageNoEndtime, name='insert-waterusage-no-endtime'),
+
+    # HouseState
+
+    path('gethousestate/', GetCurrentHouseState, name='get-housestate'),
+
+    path('update/housestate/', UpdateHouseState, name='update-housestate'),
+
+    path('update/homestate/', UpdateHomeState, name='update-homestate'),
+
+
+    # Formerly Living Nightmare, Now My Best Friend
+
+    path('insert/livewaterusage/', InsertLivewaterusage, name='insert-livewaterusage'), 
+
+    path('insert/livepowerusage/', InsertLivepowerusage, name='insert-livepowerusage'),   
+
+    path('insert/livepowerusagenoendtime/', InsertLivepowerusageNoEndtime, name='insert-powerusage-no-endtime'),
+
+    path('insert/livewaterusagenoendtime/', InsertLivewaterusageNoEndtime, name='insert-waterusage-no-endtime'),
 ]
