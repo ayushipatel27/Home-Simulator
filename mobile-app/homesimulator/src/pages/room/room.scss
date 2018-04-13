@@ -1,0 +1,31 @@
+page-rooms {
+  //Hide scrollbar
+  .scroll-content {
+    overflow-y: hidden !important;
+  }
+}
+.rooms-card {
+  height: auto;
+}
+
+.rooms-list {
+  height: auto;
+}
+
+.room-item {
+  line-height: auto;
+  height: 11%;
+  border-top: #f4f4f4 0.1px solid;
+}
+
+ion-item-group {
+  height: 100%;
+}
+
+.back-button {
+  width: 10px;
+}
+
+.toolbar-title ion-title .title {
+  width: 90px;
+}

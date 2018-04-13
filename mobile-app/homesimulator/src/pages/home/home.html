@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Home Simulator</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="background">
+  <ion-row>
+    <ion-col col-12>
+      <button  ion-button block icon-start (click)="navigateToRoomsPage()">
+        <ion-icon src="https://png.icons8.com/material/100/000000/door-closed.png"></ion-icon>
+        <b>Rooms</b>
+      </button>
+    </ion-col>
+    <ion-col col-12>
+      <button ion-button block icon-start (click)="navigateToAppliancesPage()">
+          <i class="material-icons md-36">local_laundry_service</i>
+          <b>Appliances</b>
+      </button>
+    </ion-col>
+    <ion-col col-12>
+      <button ion-button block icon-start (click)="navigateToTemperaturePage()">
+        <ion-icon name="thermometer"></ion-icon>
+        <b>Temperature</b>
+      </button>
+    </ion-col>
+    <ion-col col-12>
+      <button  ion-button block icon-start (click)="navigateToInProgressPage()">
+        <ion-icon name="sync"></ion-icon>
+        <b>In Progress</b>
+      </button>
+    </ion-col>
+  </ion-row>
+</ion-content>

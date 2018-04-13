@@ -1,0 +1,34 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Data Visualization</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding class="background">
+
+  <ion-row>
+    <ion-col col-12>
+      <button ion-button icon-start block (click)="navigateToPowerVisualizationPage()" id="PowerButton">
+        <ion-icon name="outlet"></ion-icon>
+        Power Visualization
+      </button>
+    </ion-col>
+
+    <ion-col col-12>
+      <button ion-button icon-start block (click)="navigateToWaterVisualizationPage()" id="WaterButton">
+        <ion-icon name="water"></ion-icon>
+        Water Visualization
+      </button>
+    </ion-col>
+
+    <ion-col col-12>
+      <button ion-button icon-start block (click)="navigateToHVACVisualizationPage()" id="HvacButton">
+        <i class="material-icons">highlight</i>
+        HVAC Visualization
+      </button>
+    </ion-col>
+  </ion-row>
+
+</ion-content>

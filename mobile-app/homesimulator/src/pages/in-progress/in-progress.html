@@ -1,0 +1,31 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>in-progress</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="background" padding>
+
+  <ion-card class="rooms-card">
+
+    <ion-scroll scrollY="true">
+
+      <ion-list class="rooms-list">
+        <ion-item-group>
+          <ion-item-divider class="header-divider" color="light">In Progress</ion-item-divider>
+          <ion-item text-wrap *ngFor="let sensor of inprogress" class="room-item" (click)="navigateToSensorDetailsPage(sensor)">
+            Sensor: {{sensor.sensorname}}
+          </ion-item>
+        </ion-item-group>
+      </ion-list>
+    </ion-scroll>
+    <!--<ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+      <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll> -->
+
+  </ion-card>
+
+</ion-content>

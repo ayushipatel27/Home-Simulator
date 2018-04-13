@@ -1,0 +1,32 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Temperature</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="background" padding>
+
+
+  <ion-card class="temperature-card">
+    <!--<ion-item-divider class="header-divider" color="light">Temperature</ion-item-divider> -->
+    <ion-card-header text-wrap>
+      <p id="temp-title"> <b> Current House Temperature</b> </p>
+    </ion-card-header>
+    <h3 id="output">{{temperature}}
+      <span id="degrees"></span>
+    </h3>
+    <!--<div class="slidecontainer">
+      <input type="range" min="1" max="100" value="50" class="slider" id="myslider">
+    </div> -->
+    <ion-item >
+      <ion-range id="temprange" min="50" max="100" step="1" snaps="true" color="danger" [(ngModel)]="temperature"></ion-range>
+      <!--<ion-label range-left>50</ion-label>
+      <ion-label range-left>100</ion-label> -->
+    </ion-item>
+
+  </ion-card>
+
+</ion-content>
