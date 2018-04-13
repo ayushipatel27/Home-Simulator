@@ -6,7 +6,6 @@ import { HttpClientModule } from '@angular/common/http';
 import {Observable} from 'rxjs/Rx';
 import * as $ from 'jquery';
 import * as _ from 'lodash';
-import { lab } from 'd3';
 
 /**
  * Generated class for the SensordetailsPage page.
@@ -87,6 +86,7 @@ export class SensorDetailsPage {
     console.log('About to turn something on.');
     turnOn(page).then((newpage: any) => {
       console.log('Entered then promise');
+      console.log('Posting state '+ newpage.currentState);
       this.ApiProvider.postCurrentState(newpage.currentState).subscribe( data => {
         return true;
       }, error => {
@@ -100,6 +100,7 @@ export class SensorDetailsPage {
     //newpage = turnOff(page);
     turnOff(page).then((newpage: any) => {
       console.log('Entered then promise');
+      console.log('Posting state '+ newpage.currentState);
       this.ApiProvider.postCurrentState(newpage.currentState).subscribe( data => {
         return true;
       }, error => {
@@ -114,22 +115,28 @@ export class SensorDetailsPage {
  }
 
 function turnOn(page: any) {
+  console.log(page);
   return new Promise((resolve, reject) => {
   var waterids = [19,20,23,24,42,44];
   var hvacid = 36;
   if(waterids.includes(page.id)) {
     console.log('The currently on waterids are: ' + page.currentState.home.waterusage.sensorids);
-    let arr = JSON.parse(page.currentState.home.waterusage.sensorids);
-    let arr2 = JSON.parse(page.currentState.home.powerusage.sensorids)
-    let arr3 = JSON.parse(page.currentState.home.hvacusage.sensorid)
-    arr.push(page.id);
-    page.currentState.home.waterusage.sensorids = arr;
-    page.currentState.home.powerusage.sensorids = arr2;
-    page.currentState.home.hvacusage.sensorid = arr3;
+    try{
+      let arr = JSON.parse(page.currentState.home.waterusage.sensorids);
+      let arr2 = JSON.parse(page.currentState.home.powerusage.sensorids)
+      let arr3 = JSON.parse(page.currentState.home.hvacusage.sensorid)
+      arr.push(page.id);
+      page.currentState.home.waterusage.sensorids = arr;
+      page.currentState.home.powerusage.sensorids = arr2;
+      page.currentState.home.hvacusage.sensorid = arr3;
+    }catch(e) {
+      page.currentState.home.waterusage.sensorids.push(page.id);
+    }
     console.log('Turned on ' + JSON.stringify(page.currentState.home.waterusage));
     resolve(page)
   }
   if(page.id == hvacid) {
+    try{
     let arr = JSON.parse(page.currentState.home.hvacusage.sensorid);
     let arr2 = JSON.parse(page.currentState.home.powerusage.sensorids);
     let arr3 = JSON.parse(page.currentState.home.waterusage.sensorid);
@@ -138,10 +145,15 @@ function turnOn(page: any) {
     page.currentState.home.hvacusage.sensorid = arr;
     page.currentState.home.powerusage.sensorids = arr2;
     page.currentState.home.waterusage.sensorids = arr3;
+    }catch(e) {
+    page.currentState.home.hvacusage.sensorid.push(page.id);
+    }
     resolve(page);
   }
-  if(!waterids.includes(page.id) && !hvacid == page.id) {
-    let arr = JSON.parse(page.currentState.home.waterusage.sensorids);
+  if(!waterids.includes(page.id) && hvacid != page.id) {
+    
+    try {
+    let arr = JSON.parse(page.currentState.home.powerusage.sensorids);
     let arr2 = JSON.parse(page.currentState.home.waterusage.sensorids);
     let arr3 = JSON.parse(page.currentState.home.hvacusage.sensorid);
     console.log('The currently on powerids are: ' + page.currentState.home.powerusage.sensorids);
@@ -149,7 +161,10 @@ function turnOn(page: any) {
     page.currentState.home.powerusage.sensorids = arr;
     page.currentState.home.waterusage.sensorids = arr2;
     page.currentState.home.hvacusage.sensorids = arr3;
-
+    }catch(e) {
+      console.log('The currently on powerids are: ' + page.currentState.home.powerusage.sensorids);
+      page.currentState.home.powerusage.sensorids.push(page.id);
+    }
     console.log('Turned on ' + JSON.stringify(page.currentState.home.powerusage));
     resolve(page);
     }
@@ -165,6 +180,7 @@ function turnOff(page: any) {
 
   if(waterids.includes(page.id)) {
     console.log('Entered if');
+    try {
     let arr = JSON.parse(page.currentState.home.waterusage.sensorids);
     let arr2 = JSON.parse(page.currentState.home.powerusage.sensorids);
     let arr3 = JSON.parse(page.currentState.home.hvacusage.sensorid);
@@ -173,30 +189,43 @@ function turnOff(page: any) {
     page.currentState.home.powerusage.sensorids = arr2;
     page.currentState.home.hvacusage.sensorid = arr3;
     console.log(page.currentState.home.waterusage.sensorids);
+    }catch(e) {
+      _.pull(page.currentState.home.waterusage.sensorids, page.id);
+      console.log(page.currentState.home.waterusage.sensorids);
+    }    
     resolve(page);
   }
   if(page.id == hvacid) {
     console.log('Entered if');
-    let arr = JSON.parse(page.currentState.home.hvacusage.sensorid);
-    let arr2 = JSON.parse(page.currentState.home.powerusage.sensorids)
-    let arr3 = JSON.parse(page.currentState.home.waterusage.sensorid)
-    _.pull(arr, page.id);
-    page.currentState.home.hvacusage.sensorid = arr;
-    page.currentState.home.powerusage.sensorids = arr2;
-    page.currentState.home.waterusage.sensorids = arr3;
-    console.log(page.currentState.home.hvacusage.sensorids);
+    try {
+      let arr = JSON.parse(page.currentState.home.hvacusage.sensorid);
+      let arr2 = JSON.parse(page.currentState.home.powerusage.sensorids);
+      let arr3 = JSON.parse(page.currentState.home.waterusage.sensorid);
+      _.pull(arr, page.id);
+      page.currentState.home.hvacusage.sensorid = arr;
+      page.currentState.home.powerusage.sensorids = arr2;
+      page.currentState.home.waterusage.sensorids = arr3;
+      console.log(page.currentState.home.hvacusage.sensorids);
+    }catch(e) {
+      _.pull(page.currentState.home.hvacusage.sensorid, page.id);
+      console.log(page.currentState.home.hvacusage.sensorids);
+    }
     resolve(page);
   }
   if(!waterids.includes(page.id) && hvacid != page.id) {
-    console.log('Entered if');
-    let arr = JSON.parse(page.currentState.home.powerusage.sensorids);
-    let arr2 = JSON.parse(page.currentState.home.waterusage.sensorids);
-    let arr3 = JSON.parse(page.currentState.home.hvacusage.sensorid);
-    _.pull(arr, page.id);
-    page.currentState.home.powerusage.sensorids = arr;
-    page.currentState.home.waterusage.sensorids = arr2;
-    page.currentState.home.hvacusage.sensorids = arr3;
-    console.log(page.currentState.home.powerusage.sensorids);
+    try{
+      console.log('Entered if');
+      let arr = JSON.parse(page.currentState.home.powerusage.sensorids);
+      let arr2 = JSON.parse(page.currentState.home.waterusage.sensorids);
+      let arr3 = JSON.parse(page.currentState.home.hvacusage.sensorid);
+      _.pull(arr, page.id);
+      page.currentState.home.powerusage.sensorids = arr;
+      page.currentState.home.waterusage.sensorids = arr2;
+      page.currentState.home.hvacusage.sensorids = arr3;
+      console.log(page.currentState.home.powerusage.sensorids);
+    }catch(e) {
+      _.pull(page.currentState.home.powerusage.sensorids, page.id);
+    }
     resolve(page);
   }
   console.log('Turned off ' + JSON.stringify(page.currentState.home.powerusage));
